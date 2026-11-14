@@ -15,6 +15,7 @@ export function noEncontrado(req, _res, next) {
 // Express 5 reenvía aquí también los errores de handlers async.
 // eslint-disable-next-line no-unused-vars
 export function manejadorErrores(err, _req, res, _next) {
+  res.set('Cache-Control', 'no-store'); // un error nunca se cachea
   if (err instanceof ZodError) {
     return res.status(400).json({
       error: {

@@ -7,6 +7,7 @@ pg.types.setTypeParser(pg.types.builtins.INT8, (v) => Number(v));
 export function crearPool() {
   return new pg.Pool({
     connectionString: env.DATABASE_URL,
+    ssl: env.DATABASE_SSL === 'disable' ? false : { rejectUnauthorized: env.DATABASE_SSL === 'require' },
     max: env.DB_POOL_MAX,
     statement_timeout: 5000,
   });

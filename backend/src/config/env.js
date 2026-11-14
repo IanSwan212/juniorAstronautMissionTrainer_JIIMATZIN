@@ -1,16 +1,49 @@
 import { z } from 'zod';
 
-const esquema = z.object({
-  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
-  PORT: z.coerce.number().int().min(1).max(65535).default(3000),
-  DATABASE_URL: z.string().min(1, 'es obligatoria (solo en servidor, nunca en el frontend)'),
-  CORS_ORIGINS: z
-    .string()
-    .default('')
-    .transform((v) => v.split(',').map((s) => s.trim()).filter(Boolean)),
-  DB_POOL_MAX: z.coerce.number().int().min(1).max(50).default(10),
-  DATA_DIR: z.string().default('../../muestras'),
-});
+const esquema = z
+  .object({
+    NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+    PORT: z.coerce.number().int().min(1).max(65535).default(3000),
+    DATABASE_URL: z
+      .string()
+      .regex(/^postgres(ql)?:\/\//, 'es obligatoria y debe empezar por postgresql:// (solo en servidor)'),
+    // 'disable' = sin TLS (local); 'require' = TLS verificando el certificado; 'no-verify' = TLS sin verificar
+    // (algunos proveedores gestionados usan certificados propios).
+    DATABASE_SSL: z.enum(['disable', 'require', 'no-verify']).default('disable'),
+    CORS_ORIGINS: z
+      .string()
+      .default('')
+      .transform((v) => v.split(',').map((s) => s.trim()).filter(Boolean)),
+    // Saltos de proxy inverso delante de la API (hosting con balanceador = 1).
+    TRUST_PROXY: z.coerce.number().int().min(0).max(5).default(0),
+    DB_POOL_MAX: z.coerce.number().int().min(1).max(50).default(10),
+    // Peticiones máximas por IP en la ventana (segundos). 0 desactiva el límite.
+    RATE_LIMIT_MAX: z.coerce.number().int().min(0).default(120),
+    RATE_LIMIT_WINDOW_S: z.coerce.number().int().min(1).default(60),
+    // Caché pública del contenido servido (los escenarios publicados son estables).
+    CACHE_SECONDS: z.coerce.number().int().min(0).max(86400).default(60),
+    DATA_DIR: z.string().default('../../muestras'),
+  })
+  .superRefine((cfg, ctx) => {
+    if (cfg.NODE_ENV !== 'production') return;
+    const falla = (path, message) => ctx.addIssue({ code: 'custom', path: [path], message });
+
+    if (cfg.CORS_ORIGINS.length === 0) {
+      falla('CORS_ORIGINS', 'en producción debe listar el origen del frontend (p. ej. https://usuario.github.io)');
+    }
+    if (cfg.CORS_ORIGINS.some((o) => o === '*' || !/^https:\/\/[^/]+$/.test(o))) {
+      falla('CORS_ORIGINS', 'en producción solo se aceptan orígenes https exactos, sin comodín ni ruta');
+    }
+    if (/jiimatzin_dev|localhost|127\.0\.0\.1/.test(cfg.DATABASE_URL)) {
+      falla('DATABASE_URL', 'apunta a una BD local o usa la contraseña de desarrollo');
+    }
+    if (cfg.RATE_LIMIT_MAX === 0) {
+      falla('RATE_LIMIT_MAX', 'en producción el límite de peticiones no puede desactivarse');
+    }
+    if (cfg.DATABASE_SSL === 'disable') {
+      falla('DATABASE_SSL', 'en producción usa "require" (o "no-verify" si el proveedor lo exige)');
+    }
+  });
 
 const resultado = esquema.safeParse(process.env);
 
@@ -18,7 +51,7 @@ if (!resultado.success) {
   const detalle = resultado.error.issues
     .map((i) => `  - ${i.path.join('.')}: ${i.message}`)
     .join('\n');
-  throw new Error(`Configuración de entorno inválida (revisa .env):\n${detalle}`);
+  throw new Error(`Configuración de entorno inválida (revisa las variables de entorno):\n${detalle}`);
 }
 
 export const env = resultado.data;

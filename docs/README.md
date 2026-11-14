@@ -9,6 +9,7 @@ Se actualiza junto con el código (un commit `docs(...)` por cambio relevante). 
 | [03-modelo-datos.md](03-modelo-datos.md) | Diagrama entidad-relación y reglas de datos |
 | [04-api.md](04-api.md) | Endpoints, errores y ejemplos |
 | [05-importacion.md](05-importacion.md) | Flujo del importador y política de calidad |
+| [06-produccion.md](06-produccion.md) | Variables de entorno, despliegue y lista de comprobación |
 | [../CONTRIBUTING.md](../CONTRIBUTING.md) | Commits, ramas y flujo |
 
 ## Registro de avance

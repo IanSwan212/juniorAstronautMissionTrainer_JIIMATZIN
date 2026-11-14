@@ -68,6 +68,15 @@ test('ficha y fuente inexistentes → 404', async () => {
   assert.equal((await get('/api/v1/sources/no-existe')).status, 404);
 });
 
+test('cabeceras: contenido cacheable, salud y errores sin caché, límite informado', async () => {
+  const ok = await get('/api/v1/scenarios');
+  assert.match(ok.headers.get('cache-control'), /^public, max-age=\d+$/);
+  assert.ok(ok.headers.get('ratelimit') || ok.headers.get('ratelimit-policy'));
+  assert.equal(ok.headers.get('x-powered-by'), null);
+  assert.equal((await get('/health')).headers.get('cache-control'), 'no-store');
+  assert.equal((await get('/api/v1/scenarios/no-existe')).headers.get('cache-control'), 'no-store');
+});
+
 test('ruta desconocida → 404 JSON', async () => {
   const r = await get('/api/v1/nada');
   assert.equal(r.status, 404);
