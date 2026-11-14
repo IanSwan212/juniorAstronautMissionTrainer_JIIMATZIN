@@ -10,6 +10,7 @@ Se actualiza junto con el código (un commit `docs(...)` por cambio relevante). 
 | [04-api.md](04-api.md) | Endpoints, errores y ejemplos |
 | [05-importacion.md](05-importacion.md) | Flujo del importador y política de calidad |
 | [06-produccion.md](06-produccion.md) | Variables de entorno, despliegue y lista de comprobación |
+| [07-guia-desarrollo.md](07-guia-desarrollo.md) | Orden de trabajo: primero BD, después endpoints |
 | [../CONTRIBUTING.md](../CONTRIBUTING.md) | Commits, ramas y flujo |
 
 ## Registro de avance

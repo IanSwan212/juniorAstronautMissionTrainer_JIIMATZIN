@@ -54,7 +54,7 @@ flowchart LR
 
 ## Pendiente
 
-- Elegir hosting: ninguno está confirmado (GitHub Pages no ejecuta servidor).
+- Hosting: irá a Google Cloud; el servicio concreto está pendiente (GitHub Pages no ejecuta servidor).
 - Decidir quién ejecuta las migraciones en cada despliegue (manual o paso del pipeline).
 - Limitación de tasa (`rate limit`) y registro estructurado, si el tráfico lo justifica.
 - Cuando se importen datos reales: estrategia de copias de seguridad de la BD.
