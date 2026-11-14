@@ -1,0 +1,22 @@
+{
+  "name": "jiimatzin",
+  "private": true,
+  "description": "Junior Astronaut Mission Trainer (JIIMATZIN): monorepo con backend (API de contenido) y frontend (Phaser).",
+  "packageManager": "pnpm@11.3.0",
+  "engines": {
+    "node": ">=22.9",
+    "pnpm": ">=10"
+  },
+  "scripts": {
+    "preinstall": "node scripts/solo-pnpm.mjs",
+    "dev:back": "pnpm --filter @jiimatzin/backend dev",
+    "dev:front": "pnpm --filter @jiimatzin/frontend dev",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f db",
+    "migrar": "pnpm --filter @jiimatzin/backend migrar",
+    "migrar:revertir": "pnpm --filter @jiimatzin/backend migrar:revertir",
+    "test": "pnpm --filter @jiimatzin/backend test",
+    "prepare": "git config core.hooksPath .githooks || exit 0"
+  }
+}

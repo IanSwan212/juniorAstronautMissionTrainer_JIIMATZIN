@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jiimatzin.local/contrato/scenario.schema.json",
+  "title": "Escenario JIIMATZIN (borrador v1, NO aprobado)",
+  "description": "Contrato entre la API de contenido y el adaptador de Phaser. Debe acordarse con los roles 1, 2 y 3 antes de congelarse.",
+  "type": "object",
+  "required": ["schemaVersion", "scenarioId", "scenarioVersion", "rulesVersion", "dataMode", "sourceCoverage", "retrievedAt", "conditions", "factIds", "modelAssumptions"],
+  "properties": {
+    "schemaVersion": { "const": "1" },
+    "scenarioId": { "type": "string" },
+    "scenarioVersion": { "type": "string" },
+    "rulesVersion": { "type": "string" },
+    "language": { "type": "string", "pattern": "^[a-z]{2}$" },
+    "dataMode": { "enum": ["historical"], "description": "Solo histórico en la v1. No llamarlo 'tiempo real'." },
+    "sourceCoverage": {
+      "type": "object",
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": ["string", "null"], "format": "date-time" },
+        "end": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "retrievedAt": { "type": ["string", "null"], "format": "date-time", "description": "Captura UTC; distinta de la fecha del fenómeno." },
+    "conditions": { "type": "array", "items": { "$ref": "#/$defs/condition" } },
+    "factIds": { "type": "array", "items": { "type": "string" } },
+    "facts": { "type": "array", "items": { "$ref": "#/$defs/factEssential" } },
+    "modelAssumptions": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "condition": {
+      "type": "object",
+      "required": ["kind", "variable", "value", "unit", "evidenceId", "quality", "context"],
+      "properties": {
+        "kind": { "enum": ["observation", "record"] },
+        "variable": { "type": "string" },
+        "value": { "type": ["number", "null"], "description": "null = faltante; nunca -999 ni 0 inventado." },
+        "unit": { "type": ["string", "null"] },
+        "evidenceId": { "type": "string", "description": "obs:<id> o rec:<id>" },
+        "quality": { "type": ["string", "null"] },
+        "context": { "type": ["string", "null"] },
+        "justification": { "type": "string" },
+        "gameSol": { "type": ["integer", "null"], "description": "Sol del JUEGO, no de la misión real." },
+        "gamePhase": { "enum": ["morning", "day", "emergency", "night", null] },
+        "missionSol": { "type": ["integer", "null"] },
+        "observedAt": { "type": ["string", "null"] },
+        "occurredAt": { "type": ["string", "null"] },
+        "payload": { "type": ["object", "null"] }
+      }
+    },
+    "factEssential": {
+      "type": "object",
+      "required": ["id", "language", "title", "explanation"],
+      "properties": {
+        "id": { "type": "string" },
+        "language": { "type": "string" },
+        "version": { "type": "integer" },
+        "title": { "type": "string" },
+        "explanation": { "type": "string" },
+        "gameAdaptation": { "type": ["string", "null"] },
+        "appearsAt": { "type": "object" }
+      }
+    }
+  }
+}

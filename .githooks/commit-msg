@@ -1,0 +1,3 @@
+#!/bin/sh
+# Valida el mensaje de commit (ver CONTRIBUTING.md). Se activa con `npm install` (script "prepare").
+node "$(dirname "$0")/../scripts/validar-commit.mjs" "$1"

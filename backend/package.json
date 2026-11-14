@@ -1,0 +1,29 @@
+{
+  "name": "@jiimatzin/backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "API de contenido de JIIMATZIN: sirve escenarios y fichas importados a PostgreSQL.",
+  "engines": {
+    "node": ">=22.9"
+  },
+  "scripts": {
+    "dev": "node --watch --env-file-if-exists=../.env src/index.js",
+    "start": "node --env-file-if-exists=../.env src/index.js",
+    "test": "node --test",
+    "migrar": "node --env-file-if-exists=../.env node_modules/node-pg-migrate/bin/node-pg-migrate.js -m migrations up",
+    "migrar:revertir": "node --env-file-if-exists=../.env node_modules/node-pg-migrate/bin/node-pg-migrate.js -m migrations down",
+    "migrar:crear": "node node_modules/node-pg-migrate/bin/node-pg-migrate.js -m migrations --migration-file-language sql create",
+    "importar": "node --env-file-if-exists=../.env src/importador/cli.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "helmet": "^8.3.0",
+    "pg": "^8.23.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "node-pg-migrate": "^9.0.0"
+  }
+}

@@ -1,0 +1,17 @@
+node_modules/
+.env
+.env.*
+!.env.example
+dist/
+build/
+coverage/
+*.log
+.DS_Store
+Thumbs.db
+
+# Originales y respaldos de datos: nunca al repositorio (se conservan aparte, con hash)
+backend/data/
+backups/
+*.zip
+package-lock.json
+yarn.lock
