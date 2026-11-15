@@ -43,28 +43,7 @@ for (const t of ['La energía de hoy ya está repartida. La consola vuelve a abr
 for (let n = 3; n <= 30; n++) add(`Son las 8 de la noche. Ya es de noche y los paneles solares descansan. Los sistemas gastan ${n} de energía.`, 'neutral', true);
 for (let k = 1; k <= 8; k++) add(`Con tus ajustes de ingeniero, Wenceslao, son ${k} menos que sin ellos.`, 'neutral', false);
 add('Vamos al Refugio a descansar con el equipo.', 'neutral', false);
-// Resumen del sol (guia.resumenDelSol)
-for (const x of SOBRE_TEMA) { add(`Hoy aprendiste más sobre ${x}.`, 'feliz', false); add(`Mañana practiquemos ${x}.`, 'feliz', false); }
-add('¡Vas muy bien en todo!', 'feliz', false);
-// Consola: pista antes y porqué después (guia.pistaConsola, guia.evidenciaConsola)
-for (const r of RECURSOS) {
-  const s = A_SISTEMA[SISTEMA_DE_RECURSO[r]];
-  add(`Pista de la IA: tu ${NOMBRE_RECURSO[r]} es lo más bajo hoy. Dale más núcleos ${s}.`, 'procesando', false);
-  add(`Un consejo: tu ${NOMBRE_RECURSO[r]} era lo más bajo; había que darle más núcleos ${s}.`, 'neutral', false);
-}
-add('Pista de la IA: mi pronóstico dice llamarada fuerte. Los Escudos del Casco van a necesitar núcleos.', 'procesando', false);
-add('Un consejo: mi pronóstico decía llamarada fuerte; con más núcleos en los Escudos el blindaje se cuida.', 'neutral', false);
-// Emergencias: pista y porqué (guia.pistaEmergencia, guia.evidenciaEmergencia)
-add('Pista: antes de elegir, mira cuál de tus recursos está más alto.', 'procesando', false);
-for (const r of RECURSOS) add(`Pista: ahora tienes más ${NOMBRE_RECURSO[r]}. Gasta lo que tienes de sobra.`, 'procesando', false);
-add('Se acabó el tiempo y la base eligió sola. Si miras las barras primero, decides más rápido.', 'neutral', false);
-const pares = new Set();
-for (const [a, b] of COSTES) { pares.add(`${a}|${b}`); pares.add(`${b}|${a}`); }
-for (const p of pares) {
-  const [sobra, falta] = p.split('|');
-  add(`¡Bien pensado! Gastaste ${CON_ARTICULO[sobra]}, que tenías de sobra, y cuidaste ${CON_ARTICULO[falta]}, que era lo más bajo.`, 'feliz', false);
-  add(`Ojo: ${CON_ARTICULO[falta]} era lo más bajo y gastaste justo eso. La próxima vez, gasta lo que más tienes: ${CON_ARTICULO[sobra]}.`, 'neutral', false);
-}
+// (la IA guía: pistas, porqués, repaso y resumen salen de src/compania/frases.js, más abajo)
 // Noticias del Sol (datosReales.lineasSol): lo que no depende de la fecha ni de la clase
 add('Noticias del Sol, de la NASA: en los últimos 7 días no se registró ninguna llamarada solar. El Sol ha estado tranquilo.', 'feliz', false);
 // (y por frases: si la NASA no respondió, el juego le añade una frase al final)
@@ -82,10 +61,10 @@ const UNI = ['cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', '
 const ONES = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen',
   'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty', 'twenty-one', 'twenty-two', 'twenty-three',
   'twenty-four', 'twenty-five', 'twenty-six', 'twenty-seven', 'twenty-eight', 'twenty-nine', 'thirty'];
-const leerEs = t => t.replace(/CO₂/g, 'dióxido de carbono').replace(/\bIA\b/g, 'I A').replace(/\bNASA\b/g, 'NASA')
+const leerEs = t => t.replace(/P.I.E.D.R.A/g, 'Piedra').replace(/CO₂/g, 'dióxido de carbono').replace(/\bIA\b/g, 'I A').replace(/\bNASA\b/g, 'NASA')
   .replace(/\b1 llamarada\b/g, 'una llamarada').replace(/\b(\d{1,2})\b/g, (_, n) => UNI[+n] ?? n)
   .replace(/letras: A, B, C, M y X/, 'letras: A, B, C, M y equis');
-const leerEn = t => t.replace(/CO₂/g, 'carbon dioxide').replace(/\bAI\b/g, 'A I').replace(/\b(\d{1,2})\b/g, (_, n) => ONES[+n] ?? n);
+const leerEn = t => t.replace(/P.I.E.D.R.A/g, 'Piedra').replace(/CO₂/g, 'carbon dioxide').replace(/\bAI\b/g, 'A I').replace(/\b(\d{1,2})\b/g, (_, n) => ONES[+n] ?? n);
 
 // Frases como las corta sonido.js
 const frases = t => t.replace(/\s+/g, ' ').trim().split(/(?<=[.!?])\s+/).filter(Boolean);
@@ -106,6 +85,12 @@ for (const lengua of ['es', 'en']) {
     if (lengua === 'en' && t === e.texto) console.warn('sin inglés:', e.texto);
     for (const f of e.frases ? frases(t) : [t]) meter(lengua, f, e.cara);
   }
+}
+
+// --- La IA guía: todas las variantes de src/compania/frases.js con cada valor posible, por frases ---
+const { todasLasFrases } = await import(pathToFileURL(path.join(FRONT, 'src/compania/frases.js')).href);
+for (const lengua of ['es', 'en']) {
+  for (const linea of todasLasFrases(lengua === 'en')) for (const f of frases(linea)) meter(lengua, f, 'neutral');
 }
 
 // --- Inglés de las líneas de la IA de historia.ink (en español ya tienen MP3 del rol 5) ---
