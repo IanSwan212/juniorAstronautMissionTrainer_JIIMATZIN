@@ -22,7 +22,7 @@ describe('API con PostgreSQL y migraciones desde cero', { skip: !process.env.TES
     const url = new URL(process.env.TEST_DATABASE_URL);
     assert.match(url.pathname, /^\/jiimatzin_test_[0-9a-f]{32}$/, 'Usa pnpm test:integracion para crear una BD aislada');
     pool = new pg.Pool({ connectionString: url.href, connectionTimeoutMillis: 5000 });
-    for (const migration of ['20261114000000_esquema-inicial.sql', '20261115000000_dataset-cientifico.sql','20261116000000_publicaciones.sql','20261117000000_escenarios-cientificos.sql']) {
+    for (const migration of ['20261114000000_esquema-inicial.sql', '20261115000000_dataset-cientifico.sql','20261116000000_publicaciones.sql','20261117000000_escenarios-cientificos.sql','20261118000000_contenido-juego.sql']) {
       const sql = await readFile(new URL(`../migrations/${migration}`, import.meta.url), 'utf8');
       await pool.query(sql.split('-- Down Migration')[0]);
     }

@@ -1,12 +1,14 @@
 import { parseArgs } from 'node:util';
-import { readFile } from 'node:fs/promises';
+import { readFile,writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pg from 'pg';
 import { crearBorradorEscenario,cambiarPublicacionEscenario } from './escenarios.admin.js';
 import { exportarEscenario } from './escenarios.exportar.js';
+import { prepararEscenario } from '../contenido/contenido.escenario.js';
 
-const help=`Uso: pnpm --filter @jiimatzin/backend escenarios -- <crear|publicar|retirar|exportar>
+const help=`Uso: pnpm --filter @jiimatzin/backend escenarios -- <preparar|crear|publicar|retirar|exportar>
+preparar: --catalogo <cat_SHA256> --release <id> --id <slug> --version <entero> --salida <JSON> [--vinculos <JSON>]
 crear: --definicion <JSON> --actor <referencia>
 publicar/retirar: --id <slug> --version <entero> --actor <referencia> [--motivo <texto>]
 exportar: --id <slug> --version <entero> [--directorio <carpeta>]
@@ -16,12 +18,13 @@ try {
   const args=process.argv.slice(2);if(args[0]==='--')args.shift();
   const {positionals,values}=parseArgs({args,allowPositionals:true,options:{
     definicion:{type:'string'},actor:{type:'string'},id:{type:'string'},version:{type:'string'},motivo:{type:'string'},directorio:{type:'string'},ayuda:{type:'boolean'},
+    catalogo:{type:'string'},release:{type:'string'},salida:{type:'string'},vinculos:{type:'string'},
   }});
   if(values.ayuda) console.log(help);
   else {
     const [action]=positionals;
-    if(positionals.length!==1 || !['crear','publicar','retirar','exportar'].includes(action)) throw new Error(help);
-    const allowed={crear:['definicion','actor'],publicar:['id','version','actor'],retirar:['id','version','actor','motivo'],exportar:['id','version','directorio']}[action];
+    if(positionals.length!==1 || !['preparar','crear','publicar','retirar','exportar'].includes(action)) throw new Error(help);
+    const allowed={preparar:['catalogo','release','id','version','salida','vinculos'],crear:['definicion','actor'],publicar:['id','version','actor'],retirar:['id','version','actor','motivo'],exportar:['id','version','directorio']}[action];
     if(Object.keys(values).some((key)=>!allowed.includes(key))) throw new Error('Opción incompatible con la acción');
     if(!/^postgres(ql)?:\/\//.test(process.env.DATABASE_URL??''))throw new Error('DATABASE_URL es obligatoria');
     const ssl=process.env.DATABASE_SSL??'disable';
@@ -29,7 +32,13 @@ try {
     pool=new pg.Pool({connectionString:process.env.DATABASE_URL,max:1,connectionTimeoutMillis:5000,
       ssl:ssl==='disable'?false:{rejectUnauthorized:ssl==='require'}});
     let result;
-    if(action==='crear') {
+    if(action==='preparar') {
+      if(!values.salida||!/^[1-9][0-9]*$/.test(values.version??''))throw new Error('Faltan --salida y --version');
+      const definition=await prepararEscenario(pool,{catalogId:values.catalogo,releaseId:values.release,scenarioId:values.id,version:Number(values.version),
+        factBindings:values.vinculos?JSON.parse(await readFile(resolve(values.vinculos),'utf8')):[]});
+      await writeFile(resolve(values.salida),JSON.stringify(definition,null,2)+'\n',{flag:'wx'});
+      result={path:resolve(values.salida),status:'definition_prepared',conditions:definition.conditions.length,facts:definition.facts.length};
+    } else if(action==='crear') {
       if(!values.definicion)throw new Error('Falta --definicion');
       result=await crearBorradorEscenario(pool,JSON.parse(await readFile(resolve(values.definicion),'utf8')),values.actor);
     } else {

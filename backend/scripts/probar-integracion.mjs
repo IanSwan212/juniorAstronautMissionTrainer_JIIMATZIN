@@ -7,9 +7,10 @@ import pg from 'pg';
 const admin = new pg.Client({ connectionString: process.env.DATABASE_URL, connectionTimeoutMillis: 5000 });
 try {
   await admin.connect();
-  const suites = process.argv.includes('--escenarios') ? ['test/escenarios.integracion.test.js']
+  const suites = process.argv.includes('--contenido') ? ['test/contenido.integracion.test.js']
+    : process.argv.includes('--escenarios') ? ['test/escenarios.integracion.test.js']
     : process.argv.includes('--publicaciones') ? ['test/publicaciones.integracion.test.js']
-    : ['test/integracion.test.js','test/importador.integracion.test.js','test/publicaciones.integracion.test.js','test/escenarios.integracion.test.js'];
+    : ['test/integracion.test.js','test/importador.integracion.test.js','test/publicaciones.integracion.test.js','test/escenarios.integracion.test.js','test/contenido.integracion.test.js'];
   for (const suite of suites) {
     const database = `jiimatzin_test_${randomUUID().replaceAll('-', '')}`;
     const url = new URL(process.env.DATABASE_URL);

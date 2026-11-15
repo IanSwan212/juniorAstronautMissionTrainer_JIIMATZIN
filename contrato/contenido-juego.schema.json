@@ -1,0 +1,611 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 20000
+    },
+    "recursos": {
+      "minItems": 3,
+      "maxItems": 3,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": [
+              "energia",
+              "oxigeno",
+              "blindaje"
+            ]
+          },
+          "niveles": {
+            "type": "object",
+            "properties": {
+              "0": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "1": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "2": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "3": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              }
+            },
+            "required": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "niveles"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "personajes": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+          },
+          "nombre": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "rol": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "habilidades": {
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 20000
+            }
+          },
+          "muletilla": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "expresiones": {
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 20000
+            }
+          },
+          "jugable": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "nombre",
+          "rol",
+          "habilidades",
+          "muletilla",
+          "expresiones",
+          "jugable"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "soles": {
+      "minItems": 10,
+      "maxItems": 10,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sol": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "nudo_manana": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "nudo_dia": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "minijuego_sugerido": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "emergencia_sugerida": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "nudo_noche": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "en_modo_rapido": {
+            "type": "boolean"
+          },
+          "nota": {
+            "type": "string",
+            "maxLength": 20000
+          }
+        },
+        "required": [
+          "sol",
+          "nudo_manana",
+          "nudo_dia",
+          "minijuego_sugerido",
+          "emergencia_sugerida",
+          "nudo_noche",
+          "en_modo_rapido",
+          "nota"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "minijuegos": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+          },
+          "nombre": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "recurso": {
+            "type": "string",
+            "enum": [
+              "energia",
+              "oxigeno",
+              "blindaje"
+            ]
+          },
+          "nudos": {
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 20000
+            }
+          },
+          "gana": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "falla": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "evento_real": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "dato": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mecanica": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          }
+        },
+        "required": [
+          "id",
+          "nombre",
+          "recurso",
+          "nudos",
+          "gana",
+          "falla",
+          "evento_real",
+          "dato",
+          "mecanica"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "emergencias": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+          },
+          "sol_sugerido": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "opciones": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "opcion": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20000
+                },
+                "costo": {
+                  "type": "object",
+                  "properties": {
+                    "recurso": {
+                      "type": "string",
+                      "enum": [
+                        "energia",
+                        "oxigeno",
+                        "blindaje"
+                      ]
+                    },
+                    "cambio": {
+                      "type": "integer",
+                      "minimum": -3,
+                      "maximum": -1
+                    }
+                  },
+                  "required": [
+                    "recurso",
+                    "cambio"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "opcion",
+                "costo"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "nudo_dato": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dato": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "sol_sugerido",
+          "opciones",
+          "nudo_dato",
+          "dato"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "cartas_mejora": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+          },
+          "nombre": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "efecto_sugerido": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "dato": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "costo_sugerido": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "nombre",
+          "efecto_sugerido",
+          "dato"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "finales": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+          },
+          "nudo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "condicion": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "musica": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+          },
+          "sfx": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+          },
+          "dato": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "accion": {
+            "type": "string",
+            "enum": [
+              "creditos",
+              "reiniciar"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "nudo",
+          "condicion",
+          "musica",
+          "accion"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "datos_reales": {
+      "maxItems": 1000,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+          },
+          "lineas_de_la_escena": {
+            "anyOf": [
+              {
+                "maxItems": 200,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20000
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "nudos_donde_aparece": {
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 20000
+            }
+          },
+          "resumen_verificado": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "fuentes": {
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 20000
+            }
+          },
+          "verificado": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          }
+        },
+        "required": [
+          "id",
+          "lineas_de_la_escena",
+          "nudos_donde_aparece",
+          "resumen_verificado",
+          "fuentes",
+          "verificado"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "audio": {
+      "type": "object",
+      "properties": {
+        "musica": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          }
+        },
+        "sfx": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          }
+        }
+      },
+      "required": [
+        "musica",
+        "sfx"
+      ],
+      "additionalProperties": false
+    },
+    "variables_del_juego": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 20000
+      }
+    }
+  },
+  "required": [
+    "version",
+    "recursos",
+    "personajes",
+    "soles",
+    "minijuegos",
+    "emergencias",
+    "cartas_mejora",
+    "finales",
+    "datos_reales",
+    "audio",
+    "variables_del_juego"
+  ],
+  "additionalProperties": false
+}

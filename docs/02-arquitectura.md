@@ -84,7 +84,11 @@ flowchart LR
 
 `app.js` conecta configuración, middlewares y routers; `rutas.js` agrupa `/api/v1`. `infraestructura/` concentra configuración, pool y middlewares HTTP. `compartido/errores.js` define errores de aplicación sin dependencias de transporte; el middleware traduce una ausencia a 404 y oculta los errores inesperados con 500.
 
-El importador sigue siendo un comando administrativo pendiente de implementar. Tendrá sus propios casos de uso y persistencia cuando se construya; no necesita controlador ni vista HTTP mientras no exponga rutas.
+Los importadores científicos (`src/importador/`) y del desglose del juego
+(`src/contenido/`) son comandos administrativos implementados. Validan entradas,
+cargan en transacciones y conservan identidades por contenido. No exponen rutas
+de escritura. Los escenarios fijan las revisiones de ambas partes y su vista
+construye la respuesta pública; ver [catálogos](12-contenido-juego.md).
 
 ### Reglas para extender
 

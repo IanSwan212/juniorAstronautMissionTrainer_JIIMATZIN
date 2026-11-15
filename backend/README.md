@@ -45,13 +45,13 @@ Se leen del `.env` de la raíz (ver [../.env.example](../.env.example)). `DATABA
 
 ## Pruebas
 
-`pnpm test` ejecuta 47 pruebas sin PostgreSQL: rutas, contratos, validación,
+`pnpm test` ejecuta 51 pruebas sin PostgreSQL: rutas, contratos, validación,
 cabeceras, errores, DONKI con cliente simulado y el importador con paquetes ZIP
 mínimos. Requiere Python 3; las suites de integración se omiten en esa ejecución.
 
 `pnpm test:integracion` usa `DATABASE_URL` de `../.env` para crear una BD
-temporal `jiimatzin_test_<uuid>` por suite, aplicar las cuatro migraciones desde cero y
-ejecutar 37 pruebas de API, importación, publicación y escenarios con SQL real. Las BD se eliminan en `finally`, incluso
+temporal `jiimatzin_test_<uuid>` por suite, aplicar las migraciones necesarias desde cero y
+ejecutar 42 pruebas de API, importación, publicación, escenarios y catálogos con SQL real. Las BD se eliminan en `finally`, incluso
 si falla una prueba; no se escriben fixtures en la BD de desarrollo. Requiere
 PostgreSQL accesible y un rol con permiso `CREATEDB` (el rol local de Compose lo
 tiene). Si el proceso se termina forzosamente puede quedar la BD temporal.
@@ -66,8 +66,10 @@ usan `juego` y fijan miembros de `ciencia`; el adaptador consume `schemaVersion:
 
 ## Pendiente
 
-Revisión humana de fichas, definición editorial de escenarios/reglas,
-correspondencia con las etiquetas narrativas y despliegue. Ver [../docs/README.md](../docs/README.md).
+Publicación del primer escenario, integración del motor visual y despliegue.
+Las entradas narrativas del desglose conservan una revisión independiente de las
+fichas científicas; los efectos de cartas descritos en texto siguen pendientes
+de parámetros. Ver [contenido del juego](../docs/12-contenido-juego.md).
 
 ## Importación
 
@@ -86,8 +88,13 @@ revisiones y límites de escritura; ver `src/publicaciones/` y las migraciones.
 
 ## Escenarios
 
-`pnpm escenarios -- crear|publicar|retirar|exportar ...` prepara contenido desde
+`pnpm escenarios -- preparar|crear|publicar|retirar|exportar ...` prepara contenido desde
 una definición JSON y exporta únicamente versiones disponibles. Cada escenario
 fija publicación, reglas y registros; los datos de juego viven en `juego`.
 La API los recupera en una sola instantánea. Definición, contrato, plantilla y
 respaldo en `src/escenarios/` y `migrations/`.
+
+`pnpm contenido -- validar|importar --archivo <JSON> --sha256 <huella> ...`
+valida y carga el desglose del juego, con cotejo opcional de sus CSV. Los
+catálogos son inmutables por versión y se fijan en `gameplay` del escenario.
+Ver [operación](../docs/12-contenido-juego.md) y [DDL](../docs/13-modelo-juego.md).

@@ -19,8 +19,8 @@ Salud y DONKI conservan su comportamiento. Las fichas sin aprobación humana
 devuelven 404; las fuentes se sirven desde el catálogo importado.
 La importación no habilita escenarios científicos.
 
-Verificación automatizada: `pnpm test` (47 pruebas sin BD) y
-`pnpm test:integracion` (37 pruebas con PostgreSQL, migraciones desde cero y
+Verificación automatizada: `pnpm test` (51 pruebas sin BD) y
+`pnpm test:integracion` (42 pruebas con PostgreSQL, migraciones desde cero y
 fixtures en bases temporales eliminadas al terminar). El importador tiene una
 prueba adicional opcional con el ZIP completo; ver [05](05-importacion.md).
 
@@ -83,8 +83,8 @@ El adaptador del frontend consume el borrador 2 de escenarios y comprueba la rev
 Este endpoint publica contenido editorial aprobado de forma independiente; no
 declara validado un `dataset_release`, no selecciona una publicación ni alimenta
 automáticamente las partidas. Los controles administrativos de publicación ya
-están implementados en `backend/src/publicaciones/`; falta la revisión humana y definir el
-primer escenario editorial para esa publicación.
+están implementados en `backend/src/publicaciones/`. El primer escenario puede
+prepararse con el catálogo del juego y mantenerse como borrador hasta su publicación.
 
 ## Escenarios científicos
 
@@ -153,6 +153,18 @@ administrativos; no se añaden endpoints públicos de escritura.
 ```
 
 Errores propios (además de los de abajo): `502 fuente_error | fuente_no_disponible | fuente_respuesta_invalida`, `503 fuente_limitada` (con `Retry-After`), `504 fuente_sin_respuesta`.
+
+## Catálogo de juego dentro del escenario
+
+El detalle de escenario puede incluir `gameplay`, una extensión opcional del
+contrato 2. Fija catálogo, recursos iniciales, personajes, calendario, minijuegos,
+emergencias/opciones, cartas, finales y referencias de audio/Ink. Los cambios de
+recurso son objetos estructurados; las propuestas y efectos pendientes conservan
+su estado. Los IDs de datos narrativos no heredan aprobación científica: se
+excluyen sus resúmenes y fuentes pendientes. Los vínculos hacia `facts` son
+referencias complementarias explícitas. Ver [contrato y operación](12-contenido-juego.md).
+El campo viaja también en el respaldo exportado. Los escenarios sin catálogo
+mantienen su respuesta anterior; no se añadió un endpoint global ni de escritura.
 
 ## Errores
 

@@ -3,6 +3,7 @@ import { canonical } from '../importador/validacion.js';
 import { crearRepositorioEscenarios } from './escenarios.repository.js';
 import { presentarEscenario } from './escenarios.view.js';
 import { contratoEscenario } from './escenarios.contract.js';
+import { contenidoEscenarioSchema } from '../contenido/contenido.schema.js';
 
 const id=z.string().regex(/^[a-z0-9][a-z0-9_-]{0,63}$/);
 const version=z.number().int().min(1).max(2147483647);
@@ -18,6 +19,7 @@ export const definicionEscenario=z.strictObject({
   conditions:z.array(z.strictObject({recordId,role:z.enum(['environment','reference']),gameSol:sol,gamePhase:phase,
     justification:z.string().trim().min(1).max(2000)})).min(1).max(2000),
   facts:z.array(z.strictObject({recordId,gameSol:sol.nullable().default(null),gamePhase:phase})).max(100),
+  gameplay:contenidoEscenarioSchema.optional(),
 });
 
 async function transaccion(pool, fn) {
@@ -38,6 +40,7 @@ async function transaccion(pool, fn) {
 export async function crearBorradorEscenario(pool,input,actor) {
   const d=definicionEscenario.parse(input);actor=actorSchema.parse(actor);
   if(new Set(d.facts.map((f)=>f.recordId)).size!==d.facts.length) throw new Error('Ficha duplicada en la selección');
+  if(d.gameplay)d.gameplay.factBindings.sort((a,b)=>a.narrativeId.localeCompare(b.narrativeId,'en')||a.recordId.localeCompare(b.recordId,'en'));
   return transaccion(pool,async(client)=>{
     await client.query(`INSERT INTO juego.game_rule_sets(rules_version,definition) VALUES($1,$2::jsonb) ON CONFLICT DO NOTHING`,
       [d.rulesVersion,JSON.stringify(d.rules)]);
@@ -52,6 +55,8 @@ export async function crearBorradorEscenario(pool,input,actor) {
       if(existing.publication_status!=='draft' || existing.release_id!==d.releaseId || existing.rules_version!==d.rulesVersion
         || existing.language!==d.language || existing.title!==d.title || canonical(existing.model_assumptions)!==canonical(d.modelAssumptions)
         || canonical(records)!==canonical(d.conditions) || canonical(facts)!==canonical(d.facts)) throw new Error('La versión de escenario ya existe con otro contenido o está publicada');
+      const stored=await leerContenidoDefinicion(client,d.scenarioId,d.version);
+      if(canonical(stored)!==canonical(d.gameplay??null))throw new Error('La versión de escenario ya existe con otro catálogo o vínculos');
       return {scenarioId:d.scenarioId,version:d.version,status:'draft',created:false};
     }
     await client.query(`INSERT INTO juego.scenarios(scenario_id,version,release_id,rules_version,language,title,model_assumptions)
@@ -62,9 +67,27 @@ export async function crearBorradorEscenario(pool,input,actor) {
     for(const [position,f] of d.facts.entries()) await client.query(`INSERT INTO juego.scenario_facts
       (scenario_id,scenario_version,release_id,position,record_id,game_sol,game_phase) VALUES($1,$2,$3,$4,$5,$6,$7)`,
       [d.scenarioId,d.version,d.releaseId,position,f.recordId,f.gameSol,f.gamePhase]);
+    if(d.gameplay) {
+      const g=d.gameplay;
+      if(new Set(g.factBindings.map(b=>b.narrativeId+':'+b.recordId)).size!==g.factBindings.length)throw new Error('Vínculo narrativo duplicado');
+      await client.query(`INSERT INTO juego.scenario_content(scenario_id,scenario_version,catalog_id,initial_resources)
+        VALUES($1,$2,$3,$4::jsonb)`,[d.scenarioId,d.version,g.catalogId,JSON.stringify(g.initialResources)]);
+      for(const b of g.factBindings)await client.query(`INSERT INTO juego.vinculos_datos
+        (scenario_id,scenario_version,catalog_id,narrative_id,record_id,justification) VALUES($1,$2,$3,$4,$5,$6)`,
+        [d.scenarioId,d.version,g.catalogId,b.narrativeId,b.recordId,b.justification]);
+    }
     await client.query(`INSERT INTO juego.scenario_events(scenario_id,scenario_version,action,actor_ref) VALUES($1,$2,'created',$3)`,[d.scenarioId,d.version,actor]);
     return {scenarioId:d.scenarioId,version:d.version,status:'draft',created:true};
   });
+}
+
+async function leerContenidoDefinicion(client,id,version) {
+  const {rows:[r]}=await client.query('SELECT * FROM juego.scenario_content WHERE scenario_id=$1 AND scenario_version=$2',[id,version]);
+  if(!r)return null;
+  const {rows:bindings}=await client.query(`SELECT narrative_id AS "narrativeId",record_id AS "recordId",justification
+    FROM juego.vinculos_datos WHERE scenario_id=$1 AND scenario_version=$2 ORDER BY narrative_id,record_id`,[id,version]);
+  bindings.sort((a,b)=>a.narrativeId.localeCompare(b.narrativeId,'en')||a.recordId.localeCompare(b.recordId,'en'));
+  return {catalogId:r.catalog_id,initialResources:r.initial_resources,factBindings:bindings};
 }
 
 export async function cambiarPublicacionEscenario(pool,options) {

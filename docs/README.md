@@ -11,6 +11,8 @@ Se actualiza junto con el código (un commit `docs(...)` por cambio relevante). 
 | [06-produccion.md](06-produccion.md) | Variables de entorno, despliegue y lista de comprobación |
 | [10-diccionario-bd.md](10-diccionario-bd.md) | Propósito, columnas, tipos, PK, FK y restricciones de las tablas de ciencia |
 | [11-diagrama-er.md](11-diagrama-er.md) | Diagrama completo de ciencia y su fuente Mermaid |
+| [12-contenido-juego.md](12-contenido-juego.md) | Importación del desglose, catálogos versionados, escenarios y contrato del frontend |
+| [13-modelo-juego.md](13-modelo-juego.md) | Diccionario y relaciones de las 19 tablas de juego |
 | [../CONTRIBUTING.md](../CONTRIBUTING.md) | Commits, ramas y flujo |
 
 ## Cómo mantener esta documentación

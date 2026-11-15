@@ -1,3 +1,4 @@
+import { presentarContenido } from '../contenido/contenido.view.js';
 /** Proyección pública del contrato 2; excluye payloads y metadatos administrativos. */
 function condicion(r) {
   const data = r.data;
@@ -47,5 +48,6 @@ export function presentarEscenario(r) {
       explanation:f.child_explanation,gameAdaptation:f.game_adaptation,limitations:f.limitations,sourceContext:f.source_context,
       appearsAt:{ gameSol:f.game_sol,gamePhase:f.game_phase } })),
     modelAssumptions:r.model_assumptions,
+    ...(r.gameplay?{gameplay:presentarContenido(r.gameplay,r.facts)}:{}),
   };
 }

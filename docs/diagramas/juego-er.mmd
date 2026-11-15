@@ -1,0 +1,91 @@
+erDiagram
+    game_rule_sets {
+        text referencia "Ver DDL completo"
+    }
+    scenarios {
+        text referencia "Ver DDL completo"
+    }
+    ciencia_dataset_releases ||--o{ scenarios : referencia
+    game_rule_sets ||--o{ scenarios : referencia
+    scenario_records {
+        text referencia "Ver DDL completo"
+    }
+    scenarios ||--o{ scenario_records : referencia
+    ciencia_release_members ||--o{ scenario_records : referencia
+    scenario_facts {
+        text referencia "Ver DDL completo"
+    }
+    ciencia_fact_cards ||--o{ scenario_facts : referencia
+    scenarios ||--o{ scenario_facts : referencia
+    ciencia_release_members ||--o{ scenario_facts : referencia
+    scenario_events {
+        text referencia "Ver DDL completo"
+    }
+    scenarios ||--o{ scenario_events : referencia
+    catalogos {
+        text referencia "Ver DDL completo"
+    }
+    recursos {
+        text referencia "Ver DDL completo"
+    }
+    catalogos ||--o{ recursos : referencia
+    personajes {
+        text referencia "Ver DDL completo"
+    }
+    catalogos ||--o{ personajes : referencia
+    datos_narrativos {
+        text referencia "Ver DDL completo"
+    }
+    catalogos ||--o{ datos_narrativos : referencia
+    minijuegos {
+        text referencia "Ver DDL completo"
+    }
+    catalogos ||--o{ minijuegos : referencia
+    recursos ||--o{ minijuegos : referencia
+    datos_narrativos ||--o{ minijuegos : referencia
+    emergencias {
+        text referencia "Ver DDL completo"
+    }
+    catalogos ||--o{ emergencias : referencia
+    datos_narrativos ||--o{ emergencias : referencia
+    opciones_emergencia {
+        text referencia "Ver DDL completo"
+    }
+    emergencias ||--o{ opciones_emergencia : referencia
+    recursos ||--o{ opciones_emergencia : referencia
+    cartas_mejora {
+        text referencia "Ver DDL completo"
+    }
+    catalogos ||--o{ cartas_mejora : referencia
+    datos_narrativos ||--o{ cartas_mejora : referencia
+    recursos ||--o{ cartas_mejora : referencia
+    finales {
+        text referencia "Ver DDL completo"
+    }
+    catalogos ||--o{ finales : referencia
+    datos_narrativos ||--o{ finales : referencia
+    soles {
+        text referencia "Ver DDL completo"
+    }
+    catalogos ||--o{ soles : referencia
+    minijuegos ||--o{ soles : referencia
+    emergencias ||--o{ soles : referencia
+    audio {
+        text referencia "Ver DDL completo"
+    }
+    catalogos ||--o{ audio : referencia
+    variables {
+        text referencia "Ver DDL completo"
+    }
+    catalogos ||--o{ variables : referencia
+    scenario_content {
+        text referencia "Ver DDL completo"
+    }
+    catalogos ||--o{ scenario_content : referencia
+    scenarios ||--o{ scenario_content : referencia
+    vinculos_datos {
+        text referencia "Ver DDL completo"
+    }
+    scenario_content ||--o{ vinculos_datos : referencia
+    datos_narrativos ||--o{ vinculos_datos : referencia
+    scenario_facts ||--o{ vinculos_datos : referencia

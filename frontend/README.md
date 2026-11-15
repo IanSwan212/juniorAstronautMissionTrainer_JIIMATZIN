@@ -60,6 +60,14 @@ conexión. Al retirar contenido, actualizar también los artefactos del desplieg
 
 ## Desarrollo y producción
 
+Cuando el escenario tiene `gameplay`, incluye sus personajes, recursos iniciales,
+calendario, minijuegos, emergencias, cartas, finales y referencias de audio/Ink.
+El adaptador valida ese catálogo tanto en API como en respaldo. Los cambios de
+recurso ya están estructurados; los efectos de cartas `design_pending` requieren
+reglas de diseño antes de ejecutarse. Los IDs narrativos pendientes no tienen
+texto aprobado: mostrar las fichas científicas vinculadas de `facts`, conservando
+sus límites. Ver [contrato de contenido](../docs/12-contenido-juego.md).
+
 Para integrar el servidor visual: instalar Vite/Phaser en este workspace, partir
 de `vite.config.example.js` y definir el script `dev`. El proxy envía `/api` al
 backend; las URLs no deben fijarse en escenas de Phaser.

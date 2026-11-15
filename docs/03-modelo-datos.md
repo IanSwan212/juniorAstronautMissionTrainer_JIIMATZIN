@@ -7,7 +7,9 @@ ver el [diccionario](10-diccionario-bd.md) y el
 [diagrama ER](11-diagrama-er.md). Los endpoints de fuentes y fichas
 ya consultan `ciencia`; escenarios usa `juego` y las membresías científicas.
 El importador y el vínculo escenario-publicación están implementados;
-el esquema `juego` añade cinco tablas adicionales.
+el esquema `juego` tiene 19 tablas: cinco de escenarios y catorce de catálogos
+y vínculos. El desglose del juego se carga por versión, separado de ciencia;
+ver [contenido](12-contenido-juego.md) y [modelo de juego](13-modelo-juego.md).
 Ver [API](04-api.md) e [importación](05-importacion.md).
 
 Implementado en [backend/migrations/20261114000000_esquema-inicial.sql](../backend/migrations/20261114000000_esquema-inicial.sql). Es el esquema propuesto en el doc 04, **todavía sujeto a aprobación**.

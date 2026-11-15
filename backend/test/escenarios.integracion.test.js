@@ -31,6 +31,7 @@ describe('Escenarios científicos y respaldo del frontend',{skip:!process.env.TE
     }
     const [up,down]=(await readFile(new URL('../migrations/20261117000000_escenarios-cientificos.sql',import.meta.url),'utf8')).split('-- Down Migration');
     await pool.query(up);await pool.query(down);await pool.query(up);
+    await pool.query((await readFile(new URL('../migrations/20261118000000_contenido-juego.sql',import.meta.url),'utf8')).split('-- Down Migration')[0]);
     const spec=datosPrueba();spec.rows['captures.jsonl'][0].captured_at_utc='2026-11-14T00:00:00Z';
     const envelope=structuredClone(spec.rows['observations.jsonl'][0]);
     spec.rows['datasets.jsonl'].push(

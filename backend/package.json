@@ -17,7 +17,8 @@
     "migrar:crear": "node node_modules/node-pg-migrate/bin/node-pg-migrate.js -m migrations --migration-file-language sql create",
     "importar": "node --env-file-if-exists=../.env src/importador/cli.js",
     "publicaciones": "node --env-file-if-exists=../.env src/publicaciones/cli.js",
-    "escenarios": "node --env-file-if-exists=../.env src/escenarios/cli.js"
+    "escenarios": "node --env-file-if-exists=../.env src/escenarios/cli.js",
+    "contenido": "node --env-file-if-exists=../.env src/contenido/cli.js"
   },
   "dependencies": {
     "cors": "^2.8.6",

@@ -36,6 +36,12 @@ export function crearRepositorioEscenarios(pool) {
         )
         SELECT s.scenario_id AS code,s.version,s.release_id,s.rules_version,s.language,s.title,s.model_assumptions,
           g.definition AS rules,r.dataset_version,r.schema_version AS dataset_schema_version,
+          (SELECT jsonb_build_object('catalog_id',c.catalog_id,'content_sha256',c.content_sha256,
+            'initial_resources',x.initial_resources,'document',juego.catalog_document(c.catalog_id),
+            'bindings',COALESCE((SELECT jsonb_agg(to_jsonb(b) ORDER BY b.narrative_id,b.record_id)
+              FROM juego.vinculos_datos b WHERE b.scenario_id=s.scenario_id AND b.scenario_version=s.version),'[]'::jsonb))
+            FROM juego.scenario_content x JOIN juego.catalogos c USING(catalog_id)
+            WHERE x.scenario_id=s.scenario_id AND x.scenario_version=s.version AND c.sealed) AS gameplay,
           CASE WHEN count_dates.n>0 AND count_dates.known=count_dates.n THEN count_dates.latest ELSE NULL END AS retrieved_at,
           COALESCE((SELECT jsonb_agg(jsonb_build_object(
             'record_id',x.record_id,'record_type',x.record_type,'game_sol',x.game_sol,'game_phase',x.game_phase,

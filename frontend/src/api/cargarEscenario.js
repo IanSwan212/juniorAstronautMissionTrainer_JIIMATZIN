@@ -1,4 +1,5 @@
 import { apiGet, obtenerJson, ErrorApi } from './cliente.js';
+import { validarGameplay } from './validarGameplay.js';
 
 const hash=(s)=>typeof s==='string'&&/^[0-9a-f]{64}$/.test(s);
 const object=(v)=>v!==null&&typeof v==='object'&&!Array.isArray(v);
@@ -49,6 +50,7 @@ export function validarEscenario(e, expected={}) {
       &&strings(f.limitations)&&typeof f.sourceContext==='string'&&object(f.appearsAt)
       &&(f.appearsAt.gameSol===null||sol(f.appearsAt.gameSol))&&phase(f.appearsAt.gamePhase))
     &&strings(e.modelAssumptions)&&e.modelAssumptions.length<=100
+    &&(e.gameplay===undefined||validarGameplay(e.gameplay,e.facts))
     &&(expected.scenarioId===undefined||e.scenarioId===expected.scenarioId)
     &&(expected.version===undefined||e.scenarioVersion===String(expected.version))
     &&(expected.releaseId===undefined||e.releaseId===expected.releaseId);

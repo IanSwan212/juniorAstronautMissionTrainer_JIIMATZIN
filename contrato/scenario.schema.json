@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Escenario científico JIIMATZIN (borrador 2, NO aprobado)",
-  "description": "API v1; fija publicación científica, reglas y revisiones de contenido. Sustituye el borrador de public.",
+  "description": "API v1, contrato 2. Catálogo de juego opcional fijado por versión; compatible con escenarios científicos sin catálogo.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -150,6 +150,707 @@
       "items": {
         "type": "string"
       }
+    },
+    "gameplay": {
+      "type": "object",
+      "properties": {
+        "catalogId": {
+          "type": "string",
+          "pattern": "^cat_[0-9a-f]{64}$"
+        },
+        "contentHash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "sourceVersion": {
+          "type": "string"
+        },
+        "rulesStatus": {
+          "type": "string",
+          "const": "team_proposal"
+        },
+        "initialResources": {
+          "type": "object",
+          "properties": {
+            "energia": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3
+            },
+            "oxigeno": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3
+            },
+            "blindaje": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3
+            }
+          },
+          "required": [
+            "energia",
+            "oxigeno",
+            "blindaje"
+          ],
+          "additionalProperties": false
+        },
+        "recursos": {
+          "minItems": 3,
+          "maxItems": 3,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "enum": [
+                  "energia",
+                  "oxigeno",
+                  "blindaje"
+                ]
+              },
+              "niveles": {
+                "type": "object",
+                "properties": {
+                  "0": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 20000
+                  },
+                  "1": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 20000
+                  },
+                  "2": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 20000
+                  },
+                  "3": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 20000
+                  }
+                },
+                "required": [
+                  "0",
+                  "1",
+                  "2",
+                  "3"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "id",
+              "niveles"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "personajes": {
+          "minItems": 1,
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              "nombre": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "rol": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "habilidades": {
+                "maxItems": 200,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20000
+                }
+              },
+              "muletilla": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "expresiones": {
+                "maxItems": 200,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20000
+                }
+              },
+              "jugable": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "nombre",
+              "rol",
+              "habilidades",
+              "muletilla",
+              "expresiones",
+              "jugable"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "soles": {
+          "minItems": 10,
+          "maxItems": 10,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sol": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10
+              },
+              "nudo_manana": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "nudo_dia": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "minijuego_sugerido": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "emergencia_sugerida": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "nudo_noche": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "en_modo_rapido": {
+                "type": "boolean"
+              },
+              "nota": {
+                "type": "string",
+                "maxLength": 20000
+              }
+            },
+            "required": [
+              "sol",
+              "nudo_manana",
+              "nudo_dia",
+              "minijuego_sugerido",
+              "emergencia_sugerida",
+              "nudo_noche",
+              "en_modo_rapido",
+              "nota"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "minijuegos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              "nombre": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "recurso": {
+                "type": "string",
+                "enum": [
+                  "energia",
+                  "oxigeno",
+                  "blindaje"
+                ]
+              },
+              "nudos": {
+                "maxItems": 200,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20000
+                }
+              },
+              "dato": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "mecanica": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "gana": {
+                "type": "object",
+                "properties": {
+                  "recurso": {
+                    "type": "string",
+                    "enum": [
+                      "energia",
+                      "oxigeno",
+                      "blindaje"
+                    ]
+                  },
+                  "cambio": {
+                    "type": "integer",
+                    "minimum": -3,
+                    "maximum": 3
+                  }
+                },
+                "required": [
+                  "recurso",
+                  "cambio"
+                ],
+                "additionalProperties": false
+              },
+              "falla": {
+                "type": "object",
+                "properties": {
+                  "recurso": {
+                    "type": "string",
+                    "enum": [
+                      "energia",
+                      "oxigeno",
+                      "blindaje"
+                    ]
+                  },
+                  "cambio": {
+                    "type": "integer",
+                    "minimum": -3,
+                    "maximum": 3
+                  }
+                },
+                "required": [
+                  "recurso",
+                  "cambio"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "id",
+              "nombre",
+              "recurso",
+              "nudos",
+              "dato",
+              "mecanica",
+              "gana",
+              "falla"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "emergencias": {
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              "sol_sugerido": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "opciones": {
+                "minItems": 1,
+                "maxItems": 20,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "opcion": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 20000
+                    },
+                    "costo": {
+                      "type": "object",
+                      "properties": {
+                        "recurso": {
+                          "type": "string",
+                          "enum": [
+                            "energia",
+                            "oxigeno",
+                            "blindaje"
+                          ]
+                        },
+                        "cambio": {
+                          "type": "integer",
+                          "minimum": -3,
+                          "maximum": -1
+                        }
+                      },
+                      "required": [
+                        "recurso",
+                        "cambio"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "opcion",
+                    "costo"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "nudo_dato": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 20000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "dato": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "sol_sugerido",
+              "opciones",
+              "nudo_dato",
+              "dato"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "cartas_mejora": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              "nombre": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "efecto_sugerido": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "dato": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "costo_sugerido": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 20000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "costo": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "recurso": {
+                        "type": "string",
+                        "enum": [
+                          "energia",
+                          "oxigeno",
+                          "blindaje"
+                        ]
+                      },
+                      "cambio": {
+                        "type": "integer",
+                        "minimum": -3,
+                        "maximum": 3
+                      }
+                    },
+                    "required": [
+                      "recurso",
+                      "cambio"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "effectStatus": {
+                "type": "string",
+                "const": "design_pending"
+              }
+            },
+            "required": [
+              "id",
+              "nombre",
+              "efecto_sugerido",
+              "dato",
+              "costo",
+              "effectStatus"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "finales": {
+          "minItems": 1,
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              "nudo": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "condicion": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "musica": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              "sfx": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              "dato": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "accion": {
+                "type": "string",
+                "enum": [
+                  "creditos",
+                  "reiniciar"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "nudo",
+              "condicion",
+              "musica",
+              "accion"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "audio": {
+          "type": "object",
+          "properties": {
+            "musica": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              }
+            },
+            "sfx": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+              },
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              }
+            }
+          },
+          "required": [
+            "musica",
+            "sfx"
+          ],
+          "additionalProperties": false
+        },
+        "variables_del_juego": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,95}$"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          }
+        },
+        "datos_reales": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "reviewStatus": {
+                "type": "string",
+                "const": "pending_human_review"
+              }
+            },
+            "required": [
+              "id",
+              "reviewStatus"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "factBindings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "narrativeId": {
+                "type": "string"
+              },
+              "recordId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "factId": {
+                "type": "string"
+              },
+              "relation": {
+                "type": "string",
+                "const": "supporting_reference"
+              },
+              "justification": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "narrativeId",
+              "recordId",
+              "factId",
+              "relation",
+              "justification"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "catalogId",
+        "contentHash",
+        "sourceVersion",
+        "rulesStatus",
+        "initialResources",
+        "recursos",
+        "personajes",
+        "soles",
+        "minijuegos",
+        "emergencias",
+        "cartas_mejora",
+        "finales",
+        "audio",
+        "variables_del_juego",
+        "datos_reales",
+        "factBindings"
+      ],
+      "additionalProperties": false
     }
   },
   "$defs": {

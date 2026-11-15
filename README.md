@@ -86,10 +86,11 @@ Formato y errores en [docs/04-api.md](docs/04-api.md).
 
 ## Hoja de ruta
 
-1. **Base de datos e importador:** modelo `ciencia`, importador y controles de publicación implementados; hashes, política, linaje, carga idempotente y protección de revisiones. La publicación efectiva espera revisión humana. Ver [importación](docs/05-importacion.md). Los controles de validación, publicación y retiro están en `backend/src/publicaciones/`.
+1. **Base de datos e importadores:** modelos `ciencia` y `juego`, cargas idempotentes y controles de publicación implementados. Los catálogos incluyen personajes, recursos, soles, actividades, cartas y finales. Ver [importación científica](docs/05-importacion.md) y [contenido del juego](docs/12-contenido-juego.md).
 2. **Escenarios:** endpoints conectados a `ciencia` mediante `juego`, contrato 2,
-   versiones de reglas y respaldo estático implementados. Falta la definición
-   editorial y revisión del primer escenario real.
+   versiones de reglas, catálogo fijado y respaldo estático implementados. La
+   publicación de la misión y sus parámetros editoriales se administran por CLI;
+   los textos narrativos tienen una revisión independiente de las fichas científicas.
 3. **Integración con el juego:** carga de escenarios desde Phaser.
 4. **Despliegue en Google Cloud.**
 
