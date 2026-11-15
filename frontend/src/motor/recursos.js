@@ -4,6 +4,10 @@
 import { RECUERDOS } from '../mecanicas/recuerdos.js';
 
 export const IMAGENES = {
+  // Portada de «Comenzar misión» (con el título dibujado, en cada idioma) e insignia de la misión
+  portada_es: 'assets/portada/portada_es.jpg',
+  portada_en: 'assets/portada/portada_en.jpg',
+  insignia: 'assets/portada/insignia.png',
   astronauta: 'assets/arte/astronauta.png',   // provisional: lo sustituye el dibujo del rol 4
   // Interfaz pintada por herramientas/pintar_interfaz.py (al doble de resolución)
   icono_energia: 'assets/interfaz/icono_energia.png',
