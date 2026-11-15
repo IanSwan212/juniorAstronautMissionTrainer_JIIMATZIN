@@ -13,6 +13,7 @@
 // EL TIEMPO LO DICTA LA IA: la fase que ven el mapa (luz) y la interfaz (ficha del Sol) solo cambia cuando la IA la
 // anuncia en un diálogo (EV.HORA, ver Dialogo.darHora). GameState.fase es la fase de las reglas; GameState.reloj, la
 // que anunció la IA.
+import { verCine } from '../motor/cine.js';
 import { bus, EV, control } from '../motor/eventos.js';
 import { sonido } from '../motor/sonido.js';
 import { GameState } from './estado.js';
@@ -107,7 +108,9 @@ export const ciclo = {
         energia: GameState.nivel('energia'), oxigeno: GameState.nivel('oxigeno'), blindaje: GameState.nivel('blindaje'),
         sol: Math.min(GameState.sol, GameState.maxSoles),
       });
-      this.abrir('Dialogo', { nudo, narrador: this.narrador, ...opciones, alTerminar: resolver });
+      // saltar: n líneas del principio del nudo que ya contó otra cosa (el video de la introducción)
+      const narrador = opciones.saltar ? this.narradorSaltando(opciones.saltar) : this.narrador;
+      this.abrir('Dialogo', { nudo, ...opciones, narrador, alTerminar: resolver });
     })).then(async tags => {
       // # dato:<id> de la historia: si el escenario lo vincula a una ficha aprobada, la IA la cuenta (Dato real)
       const fichas = [...new Set(tags.dato ?? [])].map(d => datosReales.fichaDeDato(d)).filter(Boolean);
@@ -116,6 +119,19 @@ export const ciclo = {
     });
     this.cola = tarea.catch(() => {});
     return tarea;
+  },
+
+  // El mismo narrador, pero al empezar un nudo se salta sus n primeras líneas (sus etiquetas también)
+  narradorSaltando(n) {
+    const real = this.narrador;
+    return Object.assign(Object.create(real), {
+      empezar(nudo) {
+        if (!real.empezar(nudo)) return false;
+        for (let k = 0; k < n;) { const p = real.paso(); if (!p || p.tipo === 'opciones') break; if (p.tipo === 'linea') k++; }
+        return true;
+      },
+      paso: () => real.paso(),
+    });
   },
 
   // Abre el diálogo con líneas sueltas sin pasar por la cola (para usar dentro de otra narración)
@@ -193,7 +209,9 @@ export const ciclo = {
     await new Promise(r => setTimeout(r, 400));
     GameState.publicar();
     sonido.ambiente(true);
-    await this.narrar('introduccion');
+    // la introducción: el video (pkt/cine-intro) cuenta sus 4 primeras líneas; el diálogo sigue desde la IA
+    const vioIntro = await verCine('intro');
+    await this.narrar('introduccion', vioIntro ? { saltar: 4 } : {});
     await this.manana();
   },
 
