@@ -15,6 +15,8 @@ El backend se despliega configurado **solo por variables de entorno**, definidas
 | `DB_POOL_MAX` | 10 por defecto | Ajustar al límite de conexiones del plan de BD |
 | `RATE_LIMIT_MAX` / `RATE_LIMIT_WINDOW_S` | 120 peticiones por 60 s por IP | `0` se rechaza en producción. Requiere `TRUST_PROXY` correcto tras un balanceador |
 | `CACHE_SECONDS` | 60 | `Cache-Control` público del contenido; `/health` y los errores siempre `no-store` |
+| `DONKI_BASE_URL` | `https://ccmc.gsfc.nasa.gov/DONKI-API` | Opcional; endpoint en vivo, sin clave. El servidor necesita salida a internet |
+| `DONKI_CACHE_SECONDS` / `DONKI_TIMEOUT_MS` / `DONKI_MAX_DAYS` | 300 / 10000 / 30 | Opcionales; caché, tiempo máximo y rango máximo de consulta |
 
 `DATA_DIR` solo la usa el importador y no es necesaria para servir la API.
 
