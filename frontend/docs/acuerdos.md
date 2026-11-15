@@ -145,3 +145,14 @@ Repositorio del equipo: `as9689138/juniorAstronautMissionTrainer_JIIMATZIN` (bac
   - Tras un nudo de Ink con `# dato:<id>`, la ficha aprobada vinculada (`gameplay.factBindings`). Sin vínculo no se
     muestra como verificada.
 - **Sin API ni respaldo:** el juego sigue con su contenido propio y sin "Marte real".
+
+## 9. Pantallas encima y carga por partes
+
+- Una pantalla encima del mapa (diálogo, consola o minijuego) avisa que terminó cuando su escena **ya se apagó**.
+  `ciclo.abrir()` espera si la escena sigue activa. Si se avisara antes, la siguiente pantalla de la misma escena
+  arrancaría y el apagado pendiente la cerraría a medias, dejando el control bloqueado.
+- **Vigilante:** si `control.modal` queda en `true` sin ninguna pantalla encima durante 2 s, `ciclo` devuelve el
+  control y lo avisa en la consola.
+- **Recursos:** se piden por grupos con `cargas.asegurar(grupo)`, que devuelve una promesa, y se adelantan con
+  `cargas.precargar([...])`. Se liberan con `cargas.liberar(grupo)`. Nadie llama a `this.load` fuera de `Arranque` y del
+  `Cargador`. Las voces son la excepción: se bajan al hablar y se liberan al terminar la línea.

@@ -1,6 +1,7 @@
 // Punto de entrada. El orden de las escenas es el orden de dibujo:
 // Interfaz va al final para quedar siempre por encima de Base.
 import Arranque from './escenas/Arranque.js';
+import { Cargador } from './motor/cargas.js';
 import Inicio from './escenas/Inicio.js';
 import Base from './escenas/Base.js';
 import Interfaz from './escenas/Interfaz.js';
@@ -23,7 +24,7 @@ const juego = new Phaser.Game({
   scale: { mode: Phaser.Scale.RESIZE, width: window.innerWidth, height: window.innerHeight },
   physics: { default: 'arcade', arcade: { gravity: { x: 0, y: 0 }, debug: false } },
   // Las pantallas que se abren encima (consola, minijuegos, diálogo) van después: se dibujan por encima
-  scene: [Arranque, Inicio, Seleccion, Base, Interfaz, Consola, PanelCleaningScene, CO2FilterScene, GreenhouseScene, Dialogo],
+  scene: [Arranque, Cargador, Inicio, Seleccion, Base, Interfaz, Consola, PanelCleaningScene, CO2FilterScene, GreenhouseScene, Dialogo],
 });
 
 conectarCompania(juego);   // la IA de la base (robot que acompaña)

@@ -8,6 +8,7 @@ import { bus, EV, control } from '../motor/eventos.js';
 import Luces from '../motor/luces.js';
 import { asegurarFlecha } from '../motor/flecha.js';
 import { sonido } from '../motor/sonido.js';
+import { cargas, ZONA_INICIAL } from '../motor/cargas.js';
 
 const RADIO = 0.27;          // radio de los pies del astronauta, en casillas
 const ESCALA_ARTE = 0.5;     // el arte de las salas está pintado al doble
@@ -32,7 +33,8 @@ export default class Base extends Phaser.Scene {
 
     // --- Arte de la sala ---
     this.add.image(0, 0, `zona_${id}_fondo`).setOrigin(0).setScale(ESCALA_ARTE).setDepth(0);
-    this.add.image(0, 0, `zona_${id}_frente`).setOrigin(0).setScale(ESCALA_ARTE).setDepth(9);
+    // el frente viene recortado a lo que tiene dibujo (el murete delantero): se coloca en su sitio
+    this.add.image(z.frente_x ?? 0, z.frente_y ?? 0, `zona_${id}_frente`).setOrigin(0).setScale(ESCALA_ARTE).setDepth(9);
     this.props = z.props.map(p => {
       const prop = { ...p, img: this.add.image(p.x, p.y, p.clave).setOrigin(0).setScale(ESCALA_ARTE).setDepth(4) };
       if (p.anim && this.textures.exists(p.animClave)) {    // lo que se mueve (soplante, LED, pantalla), encima del cuerpo
@@ -87,6 +89,9 @@ export default class Base extends Phaser.Scene {
     cam.centerOn(p0.x, p0.y - 40);
     this.ajustarZoom(this.scale.width, this.scale.height);
     cam.fadeIn(260, 20, 16, 38);
+
+    // Memoria: quedan cargadas esta sala, el Pasillo y la del objetivo; las demás se liberan (se vuelven a pedir al ir)
+    this.time.delayedCall(400, () => this.ordenarSalas());
     const alRedimensionar = s => this.ajustarZoom(s.width, s.height);
     this.scale.on('resize', alRedimensionar);
 
@@ -119,7 +124,7 @@ export default class Base extends Phaser.Scene {
     };
     const alPedir = () => !control.bloqueado && this.interactuar();
     const alEstado = e => e?.fase && this.cambiarFase(e.fase);
-    const alObjetivo = n => { this.registry.set('objetivo', n); this.ponerObjetivo(n); };
+    const alObjetivo = n => { this.registry.set('objetivo', n); this.ponerObjetivo(n); this.ordenarSalas(); };
     bus.on(EV.CERRAR_PANEL, alCerrar);
     bus.on(EV.PEDIR_INTERACCION, alPedir);
     bus.on(EV.ESTADO_CAMBIO, alEstado);
@@ -279,10 +284,28 @@ export default class Base extends Phaser.Scene {
     sonido.efecto('sfx_puerta_presurizada', 0.45);
     this.tweens.add({ targets: [this.pj, this.sombra], alpha: 0, duration: 260, ease: 'Sine.in' });
     this.cameras.main.fadeOut(300, 20, 16, 38);
-    this.cameras.main.once('camerafadeoutcomplete', () => {
+    // la sala de destino se pide ya (casi siempre llega antes de que termine el fundido)
+    const lista = cargas.asegurar(`zona:${p.destino}`);
+    this.cameras.main.once('camerafadeoutcomplete', async () => {
+      const aviso = this.time.delayedCall(250, () => {                       // solo si tarda: "Cargando…"
+        const { width: w, height: h } = this.scale;
+        this.cargandoTxt = this.add.text(w / 2, h / 2, 'Cargando…', { fontFamily: 'system-ui, sans-serif', fontSize: '18px', color: '#f1ecff' })
+          .setOrigin(0.5).setScrollFactor(0).setDepth(100);
+      });
+      await lista;
+      aviso.remove();
       control.bloqueado = false;
       this.scene.restart({ zona: p.destino, llegada: p.llegada });
     });
+  }
+
+  // Salas en memoria: la actual, el Pasillo y la del objetivo; la del objetivo se adelanta en segundo plano
+  ordenarSalas() {
+    if (!this.z) return;
+    const objetivo = cargas.zonaDeEstacion(this.registry.get('objetivo'));
+    const quedan = new Set([this.z.id, ZONA_INICIAL, objetivo].filter(Boolean));
+    for (const id of Object.keys(this.zonas)) if (!quedan.has(id)) cargas.liberar(`zona:${id}`);
+    if (objetivo && objetivo !== this.z.id) cargas.precargar([`zona:${objetivo}`]);
   }
 
   // --- Fase del día, objetivo y respuesta al usar ---

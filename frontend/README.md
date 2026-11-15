@@ -62,6 +62,26 @@ frontend/
 
 Cómo se habla entre partes del juego (eventos del bus, estado, pantallas encima del mapa): [docs/acuerdos.md](docs/acuerdos.md).
 
+## Carga y memoria
+
+El juego no carga todo al principio. `src/motor/cargas.js` lo reparte en grupos, y la escena `Cargador` (que no se
+apaga nunca) los baja en segundo plano o cuando hacen falta.
+
+| Grupo | Cuándo se carga | Cuándo se libera |
+| --- | --- | --- |
+| `nucleo`: interfaz, datos, el Pasillo, la música del día | Al arrancar, con la barra | Nunca |
+| `personajes` (retratos) y `efectos` | En segundo plano, durante el prólogo | Nunca |
+| `zona:<id>` | Al cruzar su puerta; la del objetivo se adelanta | Al alejarse (quedan la actual, el Pasillo y la del objetivo) |
+| `minijuego:<escena>` | Al empezar el día | Al terminar ese minijuego |
+| `musica:<tema>` | Al sonar | Al cambiar de tema (salvo el del día) |
+| Voces | Al hablar | Al terminar la línea |
+
+Medido en local: el menú pasó de 16,3 MB y 175 archivos a **4,6 MB y 72 archivos**. Durante una partida, la memoria
+de video bajó de unos 290 MB a unos 120 MB y el audio decodificado de más de 150 MB a unos 50 MB. Además, el frente
+de cada sala se guarda recortado al murete (`frente_x`, `frente_y` en `zonas.json`).
+
+Para añadir un archivo: ponerlo en `src/motor/recursos.js`. Si no pertenece a ningún grupo, va en `nucleo`.
+
 ## La API: datos reales
 
 `src/mecanicas/datosReales.js` carga la misión `base-marte-uno` con el adaptador de `src/api`. El juego nunca llama

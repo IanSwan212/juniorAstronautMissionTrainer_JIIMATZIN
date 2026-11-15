@@ -11,6 +11,7 @@ import { sonido } from '../motor/sonido.js';
 import { GameState } from './estado.js';
 import { Narrador, ROL_DE, NOMBRE_DE } from './narrador.js';
 import { datosReales } from './datosReales.js';
+import { cargas } from '../motor/cargas.js';
 
 // Emergencia de cada sol (6_base_de_datos/soles.csv). Sol 1: tutorial sin emergencia; sol 10: a elección (una al azar)
 const EMERGENCIA_DEL_SOL = [null, null, 'emergencia_calor', 'emergencia_fuga', 'emergencia_co2', 'emergencia_radiacion',
@@ -191,14 +192,16 @@ export const ciclo = {
     this.soltar();
   },
 
-  abrirConsola() {
+  async abrirConsola() {
     control.modal = true;
+    await cargas.asegurar('consola');
     this.abrir('Consola', { modo: 'MAÑANA', alTerminar: () => this.empezarDia() });
   },
 
   async empezarDia() {
     GameState.fase = 'DIA';
     GameState.publicar();
+    cargas.precargar(Object.values(TAREAS).map(t => `minijuego:${t.escena}`));   // el arte de los 3 minijuegos, mientras habla la IA
     await this.narrar('dia');
     await this.fichasDeFase('dia');
     this.objetivo(this.siguienteTarea());
@@ -209,12 +212,14 @@ export const ciclo = {
     const t = TAREAS[nombre];
     await this.narrar(t.nudo);
     control.modal = true;
+    await cargas.asegurar(`minijuego:${t.escena}`);
     this.juego.registry.set('narrado', true);
     const resultado = await new Promise(resolver => {
       bus.once('minijuego-fin', resolver);
       this.abrir(t.escena);
     });
     GameState.publicar();
+    cargas.liberar(`minijuego:${t.escena}`);          // ya se jugó hoy: su arte se libera (mañana se vuelve a pedir)
     await this.narrar(`${t.nudo}_${resultado.success ? 'gana' : 'falla'}`);
     if (this.revisarFin()) return;
     const siguiente = this.siguienteTarea();
@@ -261,6 +266,7 @@ export const ciclo = {
     await this.narrar(`noche_${Math.min(GameState.sol, 10)}`);
     await this.fichasDeFase('noche');
     control.modal = true;
+    await cargas.asegurar('consola');
     await new Promise(resolver => this.abrir('Consola', { modo: 'MEJORA', alTerminar: resolver }));
     GameState.sol++;
     if (this.revisarFin()) return;
@@ -283,6 +289,7 @@ export const ciclo = {
     const nudo = { VICTORIA: 'fin_exito', ENERGIA: 'fin_energia', OXIGENO: 'fin_oxigeno', BLINDAJE: 'fin_blindaje' }[motivo];
     await this.narrar(nudo);
     control.modal = true;
+    await cargas.asegurar('consola');
     await new Promise(resolver => this.abrir('Consola', { modo: 'FINAL', motivo, alTerminar: resolver }));
     this.enPartida = false;
     control.modal = false;

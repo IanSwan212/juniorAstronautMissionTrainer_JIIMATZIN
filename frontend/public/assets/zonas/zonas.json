@@ -271,7 +271,9 @@
     2.5
    ],
    "fondo": "assets/zonas/pasillo_fondo.jpg",
-   "frente": "assets/zonas/pasillo_frente.png"
+   "frente": "assets/zonas/pasillo_frente.png",
+   "frente_x": 298.5,
+   "frente_y": 396.5
   },
   "energia": {
    "id": "energia",
@@ -485,7 +487,9 @@
     2.5
    ],
    "fondo": "assets/zonas/energia_fondo.jpg",
-   "frente": "assets/zonas/energia_frente.png"
+   "frente": "assets/zonas/energia_frente.png",
+   "frente_x": 298.5,
+   "frente_y": 396.5
   },
   "mando": {
    "id": "mando",
@@ -690,7 +694,9 @@
     2.5
    ],
    "fondo": "assets/zonas/mando_fondo.jpg",
-   "frente": "assets/zonas/mando_frente.png"
+   "frente": "assets/zonas/mando_frente.png",
+   "frente_x": 298.5,
+   "frente_y": 396.5
   },
   "comunicaciones": {
    "id": "comunicaciones",
@@ -886,7 +892,9 @@
     2.5
    ],
    "fondo": "assets/zonas/comunicaciones_fondo.jpg",
-   "frente": "assets/zonas/comunicaciones_frente.png"
+   "frente": "assets/zonas/comunicaciones_frente.png",
+   "frente_x": 298.5,
+   "frente_y": 396.5
   },
   "invernadero": {
    "id": "invernadero",
@@ -1070,7 +1078,9 @@
     2.5
    ],
    "fondo": "assets/zonas/invernadero_fondo.jpg",
-   "frente": "assets/zonas/invernadero_frente.png"
+   "frente": "assets/zonas/invernadero_frente.png",
+   "frente_x": 298.5,
+   "frente_y": 396.5
   },
   "soporte": {
    "id": "soporte",
@@ -1266,7 +1276,9 @@
     2.5
    ],
    "fondo": "assets/zonas/soporte_fondo.jpg",
-   "frente": "assets/zonas/soporte_frente.png"
+   "frente": "assets/zonas/soporte_frente.png",
+   "frente_x": 298.5,
+   "frente_y": 396.5
   },
   "refugio": {
    "id": "refugio",
@@ -1484,7 +1496,9 @@
     2.5
    ],
    "fondo": "assets/zonas/refugio_fondo.jpg",
-   "frente": "assets/zonas/refugio_frente.png"
+   "frente": "assets/zonas/refugio_frente.png",
+   "frente_x": 298.5,
+   "frente_y": 396.5
   }
  },
  "escala_personajes": 2.0,

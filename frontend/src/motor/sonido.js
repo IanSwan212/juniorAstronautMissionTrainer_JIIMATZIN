@@ -2,6 +2,8 @@
 // de Marte y voces de los diálogos. Si falta un archivo, sigue sin sonido (nunca detiene el juego).
 // Volúmenes: música 40-50 %, voz 90 %, efectos por encima de la música.
 
+import { cargas } from './cargas.js';
+
 const VOL_MUSICA = 0.42;
 const VOL_MUSICA_HABLANDO = 0.16;     // la música baja mientras alguien habla
 const VOL_AMBIENTE = 0.22;
@@ -38,10 +40,21 @@ export const sonido = {
   // Cambia la música con un fundido corto. nombre: etiqueta de Ink (dia, noche, emergencia, exito, fracaso, inicio)
   musica(nombre) {
     const clave = MUSICA[nombre] ?? nombre;
-    if (!this.juego || clave === this.musicaClave || !this.existe(clave)) return;
+    if (!this.juego || clave === this.musicaClave) return;
+    this.musicaPedida = clave;
+    if (!this.existe(clave)) {                       // se baja al pedirla; si mientras tanto se pidió otra, no suena
+      cargas.asegurar(`musica:${clave}`).then(() => { if (this.musicaPedida === clave) this.musica(clave); });
+      return;
+    }
     const sm = this.juego.sound;
-    const vieja = this.musicaObj;
-    if (vieja) this.fundir(vieja, 0, 700, () => vieja.destroy());
+    const vieja = this.musicaObj, claveVieja = this.musicaClave;
+    if (vieja) {
+      this.fundir(vieja, 0, 700, () => {
+        vieja.destroy();
+        // un tema decodificado ocupa decenas de MB: se libera, salvo el del día, que suena cada sol
+        if (claveVieja && claveVieja !== 'musica_dia' && claveVieja !== this.musicaClave) cargas.liberar(`musica:${claveVieja}`);
+      });
+    }
     const bucle = clave !== 'musica_exito' && clave !== 'musica_fracaso';
     this.musicaObj = sm.add(clave, { loop: bucle, volume: 0 });
     this.musicaObj.play();
@@ -103,12 +116,15 @@ export const sonido = {
   },
 
   callar() {
-    if (this.vozObj) { const v = this.vozObj; this.vozObj = null; v.stop(); v.destroy(); }
+    if (this.vozObj) { const v = this.vozObj; this.vozObj = null; v.stop(); }
   },
 
+  // Al terminar una línea, su voz se libera (cada voz decodificada ocupa 1 o 2 MB y casi nunca se repite)
   alCallar(v) {
     if (this.vozObj === v) this.vozObj = null;
     if (this.musicaObj && !this.vozObj) this.fundir(this.musicaObj, VOL_MUSICA, 500);
+    const clave = v.key;
+    setTimeout(() => { v.destroy(); this.juego.cache.audio.remove(clave); }, 0);
   },
 
   // Fundido de volumen sin depender de una escena concreta

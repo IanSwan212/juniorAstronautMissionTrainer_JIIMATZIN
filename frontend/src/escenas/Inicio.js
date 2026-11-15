@@ -2,6 +2,7 @@
 // los navegadores no dejan sonar audio hasta entonces.
 import { ciclo } from '../mecanicas/ciclo.js';
 import { sonido } from '../motor/sonido.js';
+import { cargas } from '../motor/cargas.js';
 
 export default class Inicio extends Phaser.Scene {
   constructor() { super('Inicio'); }
@@ -38,6 +39,8 @@ export default class Inicio extends Phaser.Scene {
     this.empezado = true;
     sonido.musica('inicio');
     // prólogo de la historia (se puede saltar) y después elegir personaje
-    ciclo.narrar('prologo', { fondo: true }).then(() => this.scene.start('Seleccion'));
+    ciclo.narrar('prologo', { fondo: true })
+      .then(() => cargas.asegurar('personajes'))
+      .then(() => this.scene.start('Seleccion'));
   }
 }

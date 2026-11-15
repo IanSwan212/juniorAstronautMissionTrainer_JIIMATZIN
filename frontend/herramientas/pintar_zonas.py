@@ -2481,14 +2481,16 @@ def pintar_zona(id_z, z):
     a = np.clip(a + ruido[..., None], 0, 1)
     Image.fromarray((a * 255).astype(np.uint8)).save(SALIDA / f"{id_z}_fondo.jpg", quality=84, optimize=True, progressive=True)
     img = frente.reducir()
-    img.quantize(colors=96, method=Image.Quantize.FASTOCTREE).save(SALIDA / f"{id_z}_frente.png", optimize=True)
+    bb_f = img.getbbox() or (0, 0, 1, 1)             # solo lo que tiene dibujo (el murete): ~10 veces menos memoria de video
+    img.crop(bb_f).quantize(colors=96, method=Image.Quantize.FASTOCTREE).save(SALIDA / f"{id_z}_frente.png", optimize=True)
 
     return dict(id=id_z, nombre=sala, sistema=sist, cols=cols, rows=filas, ox=P.ox, oy=P.oy, ancho=ancho, alto=alto,
                 horizonte=MARR - 40, muro=MURO, losa=LOSA,
                 bloq=bloq, estaciones=estaciones, props=props,
                 puertas=[dict(lado=l, pos=p, destino=d, llegada=ll, etiqueta=NOMBRE_VISIBLE[d]) for l, p, d, ll in puertas],
                 lamparas=[list(l) for l in z["lamparas"]], inicio=list(z.get("inicio", (cols / 2, filas / 2))),
-                fondo=f"assets/zonas/{id_z}_fondo.jpg", frente=f"assets/zonas/{id_z}_frente.png")
+                fondo=f"assets/zonas/{id_z}_fondo.jpg", frente=f"assets/zonas/{id_z}_frente.png",
+                frente_x=round(bb_f[0] / FINAL, 1), frente_y=round(bb_f[1] / FINAL, 1))
 
 
 def cable(lz, P, pts, color, ancho=2.6):
