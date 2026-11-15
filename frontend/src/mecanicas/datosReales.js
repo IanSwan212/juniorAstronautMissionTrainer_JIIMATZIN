@@ -4,8 +4,11 @@
 //  - Fichas «Dato real»: las aprobadas del escenario para un sol y una fase, con su contexto de fuente.
 //  - Datos de la historia (# dato:<id> de Ink): solo se muestran si el catálogo los vincula a una ficha aprobada;
 //    sin vínculo quedan pendientes y no se presentan como verificados (docs/12-contenido-juego.md del repo).
+//  - Noticias del Sol: llamaradas reales de los últimos días (DONKI en vivo, GET /api/v1/live/donki/flares). Es un
+//    catálogo de eventos del Sol casi en tiempo real: no es una medición en Marte ni dispara reglas del juego
+//    (docs/04-api.md del repo), así que solo se cuenta, sin etiquetas de peligro.
 // Si la API no responde y no hay respaldo en /escenarios/<id>.json, el juego sigue con su contenido propio.
-import { cargarEscenario, obtenerFicha, ErrorApi } from '../api/index.js';
+import { cargarEscenario, obtenerFicha, apiGet, ErrorApi } from '../api/index.js';
 
 export const ESCENARIO_ID = 'base-marte-uno';     // el id con el que el equipo prepara la misión de 10 soles
 
@@ -46,6 +49,51 @@ export const datosReales = {
   },
 
   hay() { return !!this.escenario; },
+
+  // --- Noticias del Sol (DONKI en vivo) ---
+  sol: null,
+  promesaSol: null,
+
+  cargarSol(dias = 7) {
+    this.promesaSol ??= apiGet('/live/donki/flares', { days: dias })
+      .then(r => {
+        if (r?.data_mode !== 'near_real_time' || r.is_mars_surface_measurement !== false || !Array.isArray(r.events)) {
+          throw new ErrorApi('La respuesta de DONKI no tiene el formato del contrato', { codigo: 'respuesta_invalida' });
+        }
+        this.sol = r;
+        console.info(`[datos reales] DONKI: ${r.count} llamaradas del ${r.period_requested.startDate} al ${r.period_requested.endDate}`);
+        return r;
+      })
+      .catch(e => {
+        console.info(`[datos reales] sin noticias del Sol (${e.codigo ?? e.message})`);
+        this.promesaSol = null;                         // se reintenta la próxima vez
+        return null;
+      });
+    return this.promesaSol;
+  },
+
+  // Líneas para la IA: cuántas llamaradas hubo, la más fuerte y qué significan las letras
+  lineasSol() {
+    const r = this.sol;
+    if (!r) return null;
+    const ini = new Date(`${r.period_requested.startDate}T00:00:00Z`), fin = new Date(`${r.period_requested.endDate}T00:00:00Z`);
+    const dias = Math.round((fin - ini) / 86400000) + 1;
+    const fecha = iso => new Date(iso).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', timeZone: 'UTC' });
+    const fuerza = c => 'ABCMX'.indexOf(c[0]) * 100 + (parseFloat(c.slice(1)) || 0);
+    const ev = r.events.map(e => e.data).filter(d => typeof d.class_type === 'string' && 'ABCMX'.includes(d.class_type[0]));
+    const guardada = r.freshness?.stale ? ' (es la última copia guardada: la NASA no respondió)' : '';
+    const lineas = [];
+    if (!ev.length) {
+      lineas.push({ quien: 'ia', cara: 'feliz', texto: `Noticias del Sol, de la NASA: en los últimos ${dias} días no se registró ninguna llamarada solar${guardada}. El Sol ha estado tranquilo.` });
+    } else {
+      const max = ev.reduce((a, b) => (fuerza(b.class_type) > fuerza(a.class_type) ? b : a));
+      lineas.push({ quien: 'ia', cara: 'procesando', texto: `Noticias del Sol, de la NASA: en los últimos ${dias} días se registraron ${ev.length} ` +
+        `${ev.length === 1 ? 'llamarada solar' : 'llamaradas solares'}${guardada}. La más fuerte fue de clase ${max.class_type}, el ${fecha(max.peak_time ?? max.begin_time)}.` });
+    }
+    lineas.push({ quien: 'ia', texto: 'Las llamaradas se nombran con letras: A, B, C, M y X. Cada letra es diez veces más fuerte que la anterior. ' +
+      'Esto pasa en el Sol: no es una medición en Marte.' });
+    return lineas;
+  },
 
   // Clima real del sol del juego: temperatura media, mínima y máxima (°C) y presión media (Pa), con su sol marciano
   climaDelSol(sol) {

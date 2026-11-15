@@ -73,6 +73,9 @@ juego sigue con su contenido propio. Con datos, el jugador ve:
 - **En cada fase**, las fichas «Dato real» que la misión coloca en ese sol y momento, con su fuente.
 - **Tras un `# dato:<id>` de la historia**, la ficha aprobada que esté vinculada. Sin vínculo, no se presenta como
   verificada.
+- **En la antena de Comunicaciones** (y tras la emergencia solar), las llamaradas reales de los últimos 7 días
+  (`GET /api/v1/live/donki/flares`, DONKI en vivo). Se cuentan sin etiquetas de peligro, como pide el contrato: no es
+  una medición en Marte ni dispara reglas del juego.
 
 Uso directo del adaptador:
 

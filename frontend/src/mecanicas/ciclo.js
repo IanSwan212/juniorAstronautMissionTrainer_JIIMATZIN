@@ -39,6 +39,7 @@ export const ciclo = {
     // el último estado queda en el registro: el mapa y la interfaz lo leen al cambiar de sala
     bus.on(EV.ESTADO_CAMBIO, e => juego.registry.set('estado', e));
     datosReales.cargar();          // escenario con datos reales de la API del equipo (o su respaldo); no detiene nada
+    datosReales.cargarSol();       // llamaradas reales de los últimos días (DONKI en vivo, por la API del equipo)
     window.addEventListener('keydown', ev => { if (ev.key === 'm' || ev.key === 'M') sonido.alternarSilencio(); });
   },
 
@@ -151,8 +152,11 @@ export const ciclo = {
       if (fase === 'NOCHE') return this.dormir();
       return this.avisar('El refugio tiene muros de agua contra la radiación. Aquí dormimos al caer la noche.');
     }
-    if (d.nombre === 'antena') {
-      return this.avisar('La antena habla con la Tierra. Cada mensaje tarda entre 4 y 24 minutos en llegar, según dónde estén los dos planetas.');
+    if (d.nombre === 'antena') {                     // la antena trae las noticias reales del Sol (DONKI)
+      await datosReales.cargarSol();
+      await this.decir([...(datosReales.lineasSol() ?? []),
+        'La antena habla con la Tierra. Cada mensaje tarda entre 4 y 24 minutos en llegar, según dónde estén los dos planetas.']);
+      return this.soltar();
     }
     this.soltar();
   },
@@ -202,6 +206,7 @@ export const ciclo = {
       this.objetivo(null);
       sonido.efecto('ui_aviso_emergencia', 0.8);
       const tags = await this.narrar(nudo, { cuentaAtras: GameState.getParametrosDificultad().tiempoEmergencia });
+      if (nudo === 'emergencia_solar' && datosReales.lineasSol()) await this.decir(datosReales.lineasSol());   // y lo real de esta semana
       await this.fichasDeFase('emergencia');
       for (const c of tags.costo ?? []) {              // costo:energia-1 -> -20 de energía
         const m = /^(energia|oxigeno|blindaje)([+-]\d+)$/.exec(c);
