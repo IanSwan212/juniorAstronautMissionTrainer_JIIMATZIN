@@ -31,8 +31,8 @@ export default class Consola extends Phaser.Scene {
 
   terminar(datos) {
     const fin = this.alTerminar;
+    this.events.once('shutdown', () => queueMicrotask(() => fin?.(datos)));   // avisar ya apagada (ver Dialogo.cerrar)
     this.scene.stop();
-    fin?.(datos);
   }
 
   dibujarBarraRecursos() {

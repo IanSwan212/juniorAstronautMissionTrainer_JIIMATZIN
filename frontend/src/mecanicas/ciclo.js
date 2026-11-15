@@ -41,6 +41,7 @@ export const ciclo = {
     datosReales.cargar();          // escenario con datos reales de la API del equipo (o su respaldo); no detiene nada
     datosReales.cargarSol();       // llamaradas reales de los últimos días (DONKI en vivo, por la API del equipo)
     window.addEventListener('keydown', ev => { if (ev.key === 'm' || ev.key === 'M') sonido.alternarSilencio(); });
+    this.vigilar();
   },
 
   // Se llama al terminar de cargar (Arranque): la historia y las voces ya están en caché
@@ -51,8 +52,32 @@ export const ciclo = {
   // Abre una pantalla encima de todo (diálogo, consola o minijuego) sin parar el mapa
   abrir(clave, datos) {
     const sm = this.juego.scene;
-    sm.start(clave, datos);
-    sm.bringToTop(clave);
+    const arrancar = () => { sm.start(clave, datos); sm.bringToTop(clave); };
+    const s = sm.getScene(clave);
+    if (s?.sys.isActive()) {                     // sigue abierta (o con su apagado pendiente): esperar a que se apague
+      let hecho = false;
+      const una = () => { if (!hecho) { hecho = true; arrancar(); } };
+      s.sys.events.once('shutdown', () => queueMicrotask(una));
+      setTimeout(una, 600);                      // por si nadie la apaga: se reinicia igual
+      return;
+    }
+    arrancar();
+  },
+
+  // Vigilante: si el control quedó bloqueado sin ninguna pantalla encima (un error), lo devuelve en 2 s
+  vigilar() {
+    const ENCIMA = ['Dialogo', 'Consola', 'PanelCleaningScene', 'CO2FilterScene', 'GreenhouseScene', 'Seleccion'];
+    let sin = 0;
+    setInterval(() => {
+      const algo = ENCIMA.some(k => this.juego.scene.isActive(k)) || !this.juego.scene.isActive('Base');
+      sin = control.modal && !algo ? sin + 1 : 0;
+      if (sin >= 4) {
+        console.warn('[ciclo] el control quedó bloqueado sin pantalla encima: se devuelve al jugador');
+        sin = 0;
+        this.cola = Promise.resolve();
+        this.soltar();
+      }
+    }, 500);
   },
 
   // Cuenta un nudo de la historia con la escena Dialogo. Devuelve una promesa con las etiquetas recogidas.

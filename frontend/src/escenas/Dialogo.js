@@ -267,7 +267,9 @@ export default class Dialogo extends Phaser.Scene {
     control.modal = false;
     const fin = this.datos.alTerminar;
     const tags = this.tagsJuntadas;
+    // Avisar cuando la escena YA se apagó: Phaser apaga en el siguiente cuadro y, si se avisara antes, el
+    // siguiente diálogo (la misma escena) arrancaría y ese apagado pendiente lo cerraría a medias.
+    this.events.once('shutdown', () => queueMicrotask(() => fin?.(tags)));
     this.scene.stop();
-    fin?.(tags);
   }
 }

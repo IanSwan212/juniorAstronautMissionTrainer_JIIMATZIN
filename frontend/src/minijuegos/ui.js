@@ -103,8 +103,8 @@ export function terminarMinijuego(scene, success) {
   const resultado = { game: scene.scene.key, success: !!success, timestamp: Date.now() };
   scene.registry.set("lastMinigameResult", resultado);
   sonido.efecto(success ? "sfx_celebracion" : "sfx_apagon", 0.7);
+  scene.events.once("shutdown", () => queueMicrotask(() => bus.emit("minijuego-fin", resultado)));   // avisar ya apagada
   scene.scene.stop();
-  bus.emit("minijuego-fin", resultado);
 }
 
 // Agregar al final de src/utils/ui.js
