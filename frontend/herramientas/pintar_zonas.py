@@ -52,7 +52,7 @@ PAPEL = (233, 223, 200)
 ESTACIONES = {
     "C": ("consola", "consola", "mando", "Consola de mando"),
     "P": ("tarea_paneles", "minijuego", "energia", "Limpiar paneles solares"),
-    "F": ("tarea_filtro", "minijuego", "oxigeno", "Cambiar filtro de CO2"),
+    "F": ("tarea_filtro", "minijuego", "oxigeno", "Cambiar filtro de CO₂"),
     "V": ("tarea_invernadero", "minijuego", "oxigeno", "Regar el invernadero"),
     "R": ("refugio", "refugio", "blindaje", "Refugio contra radiacion"),
     "A": ("antena", "antena", "comunicaciones", "Antena de comunicaciones"),
@@ -280,28 +280,81 @@ def butte(lz, cx, base, ancho, alto, semilla):
 
 
 def mesa_iso(lz, P, c, r, w, h, alto, semilla):
-    """Butte en isométrico (como las Murray Buttes): capas que se van estrechando y roca de remate oscura arriba."""
+    """Butte como las Murray Buttes (Curiosity, 2016): planta IRREGULAR, más ancha que alta, paredes casi
+    verticales de arenisca en capas finas, una banda de roca de remate oscura solo en lo alto, cimas de altura
+    desigual y un TALUD de arena y bloques caídos que entierra el pie. Se construye extruyendo un polígono
+    irregular (no con cajas, que la harían parecer un edificio). Luz por la izquierda: lo que mira a +columna
+    va en sombra."""
     rnd = random.Random(semilla)
-    capas = rnd.randint(5, 8)
-    z = 0
-    c0, r0, w0, h0 = c, r, w, h
-    for k in range(capas):
-        dz = alto / capas * rnd.uniform(0.7, 1.3)
-        tope = k == capas - 1
-        ci, cd, tp = caja(lz, P, c0, r0, w0, h0, z, z + dz, REMATE if tope else (226, 166, 118),
-                          REMATE if tope else MELOCOTON, (70, 52, 50) if tope else TEAL, 1.3)
-        lz.rayado(cd, TEAL_OSC, 3.2, -72, 0.7)
-        if dz > alto / capas:                                   # estratificación cruzada en las capas gruesas
-            for j in range(int(w0 * 3)):
-                u = c0 + 0.15 + j * 0.33
-                lz.linea([P(u, r0 + h0, z + 2), P(u + 0.25, r0 + h0, z + dz - 2)], OXIDO, 0.7)
-        z += dz
-        enc = rnd.uniform(0.05, 0.16)                           # la capa de encima se retira un poco
-        c0, r0, w0, h0 = c0 + enc, r0 + enc, max(0.6, w0 - enc * 2), max(0.6, h0 - enc * 2)
-    # talud de arena con losas al pie
-    pie = [P(c - 0.6, r + h + 0.3), P(c + w + 0.3, r + h + 0.3), P(c + w + 0.3, r - 0.6), P(c + w, r - 0.2)]
-    lz.poli([P(c - 0.6, r + h + 0.3), P(c, r + h), P(c + w, r + h), P(c + w, r), P(c + w + 0.3, r - 0.6), P(c + w + 0.3, r + h + 0.3)],
-            fill=(206, 150, 104))
+    cc, cr = c + w / 2, r + h / 2
+    n = 11
+    base, altos = [], []
+    for i in range(n):
+        a = math.tau * i / n + rnd.uniform(-0.12, 0.12)
+        f = rnd.uniform(0.72, 1.08)
+        base.append((cc + math.cos(a) * w / 2 * f, cr + math.sin(a) * h / 2 * f))
+        altos.append(alto * rnd.uniform(0.82, 1.04))
+    zt = alto * rnd.uniform(0.16, 0.24)                                   # hasta dónde entierra el talud
+    falda = [(cc + (x - cc) * 1.45, cr + (y - cr) * 1.45) for x, y in base]
+
+    def visible(i):                                                       # la pared mira hacia la cámara (+c, +r)
+        (x0, y0), (x1, y1) = base[i], base[(i + 1) % n]
+        nx, ny = (y1 - y0), -(x1 - x0)                                    # normal hacia fuera (orden antihorario)
+        if (x0 + x1) / 2 - cc < 0 and nx > 0 or (y0 + y1) / 2 - cr < 0 and ny > 0:
+            nx, ny = -nx, -ny
+        return nx + ny > 0.02, nx, ny
+
+    lz.sombra_suave([P(x, y) for x, y in falda], (150, 96, 66), 0.85, 7)
+    lz.poli([P(x, y) for x, y in falda], fill=(206, 150, 104))           # suelo de arena alrededor
+    paredes = []
+    for i in range(n):
+        ok, nx, ny = visible(i)
+        if ok:
+            j = (i + 1) % n
+            paredes.append(((base[i][0] + base[j][0]) + (base[i][1] + base[j][1]), i, j, nx, ny))
+    for _, i, j, nx, ny in sorted(paredes):                               # de atrás hacia delante
+        (x0, y0), (x1, y1) = base[i], base[j]
+        z0, z1 = altos[i], altos[j]
+        sombra = nx / (abs(nx) + abs(ny) + 1e-9)                         # 1 = mira a +columna (sombra)
+        col = mezcla(MELOCOTON, TEAL, max(0, min(1, sombra * 1.15)))     # mira a +fila: iluminada
+        cara = [P(x0, y0, 0), P(x1, y1, 0), P(x1, y1, z1), P(x0, y0, z0)]
+        lz.poli(cara, fill=col)
+        if sombra > 0.45:
+            lz.rayado(cara, TEAL_OSC, 3.2, -72, 0.7)
+        zz = 5.0
+        while zz < min(z0, z1) * 0.86:                                    # capas finas de la arenisca
+            lz.linea([P(x0, y0, zz), P(x1, y1, zz)], OXIDO if sombra < 0.45 else mezcla(TEAL, TEAL_OSC, 0.5), 0.55)
+            zz += rnd.uniform(4.5, 6.5)
+        for _ in range(2):                                                # cárcavas de erosión
+            t = rnd.uniform(0.15, 0.85)
+            xm, ym = x0 + (x1 - x0) * t, y0 + (y1 - y0) * t
+            lz.linea([P(xm, ym, 1), P(xm, ym, min(z0, z1) * rnd.uniform(0.3, 0.75))], (176, 112, 78), 0.8)
+        banda = [P(x0, y0, z0 * 0.86), P(x1, y1, z1 * 0.86), P(x1, y1, z1), P(x0, y0, z0)]   # roca de remate
+        lz.poli(banda, fill=mezcla(REMATE, (40, 30, 30), max(0, sombra) * 0.5))
+        lz.poli(cara, outline=NEGRO_T, ancho=1.1)
+    cima = [P(x, y, z) for (x, y), z in zip(base, altos)]
+    lz.poli(cima, fill=mezcla(REMATE, (150, 110, 90), 0.25), outline=NEGRO_T, ancho=1.4)
+    for _ in range(int(w * h * 3)):                                       # cantos sueltos en la cima
+        k = rnd.randrange(n)
+        t = rnd.uniform(0.2, 0.8)
+        x, y = cc + (base[k][0] - cc) * t, cr + (base[k][1] - cr) * t
+        px, py = P(x, y, altos[k] * 0.97)
+        lz.elipse(px - 1.5, py - 0.8, px + 1.5, py + 0.8, fill=(70, 52, 50))
+    # talud: rampa de arena desde el pie enterrado de cada pared visible hasta el suelo
+    for _, i, j, nx, ny in sorted(paredes):
+        sombra = nx / (abs(nx) + abs(ny) + 1e-9)
+        rampa = [P(*base[i], zt), P(*base[j], zt), P(*falda[j], 0), P(*falda[i], 0)]
+        lz.poli(rampa, fill=mezcla((214, 158, 110), (160, 104, 74), max(0, min(1, sombra * 1.15))))
+        if sombra > 0.45:
+            lz.rayado(rampa, (120, 76, 56), 3.6, -50, 0.6)
+    for _ in range(int(16 + w * 5)):                                      # bloques caídos sobre el talud
+        k = rnd.randrange(n)
+        if not visible(k)[0]:
+            continue
+        t = rnd.uniform(0.3, 0.95)
+        x = base[k][0] + (falda[k][0] - base[k][0]) * t
+        y = base[k][1] + (falda[k][1] - base[k][1]) * t
+        roca_iso(lz, P, x, y, rnd.uniform(0.06, 0.2), rnd.randint(0, 9999))
 
 
 def roca_iso(lz, P, c, r, t, semilla):
@@ -380,8 +433,19 @@ def paisaje_iso(lz, P, ancho, alto, cols, filas, z, semilla):
     def fuera_de_sala(x, y, m):
         return not (x_min - m < x < x_max + m and y_min - m < y < y_max + m)
 
+    # cada sala con su propio paisaje: qué esquinas tienen mesa, dónde están los paneles y el vehículo
+    rl = random.Random(semilla * 7 + 3)
+    esquinas = [(0.07, 0.36), (0.93, 0.32), (0.05, 0.98), (0.95, 0.96)]
+    rl.shuffle(esquinas)
+    mesas = [(fx + rl.uniform(-0.03, 0.03), fy + rl.uniform(-0.05, 0.04)) for fx, fy in esquinas[:rl.randint(2, 4)]]
+    sitios = [(0.05, 0.56), (0.9, 0.64), (0.1, 0.78), (0.86, 0.45)]
+    sitios = [s_ for s_ in sitios if all(math.hypot(s_[0] - m[0], (s_[1] - m[1]) * 1.6) > 0.18 for m in mesas)] or [(0.05, 0.56)]
+    rl.shuffle(sitios)
+    sitio_paneles = sitios[0]
+    sitio_rover = sitios[1] if len(sitios) > 1 and rl.random() < 0.75 else None
+    dunas = rl.sample([(0.12, 0.88), (0.88, 0.2), (0.2, 0.22), (0.82, 0.86)], rl.randint(1, 2))
     # campos de dunas oscuras (arena basáltica, como las dunas Bagnold) con ondas de escala métrica
-    for fx, fy in ((0.12, 0.88), (0.88, 0.2)):
+    for fx, fy in dunas:
         x, y = ancho * fx, alto * fy
         if not fuera_de_sala(x, y, 120):
             continue
@@ -401,7 +465,8 @@ def paisaje_iso(lz, P, ancho, alto, cols, filas, z, semilla):
         lz.rayado([(x - rad * 0.8, y), (x - rad * 0.2, y - rad * 0.38), (x + rad * 0.3, y - rad * 0.3), (x - rad * 0.3, y + rad * 0.1)], (92, 50, 36), 2.5, -40, 0.7)
         lz.d.arc([(x - rad) * K, (y - rad / 2) * K, (x + rad) * K, (y + rad / 2) * K], 330, 110, fill=(226, 166, 118), width=2 * K)
     # rocas y losas sueltas (no donde van las buttes, los paneles ni el vehículo)
-    reservas = [(ancho * fx, alto * fy, 150) for fx, fy in ((0.07, 0.36), (0.93, 0.32), (0.05, 0.98), (0.95, 0.96))] +                [(ancho * 0.08, alto * 0.6, 170), (ancho * 0.92, alto * 0.66, 120)]
+    reservas = [(ancho * fx, alto * fy, 150) for fx, fy in mesas] + [(ancho * sitio_paneles[0], alto * sitio_paneles[1], 170)] + \
+               ([(ancho * sitio_rover[0], alto * sitio_rover[1], 120)] if sitio_rover else [])
     for _ in range(220):
         x, y = r.uniform(10, ancho - 10), r.uniform(150, alto - 10)
         if not fuera_de_sala(x, y, 24) or any(math.hypot(x - rx, (y - ry) * 1.6) < rm for rx, ry, rm in reservas):
@@ -412,25 +477,25 @@ def paisaje_iso(lz, P, ancho, alto, cols, filas, z, semilla):
         else:
             caja(lz, P, c, rr, r.uniform(0.3, 0.9), r.uniform(0.2, 0.6), 0, r.uniform(3, 7), (214, 160, 112), (180, 120, 80), (112, 70, 52), 0.9)
     # buttes en las cuatro esquinas, sin tocarse
-    for i, (fx, fy) in enumerate(((0.07, 0.36), (0.93, 0.32), (0.05, 0.98), (0.95, 0.96))):
+    for i, (fx, fy) in enumerate(mesas):
         x, y = ancho * fx, alto * fy
         if not fuera_de_sala(x, y, 90):
             continue
         c, rr = casilla(x, y)
-        w, h = r.uniform(1.8, 2.8), r.uniform(1.5, 2.3)
-        mesa_iso(lz, P, c - w / 2, rr - h / 2, w, h, r.uniform(110, 190) if fy < 0.5 else r.uniform(60, 100), semilla + i)
+        w, h = rl.uniform(2.4, 3.6), rl.uniform(1.6, 2.6)              # más anchas que altas
+        mesa_iso(lz, P, c - w / 2, rr - h / 2, w, h, rl.uniform(75, 120) if fy < 0.5 else rl.uniform(50, 80), semilla + i)
     # remolino de polvo pintado a lo lejos
     dx = ancho * (0.85 if semilla % 2 else 0.15)
     for k in range(6):
         lz.linea([(dx - k * 2, 200 - k * 14), (dx + 10 + k * 3, 196 - k * 14)], (200, 150, 120), 2)
     # la base alrededor: paneles solares a un lado y el vehículo aparcado al otro, con sus rodadas
     lado = semilla % 2
-    x, y = ancho * 0.05, alto * 0.56                      # paneles a la izquierda
+    x, y = ancho * sitio_paneles[0], alto * sitio_paneles[1]          # campo de paneles (tamaño variable)
     if fuera_de_sala(x, y, 20):
         c, rr = casilla(x, y)
-        paneles_solares(lz, P, c - 1, rr - 1, 3, 2)
-    x, y = ancho * 0.9, alto * 0.64                       # vehículo a la derecha (los túneles salen a la izquierda)
-    if fuera_de_sala(x, y, 20):
+        paneles_solares(lz, P, c - 1, rr - 1, rl.randint(2, 4), rl.randint(1, 3))
+    x, y = (ancho * sitio_rover[0], alto * sitio_rover[1]) if sitio_rover else (-999, -999)   # vehículo (no en todas)
+    if sitio_rover and fuera_de_sala(x, y, 20):
         c, rr = casilla(x, y)
         for k in (0.2, 0.75):
             lz.linea([P(c - 8, rr + k), P(c, rr + k)], (120, 66, 44), 2.2)
@@ -1526,7 +1591,7 @@ def tanque_agua(lz, P, c, r, w, h, cuadro=None):
     # placa H2O y pictograma de blindaje
     pl = banda(ZS + 26, ZS + 31.5, -0.22, 0.28)
     lz.poli(pl, fill=C["etiqueta"], outline=C["tinta"], ancho=0.25)
-    lz.texto(x + ax * 0.03, y + ay - ZS - 28.8, "H2O", 1.6, C["tinta"])
+    lz.texto(x + ax * 0.03, y + ay - ZS - 28.8, "H₂O", 1.6, C["tinta"])
     sx, sy = x + ax * 0.12, y + ay * 0.99 - ZS - 12
     escudo = [(sx - 2.0, sy - 2.2), (sx, sy - 2.8), (sx + 2.0, sy - 2.2), (sx + 1.8, sy + 0.6), (sx, sy + 2.6), (sx - 1.8, sy + 0.6)]
     lz.poli(escudo, fill=E["blindaje"], outline=C["tinta"], ancho=0.3)
@@ -1744,7 +1809,7 @@ def objeto(lz, P, tipo, c, r, w, h, sistema, sala):
         lz.poli([(x - ax * 0.55, y - 10), (x - ax * 0.42, y - 10), (x - ax * 0.42, y - 44), (x - ax * 0.55, y - 44)], fill=AGUA_S)   # nivel
         lz.elipse(x - 7, y - 79, x + 7, y - 71, outline=(184, 71, 61), ancho=1.6)                # volante de la válvula
         lz.linea([(x - 7, y - 75), (x + 7, y - 75)], (184, 71, 61), 1.2)
-        lz.texto(x + 6, y - 34, "H2O", 7, PM.LUZ)
+        lz.texto(x + 6, y - 34, "H₂O", 7, PM.LUZ)
     elif tipo == "torre":                                       # Veggie: depósito, fuelle transparente, tapa de LED
         caja(lz, P, c + 0.12, r + 0.12, w - 0.24, h - 0.24, 0, 12, V3, V2, V1)                  # depósito de raíces
         x0, y0 = P(c + 0.2, r + h - 0.2, 12)
@@ -1794,7 +1859,7 @@ def objeto(lz, P, tipo, c, r, w, h, sistema, sala):
         for z in (10, 32):
             aro(lz, P, c + 0.5, r + 0.5, 0.26, z, V0, 1.6)
         lz.elipse(x - 4, y - 47, x + 4, y - 43, fill=V4, outline=TINTA, ancho=0.8)            # tapón
-        lz.texto(x - 4, y - 21, "H2O", 6, PM.LUZ)
+        lz.texto(x - 4, y - 21, "H₂O", 6, PM.LUZ)
     elif tipo == "estanteria":                                  # laterales, baldas con canto y cosas apoyadas
         prof_c, prof_r = (w - 0.16, 0.5) if w >= h else (0.5, h - 0.16)
         c0, r0 = c + 0.08, r + 0.08
@@ -2597,7 +2662,7 @@ def decorar_muro(lz, P, sala, cols, filas, ac):
     elif sala == "Soporte vital":
         for zz in (46, 56):
             lz.poli(pared(0.2, filas - 0.2, zz, zz + 6), fill=mezcla(ac, V0, 0.35), outline=TINTA, ancho=1)
-        for u, t in ((2, "O2"), (4.5, "CO2")):
+        for u, t in ((2, "O₂"), (4.5, "CO₂")):
             esfera = [P(0, u + 0.19 * math.cos(a), 80 + 9 * math.sin(a)) for a in np.linspace(0, math.tau, 28)]
             lz.poli(esfera, fill=PAPEL, outline=TINTA, ancho=1.2)
             lz.linea([P(0, u, 80), P(0, u - 0.1, 84)], (184, 71, 61), 1.2)      # aguja

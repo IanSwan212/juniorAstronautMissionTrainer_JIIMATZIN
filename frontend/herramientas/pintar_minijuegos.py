@@ -33,6 +33,8 @@ def nuevo(w, h, fondo=(0, 0, 0, 0)):
 def guardar(lz, nombre, jpg=False):
     SALIDA.mkdir(parents=True, exist_ok=True)
     img = lz.reducir()
+    if not jpg:
+        img = Z.grano_final(img, sum(map(ord, nombre)), 0.022)
     if jpg:
         img.convert("RGB").save(SALIDA / f"{nombre}.jpg", quality=86, optimize=True, progressive=True)
     else:
@@ -190,7 +192,9 @@ def carton(lz=None, ox=0, oy=0, silueta=None):
     lz.velo([P(96, 0), P(170, 6), P(158, 50), P(110, 56)], (90, 66, 50, 70))          # la curva se aleja de la luz
     franja = [P(*p) for p in bezier((14, 18), (62, 9), (116, 9), (166, 16))] + [P(*p) for p in bezier((18, 28), (64, 20), (114, 20), (163, 26))[::-1]]
     lz.poli(franja, fill=(44, 62, 112))
-    lz.texto(ox + 82, oy + 17.5, "PLAN DE VUELO · APOLO 13", 5.2, (228, 232, 246))
+    for k in range(9):                                                                # renglones impresos de la franja
+        x = 34 + k * 12
+        lz.linea([P(x, 15.5 - abs(k - 4) * 0.25), P(x + 8, 15.3 - abs(k - 4) * 0.25)], (228, 232, 246), 0.9)
     for k in range(4):                                                                # renglones impresos
         y = 33 + k * 4
         lz.linea([P(30 + k * 2, y), P(140 - k * 3, y - 1)], (150, 132, 104), 0.5)
@@ -320,9 +324,22 @@ def recipientes():
         x0, y0, x1, y1 = 155 - 96, cy - 34, 155 + 96, cy + 34
         lz.poli([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], fill=(26, 22, 56), outline=TINTA, ancho=1)
         lz.velo([(x0, y0), (x1, y0), (x1 - 4, y0 + 5), (x0 + 4, y0 + 5)], (0, 0, 0, 120))
-        for _ in range(160):
+        for _ in range(420):                                                   # espuma de celda abierta
             x, y = rnd.uniform(x0 + 2, x1 - 2), rnd.uniform(y0 + 2, y1 - 2)
-            lz.elipse(x - 0.4, y - 0.4, x + 0.4, y + 0.4, fill=(40, 36, 78))
+            t = rnd.uniform(0.3, 0.8)
+            lz.elipse(x - t, y - t, x + t, y + t, fill=rnd.choice(((40, 36, 78), (18, 16, 42), (52, 48, 96))))
+        lz.d.pieslice([(155 - 16) * Z.K, (y1 - 14) * Z.K, (155 + 16) * Z.K, (y1 + 14) * Z.K], 180, 360,
+                      fill=(16, 14, 38))                                       # muesca para meter los dedos
+        lz.linea([(x0 + 2, y1 - 1), (x1 - 2, y1 - 1)], (70, 64, 120), 0.8)          # canto de la espuma con luz
+        lz.poli([(x0 + 70, y1 + 3), (x1 - 70, y1 + 3), (x1 - 70, y1 + 9), (x0 + 70, y1 + 9)], fill=(214, 220, 236),
+                outline=TINTA, ancho=0.5)                                     # etiqueta (el nombre lo pone el juego)
+    for y in (150, 240):                                                     # asas a los lados
+        for x0 in (2, 300):
+            lz.poli([(x0, y), (x0 + 8, y), (x0 + 8, y + 24), (x0, y + 24)], fill=(150, 146, 190), outline=TINTA, ancho=0.8)
+    Z.trama(lz, [(230, 46), (308, 46), (308, 363), (230, 363)], (1, -1), 4.5, (14, 12, 34), rnd, 0.4)   # lado en sombra
+    for _ in range(40):                                                       # rayones en los cantos
+        x = rnd.uniform(6, 304)
+        lz.linea([(x, 361), (x + rnd.uniform(2, 7), 361 - rnd.uniform(-0.5, 0.5))], (120, 116, 170), 0.35)
     lz.poli([(0, 0), (310, 0), (310, 365), (0, 365)], outline=TINTA, ancho=2.4)
     guardar(lz, "mj_bandeja")
     # placa del adaptador (420 x 365): cartucho cuadrado de LiOH y tubo redondo del módulo lunar
@@ -338,7 +355,6 @@ def recipientes():
         for j in range(6):
             cx, cy = x0 + 9 + i * 9.6, y0 + 19 + j * 9.6
             lz.elipse(cx - 2.2, cy - 2.2, cx + 2.2, cy + 2.2, fill=(84, 88, 116))
-    lz.texto(x0 + s / 2, y0 + s + 22, "LiOH · CUADRADO", 7, (214, 220, 255))
     # tubo redondo (abajo a la derecha)
     cx, cy, r = 352, 262, 30
     lz.elipse(cx - r - 8, cy - r - 8, cx + r + 8, cy + r + 8, fill=(150, 156, 180), outline=TINTA, ancho=1.3)
@@ -347,11 +363,9 @@ def recipientes():
         remaches(lz, [(bx, by)], 1.8)
     lz.elipse(cx - r, cy - r, cx + r, cy + r, fill=(16, 14, 34), outline=TINTA, ancho=1.2)
     lz.elipse(cx - r + 5, cy - r + 5, cx + r - 2, cy + r - 2, fill=(30, 26, 60))
-    lz.texto(cx, cy + r + 22, "TUBO · REDONDO", 7, (214, 220, 255))
     flecha = [(118, 266), (296, 266)]                                          # el reto: cuadrado -> redondo
     lz.linea(flecha, (255, 200, 61), 1.4)
     lz.poli([(296, 260), (306, 266), (296, 272)], fill=(255, 200, 61))
-    lz.texto(207, 330, "¿cómo encajar un cuadrado en un círculo?", 7.5, (255, 214, 120))
     lz.poli([(0, 0), (420, 0), (420, 365), (0, 365)], outline=TINTA, ancho=2.4)
     guardar(lz, "mj_adaptador")
 
@@ -359,7 +373,9 @@ def recipientes():
 # =====================================================================================================
 # 3. INVERNADERO (cámara Veggie, zinnias de 2016)
 # =====================================================================================================
-COLORES_ZINNIA = [((236, 80, 150), (255, 170, 210)), ((250, 176, 40), (255, 226, 130)), ((150, 110, 240), (210, 190, 255))]
+# La zinnia que floreció en la Estación Espacial en enero de 2016 era NARANJA (variedad 'Profusion Orange').
+# Tres flores con tres tonos de ese naranja, de más rojizo a más dorado (nunca rosa ni morado).
+COLORES_ZINNIA = [((222, 92, 34), (255, 168, 92)), ((236, 118, 30), (255, 190, 110)), ((240, 140, 40), (255, 206, 128))]
 
 
 def veggie():
@@ -385,6 +401,30 @@ def veggie():
             y = 34 + k * 17.5
             lz.linea([(x0, y), (x0 + 14, y + 8), (x0 + 28, y)], (220, 230, 255), 0.6)
             lz.linea([(x0, y + 8.5), (x0 + 14, y + 16.5), (x0 + 28, y + 8.5)], (120, 110, 170), 0.5)
+    for x in range(14, W - 14, 6):                                            # aletas del disipador del banco de LED
+        lz.linea([(x, 1.5), (x, 6)], (86, 88, 112), 1.2)
+    for x0 in (10, W - 44):                                                   # ventiladores del banco de LED
+        lz.elipse(x0, 3, x0 + 34, 27, fill=(30, 30, 46), outline=TINTA, ancho=0.8)
+        for a in range(0, 360, 60):
+            ax, ay = x0 + 17 + math.cos(math.radians(a)) * 10, 15 + math.sin(math.radians(a)) * 10
+            lz.linea([(x0 + 17, 15), (ax, ay)], (110, 112, 140), 1.6)
+        lz.elipse(x0 + 14, 12, x0 + 20, 18, fill=(150, 150, 176))
+    for k in range(7):                                                        # reflejos del fuelle frontal transparente
+        x = 70 + k * 104 + rnd.uniform(-10, 10)
+        lz.velo([(x, 36), (x + 22, 36), (x - 60, H - 40), (x - 80, H - 40)], (255, 255, 255, 14 if k % 2 else 22))
+    for k in range(10):                                                       # pliegues del fuelle (verticales, suaves)
+        x = 60 + k * 72
+        lz.linea([(x, 34), (x + rnd.uniform(-4, 4), H - 38)], (200, 190, 240), 0.5)
+    Z.trama(lz, [(W * 0.7, 32), (W - 36, 32), (W - 36, H - 36), (W * 0.7, H - 36)], (1, -1), 4.5,
+            (36, 20, 60), rnd, 0.45)                                          # el lado derecho, más lejos de la luz
+    lz.poli([(W - 120, H - 70), (W - 50, H - 70), (W - 50, H - 40), (W - 120, H - 40)], fill=(54, 56, 80), outline=TINTA, ancho=1)
+    for i, col in enumerate(((124, 240, 160), (255, 200, 61), (94, 200, 242))):   # caja de control con 3 LED
+        lz.elipse(W - 112 + i * 14, H - 60, W - 105 + i * 14, H - 53, fill=col, outline=TINTA, ancho=0.4)
+    lz.poli([(W - 112, H - 48), (W - 60, H - 48), (W - 60, H - 44), (W - 112, H - 44)], fill=(30, 30, 46))
+    for y in (40, H - 46):                                                    # rieles de aluminio con tornillos
+        lz.poli([(4, y), (W - 4, y), (W - 4, y + 5), (4, y + 5)], fill=(184, 190, 210), outline=TINTA, ancho=0.6)
+        for x in range(16, W - 10, 60):
+            lz.elipse(x - 1.4, y + 1, x + 1.4, y + 3.8, fill=(110, 114, 140))
     lz.poli([(0, H - 34), (W, H - 34), (W, H), (0, H)], fill=(110, 76, 66), outline=TINTA, ancho=1.2)   # placa de raíces
     for _ in range(1500):
         x, y = rnd.uniform(2, W - 2), rnd.uniform(H - 32, H - 2)
@@ -424,7 +464,8 @@ def cojin(k):
     for x in (34, 72):                                                            # mechas de riego
         lz.linea(bezier((x, 64), (x + 1, 66), (x - 1, 68), (x + 1, H - 1), 6), (244, 244, 250), 1.2)
     lz.poli([(62, 27), (84, 27), (84, 37), (62, 37)], fill=(246, 242, 232), outline=TINTA, ancho=0.6)
-    lz.texto(73, 32, f"VEG-0{k + 1}", 5, (60, 60, 90))
+    for j, g in enumerate((0.5, 0.3, 0.6, 0.3, 0.5, 0.8, 0.3, 0.5, 0.3, 0.6, 0.4)):   # código de barras de la etiqueta
+        lz.linea([(65 + j * 1.6, 29.5), (65 + j * 1.6, 34.5)], (60, 60, 90), g)
     lz.poli(cuerpo, outline=TINTA, ancho=1.4)
     guardar(lz, f"mj_cojin_{k}")
 
