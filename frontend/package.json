@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Frontend de JIIMATZIN: el juego en Phaser 4 (mapa de la base, historia, minijuegos) y el adaptador de la API.",
   "scripts": {
-    "dev": "node scripts/servidor.mjs"
+    "dev": "node scripts/servidor.mjs",
+    "construir": "node scripts/construir.mjs"
   }
 }

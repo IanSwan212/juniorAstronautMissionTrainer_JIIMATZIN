@@ -40,7 +40,15 @@ async function archivo(ruta) {
 
 async function reenviar(req, res) {
   try {
-    const r = await fetch(API + req.url, { headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(8000) });
+    // POST (solo /api/v1/partidas lo usa): se reenvía el cuerpo tal cual, con un límite
+    let body;
+    if (req.method === 'POST') {
+      const partes = []; let tam = 0;
+      for await (const c of req) { tam += c.length; if (tam > 256 * 1024) throw new Error('cuerpo demasiado grande'); partes.push(c); }
+      body = Buffer.concat(partes);
+    }
+    const r = await fetch(API + req.url, { method: req.method, body, signal: AbortSignal.timeout(8000),
+      headers: { Accept: 'application/json', ...(body ? { 'Content-Type': req.headers['content-type'] ?? 'application/json' } : {}) } });
     const cuerpo = Buffer.from(await r.arrayBuffer());
     res.writeHead(r.status, { 'Content-Type': r.headers.get('content-type') ?? 'application/json', 'Cache-Control': 'no-store' });
     res.end(cuerpo);
@@ -52,8 +60,9 @@ async function reenviar(req, res) {
 
 createServer(async (req, res) => {
   const ruta = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-  if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405).end(); return; }
-  if (ruta.startsWith('/api/') || ruta.startsWith('/health')) { await reenviar(req, res); return; }
+  const esApi = ruta.startsWith('/api/') || ruta.startsWith('/health');
+  if (req.method !== 'GET' && req.method !== 'HEAD' && !(req.method === 'POST' && ruta.startsWith('/api/'))) { res.writeHead(405).end(); return; }
+  if (esApi) { await reenviar(req, res); return; }
   const p = await archivo(ruta === '/' ? '/index.html' : ruta);
   if (!p) { res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end('No encontrado'); return; }
   const cuerpo = await readFile(p);
