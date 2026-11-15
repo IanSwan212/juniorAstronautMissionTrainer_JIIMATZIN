@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 
 // Cada caso corre en un proceso aparte porque env.js valida al importarse.
 function cargarConEntorno(vars) {
-  return spawnSync(process.execPath, ['--input-type=module', '-e', "await import('./src/config/env.js')"], {
+  return spawnSync(process.execPath, ['--input-type=module', '-e', "await import('./src/infraestructura/config/env.js')"], {
     cwd: new URL('..', import.meta.url),
     env: { PATH: process.env.PATH, ...vars },
     encoding: 'utf8',

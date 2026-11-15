@@ -1,3 +1,4 @@
+/** Persistencia del modelo de fichas y su evidencia. */
 export function crearRepositorioFichas(pool) {
   return {
     /** Última versión aprobada de la ficha (code = etiqueta dato:<id> de Ink). */

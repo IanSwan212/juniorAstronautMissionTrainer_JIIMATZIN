@@ -1,4 +1,5 @@
 import { ZodError } from 'zod';
+import { ErrorNoEncontrado } from '../../compartido/errores.js';
 
 export class ErrorHttp extends Error {
   constructor(estado, codigo, mensaje) {
@@ -27,6 +28,9 @@ export function manejadorErrores(err, _req, res, _next) {
   }
   if (err instanceof ErrorHttp) {
     return res.status(err.estado).json({ error: { codigo: err.codigo, mensaje: err.message } });
+  }
+  if (err instanceof ErrorNoEncontrado) {
+    return res.status(404).json({ error: { codigo: err.codigo, mensaje: err.message } });
   }
   console.error(err);
   return res.status(500).json({ error: { codigo: 'error_interno', mensaje: 'Error interno del servidor' } });

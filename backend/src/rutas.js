@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { crearRutasEscenarios } from '../modules/escenarios/escenarios.routes.js';
-import { crearRutasFichas } from '../modules/fichas/fichas.routes.js';
-import { crearRutasFuentes } from '../modules/fuentes/fuentes.routes.js';
+import { crearRutasEscenarios } from './escenarios/escenarios.routes.js';
+import { crearRutasFichas } from './fichas/fichas.routes.js';
+import { crearRutasFuentes } from './fuentes/fuentes.routes.js';
 
 /** Monta todos los módulos bajo /api/v1. Para añadir un recurso: nuevo módulo + una línea aquí. */
 export function crearRutasApi({ pool }) {

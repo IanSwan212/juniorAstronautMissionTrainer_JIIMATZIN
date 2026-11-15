@@ -1,12 +1,12 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import { env } from './config/env.js';
-import { registroSolicitudes } from './middleware/registro.js';
-import { limitarPeticiones, cacheContenido, sinCache } from './middleware/limites.js';
-import { noEncontrado, manejadorErrores } from './middleware/errores.js';
-import { crearRutasSalud } from './modules/salud/salud.routes.js';
-import { crearRutasApi } from './routes/api.js';
+import { env } from './infraestructura/config/env.js';
+import { registroSolicitudes } from './infraestructura/http/registro.js';
+import { limitarPeticiones, cacheContenido, sinCache } from './infraestructura/http/limites.js';
+import { noEncontrado, manejadorErrores } from './infraestructura/http/errores.js';
+import { crearRutasSalud } from './salud/salud.routes.js';
+import { crearRutasApi } from './rutas.js';
 
 /**
  * Fábrica de la aplicación. Recibe el pool para poder sustituirlo en pruebas.

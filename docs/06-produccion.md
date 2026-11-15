@@ -1,6 +1,6 @@
 # Producción
 
-El backend se despliega configurado **solo por variables de entorno**, definidas en el panel del hosting. En producción no se usa ni se sube un archivo `.env`. Si falta o es insegura alguna variable crítica, la API **no arranca** (validación en [backend/src/config/env.js](../backend/src/config/env.js)).
+El backend se despliega configurado **solo por variables de entorno**, definidas en el panel del hosting. En producción no se usa ni se sube un archivo `.env`. Si falta o es insegura alguna variable crítica, la API **no arranca** (validación en [backend/src/infraestructura/config/env.js](../backend/src/infraestructura/config/env.js)).
 
 ## Variables
 
@@ -22,16 +22,16 @@ El backend se despliega configurado **solo por variables de entorno**, definidas
 
 | Medida | Dónde |
 | --- | --- |
-| La API no arranca con configuración insegura en producción | `config/env.js` |
+| La API no arranca con configuración insegura en producción | `infraestructura/config/env.js` |
 | Cabeceras de seguridad (`helmet`), sin `X-Powered-By` | `app.js` |
 | CORS cerrado: solo GET/HEAD y orígenes listados | `app.js` |
-| Límite de peticiones por IP (429 con formato propio) | `middleware/limites.js` |
+| Límite de peticiones por IP (429 con formato propio) | `infraestructura/http/limites.js` |
 | Tiempos máximos de petición y de cabeceras | `index.js` |
 | Cierre ordenado y salida forzada a los 10 s | `index.js` |
 | Un error en conexión inactiva de la BD no tumba el proceso | `index.js` |
 | Excepciones/promesas sin manejar: registrar y salir para que el hosting reinicie | `index.js` |
-| Sin escritura expuesta; SQL parametrizado; límites de BD (`statement_timeout` 5 s) | módulos, `db/pool.js` |
-| Los errores 500 no revelan detalles | `middleware/errores.js` |
+| Sin escritura expuesta; SQL parametrizado; límites de BD (`statement_timeout` 5 s) | repositorios por funcionalidad, `infraestructura/db/pool.js` |
+| Los errores 500 no revelan detalles | `infraestructura/http/errores.js` |
 
 ## Despliegue
 

@@ -1,5 +1,5 @@
-import { env } from './config/env.js';
-import { crearPool } from './db/pool.js';
+import { env } from './infraestructura/config/env.js';
+import { crearPool } from './infraestructura/db/pool.js';
 import { crearApp } from './app.js';
 
 const pool = crearPool();

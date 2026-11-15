@@ -1,4 +1,4 @@
-/** Acceso a datos. Solo consultas parametrizadas; nada de SQL armado con texto del usuario. */
+/** Persistencia del modelo de escenarios. Solo consultas parametrizadas. */
 export function crearRepositorioEscenarios(pool) {
   return {
     async listarPublicados() {

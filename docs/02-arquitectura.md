@@ -61,11 +61,39 @@ sequenceDiagram
 
 ## Estructura interna del backend
 
+Se aplica **screaming architecture con MVC por funcionalidad**. Al abrir `backend/src/` se encuentran `escenarios/`, `fichas/`, `fuentes/`, `salud/` e `importador/`. Las carpetas expresan qué hace la API; cada recurso HTTP contiene su modelo, vista, controlador, rutas y repositorio.
+
 ```mermaid
 flowchart LR
-    R[routes<br/>valida con zod] --> SV[service<br/>arma el contrato] --> RP[repository<br/>SQL parametrizado] --> PG[(PostgreSQL)]
-    R -. errores .-> M[middleware/errores]
+    R[routes<br/>compone dependencias y registra handlers] --> C[controller<br/>valida HTTP con zod]
+    C --> M[model<br/>casos de uso]
+    M --> RP[repository<br/>SQL parametrizado] --> PG[(PostgreSQL)]
+    M -- resultado --> C
+    C --> V[view<br/>proyección JSON pura]
+    V -- contrato público --> C
+    C -- respuesta --> HTTP[Cliente HTTP]
+    C -. errores async .-> E[infraestructura/http/errores]
 ```
+
+### MVC en esta API
+
+- **Modelo:** coordina las consultas y resuelve los casos de uso. La selección de escenarios publicados y fichas aprobadas se conserva en el SQL de sus repositorios. El modelo recibe el repositorio por inyección y desconoce Express, los estados HTTP y las variables de entorno.
+- **Vista:** transforma datos internos al JSON del contrato (nombres públicos, versiones, condiciones, fichas y evidencia). No recibe `req`/`res` ni consulta PostgreSQL.
+- **Controlador:** valida parámetros y consultas, llama al modelo y envía el resultado de la vista con el estado HTTP correspondiente. Express 5 propaga los errores asíncronos al middleware común.
+- **Rutas:** componen las dependencias locales y conectan URL → controlador; no contienen SQL, validación ni construcción de respuestas.
+
+`app.js` conecta configuración, middlewares y routers; `rutas.js` agrupa `/api/v1`. `infraestructura/` concentra configuración, pool y middlewares HTTP. `compartido/errores.js` define errores de aplicación sin dependencias de transporte; el middleware traduce una ausencia a 404 y oculta los errores inesperados con 500.
+
+El importador sigue siendo un comando administrativo pendiente de implementar. Tendrá sus propios casos de uso y persistencia cuando se construya; no necesita controlador ni vista HTTP mientras no exponga rutas.
+
+### Reglas para extender
+
+1. Crear una carpeta con el nombre de la funcionalidad y mantener juntos sus archivos `*.model.js`, `*.view.js`, `*.controller.js`, `*.repository.js` y `*.routes.js`.
+2. Mantener el SQL en repositorios y el formato público en vistas. Pasar las dependencias por las fábricas existentes.
+3. Montar las rutas de contenido en `backend/src/rutas.js` y agregar pruebas HTTP con respuestas representativas y errores.
+4. Actualizar la documentación; si cambia el contrato público, acordarlo con los roles 1 y 2 y actualizar schema/adaptador.
+
+Este refactor conserva los endpoints, el esquema de PostgreSQL y el contrato del frontend. La separación se comprueba con pruebas HTTP y pool simulado; no implica haber importado datos reales ni haber aprobado el contrato borrador.
 
 ## Conexión front ↔ back
 
