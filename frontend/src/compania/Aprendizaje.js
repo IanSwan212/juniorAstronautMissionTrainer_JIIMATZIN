@@ -8,6 +8,7 @@ import { bus, EV, control } from '../motor/eventos.js';
 import { guia } from './guia.js';
 import { TEMAS } from '../ml/aprendizaje.js';
 import { idioma } from '../motor/idioma.js';
+import { GameState } from '../mecanicas/estado.js';
 
 const FUENTE = '"Trebuchet MS", "Segoe UI", system-ui, sans-serif';
 const TINTA = 0x141026, TINTA_TXT = '#141026', LUZ_TXT = '#f3e3c3', SELLO_TXT = '#b8473d';
@@ -68,6 +69,7 @@ export default class Aprendizaje extends Phaser.Scene {
   colocarBoton() {
     const { width: w, height: h } = this.scale;
     this.boton.setPosition(w - BOTON * 1.5 - 16 - 12, h - BOTON / 2 - 34);
+    this.boton.setVisible(this.alFinal());              // el botón de la esquina aparece solo al final
   }
 
   avisarBoton() {
@@ -104,10 +106,14 @@ export default class Aprendizaje extends Phaser.Scene {
   }
 
   // ---------- Abrir y cerrar ----------
+  // Los reportes de avance se ven solo al final de la misión (pantalla final: «VER LO QUE APRENDÍ»)
+  alFinal() { return GameState.fase === 'FIN'; }
+
   alternar() { this.abierto ? this.cerrar() : this.abrir(); }
 
   /** forzar: abrir aunque haya otra pantalla (la pantalla final) */
   abrir(forzar = false) {
+    if (!forzar && !this.alFinal()) return;          // durante la misión no se abre (ni con P)
     if (control.bloqueado && !forzar) return;
     this.abierto = true;
     this.forzado = forzar;
