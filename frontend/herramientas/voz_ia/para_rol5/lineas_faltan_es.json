@@ -603,12 +603,196 @@
   "id": "ia_juego_es_076",
   "escena": "ia_juego",
   "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Humanos, seres vivos, converjan entre sí. Afuera de este planeta hay un mundo todavía más grande… infinito, inmenso, colmado de enigmas, preguntas que esperan una respuesta y tesoros que buscan ser encontrados.",
+  "texto_tts": "Humanos, seres vivos, converjan entre sí. Afuera de este planeta hay un mundo todavía más grande… infinito, inmenso, colmado de enigmas, preguntas que esperan una respuesta y tesoros que buscan ser encontrados."
+ },
+ {
+  "id": "ia_juego_es_077",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Neil Armstrong, en 1969, fue el primer individuo en llegar a la Luna.",
+  "texto_tts": "Neil Armstrong, en 1969, fue el primer individuo en llegar a la Luna."
+ },
+ {
+  "id": "ia_juego_es_078",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "¿Qué nos hace humanos? ¿Qué nos hace ser lo que realmente somos? No son nuestras habilidades sociales, no es nuestra anatomía y, claramente, no es nuestra inteligencia…",
+  "texto_tts": "¿Qué nos hace humanos? ¿Qué nos hace ser lo que realmente somos? No son nuestras habilidades sociales, no es nuestra anatomía y, claramente, no es nuestra inteligencia…"
+ },
+ {
+  "id": "ia_juego_es_079",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Entonces… ¿Qué es?...",
+  "texto_tts": "Entonces… ¿Qué es?..."
+ },
+ {
+  "id": "ia_juego_es_080",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Sí, es la necesidad de saber qué más, el saber qué hay más allá de lo que nuestra visión es capaz de alcanzar a ver. Es tener esa sed de conocimiento, tener ganas de tomar al mundo y devorarlo por completo de un solo bocado, saber qué es lo que mueve al planeta, cada dimensión, cada partícula, cada onda y cada electrón.",
+  "texto_tts": "Sí, es la necesidad de saber qué más, el saber qué hay más allá de lo que nuestra visión es capaz de alcanzar a ver. Es tener esa sed de conocimiento, tener ganas de tomar al mundo y devorarlo por completo de un solo bocado, saber qué es lo que mueve al planeta, cada dimensión, cada partícula, cada onda y cada electrón."
+ },
+ {
+  "id": "ia_juego_es_081",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Todo se mueve gracias al querer saber más, hacer más, lograr más y llegar más alto… No solo mirar el cielo y tapar el sol con el dedo; es estar frente al sol y ver en el reflejo de tus ojos esas olas que danzan tan voraces al compás de las estrellas…",
+  "texto_tts": "Todo se mueve gracias al querer saber más, hacer más, lograr más y llegar más alto… No solo mirar el cielo y tapar el sol con el dedo; es estar frente al sol y ver en el reflejo de tus ojos esas olas que danzan tan voraces al compás de las estrellas…"
+ },
+ {
+  "id": "ia_juego_es_082",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "El tiempo pasa y, entre más pasa el tiempo, más cosas van surgiendo de entre la Tierra y el espacio. Todo esto es el legado de miles de personas, el cual ha sido transferido generación por generación y han dedicado su vida entera para encontrar respuestas.",
+  "texto_tts": "El tiempo pasa y, entre más pasa el tiempo, más cosas van surgiendo de entre la Tierra y el espacio. Todo esto es el legado de miles de personas, el cual ha sido transferido generación por generación y han dedicado su vida entera para encontrar respuestas."
+ },
+ {
+  "id": "ia_juego_es_083",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Nada es imposible, porque cuando lo intentas… no siempre será lo que esperas, pero siempre tendrás un resultado…",
+  "texto_tts": "Nada es imposible, porque cuando lo intentas… no siempre será lo que esperas, pero siempre tendrás un resultado…"
+ },
+ {
+  "id": "ia_juego_es_084",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Ahora a ti te toca… Tienes la antorcha de la sabiduría, del conocimiento, de la necesidad y de la perseverancia… Demuestra tus capacidades, supérate y demuestra lo capaz que eres.",
+  "texto_tts": "Ahora a ti te toca… Tienes la antorcha de la sabiduría, del conocimiento, de la necesidad y de la perseverancia… Demuestra tus capacidades, supérate y demuestra lo capaz que eres."
+ },
+ {
+  "id": "ia_juego_es_085",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Porque si lo intentas, lo logras…",
+  "texto_tts": "Porque si lo intentas, lo logras…"
+ },
+ {
+  "id": "ia_juego_es_086",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Construye y arregla máquinas, robots y naves espaciales.",
+  "texto_tts": "Construye y arregla máquinas, robots y naves espaciales."
+ },
+ {
+  "id": "ia_juego_es_087",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Entiende cómo se mueven las cosas y cómo viaja la electricidad.",
+  "texto_tts": "Entiende cómo se mueven las cosas y cómo viaja la electricidad."
+ },
+ {
+  "id": "ia_juego_es_088",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Cuida las computadoras de la base y trabaja con disciplina bajo presión.",
+  "texto_tts": "Cuida las computadoras de la base y trabaja con disciplina bajo presión."
+ },
+ {
+  "id": "ia_juego_es_089",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Estudia las plantas y sabe cómo cuidarlas en el invernadero.",
+  "texto_tts": "Estudia las plantas y sabe cómo cuidarlas en el invernadero."
+ },
+ {
+  "id": "ia_juego_es_090",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Lee las rocas y el suelo para entender cómo es Marte.",
+  "texto_tts": "Lee las rocas y el suelo para entender cómo es Marte."
+ },
+ {
+  "id": "ia_juego_es_091",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Vigila el clima: el viento, el polvo y las tormentas.",
+  "texto_tts": "Vigila el clima: el viento, el polvo y las tormentas."
+ },
+ {
+  "id": "ia_juego_es_092",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Conoce el cuerpo humano y sabe cómo cuidarlo en el espacio.",
+  "texto_tts": "Conoce el cuerpo humano y sabe cómo cuidarlo en el espacio."
+ },
+ {
+  "id": "ia_juego_es_093",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Da primeros auxilios y mantiene al equipo sano y tranquilo.",
+  "texto_tts": "Da primeros auxilios y mantiene al equipo sano y tranquilo."
+ },
+ {
+  "id": "ia_juego_es_094",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Año 2030…",
+  "texto_tts": "Año 2030…"
+ },
+ {
+  "id": "ia_juego_es_095",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Todo empezó en 2023, cuando cuatro voluntarios de la NASA vivieron 378 días dentro de una base simulada de Marte, en Houston.",
+  "texto_tts": "Todo empezó en 2023, cuando cuatro voluntarios de la NASA vivieron 378 días dentro de una base simulada de Marte, en Houston."
+ },
+ {
+  "id": "ia_juego_es_096",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Desde entonces, la humanidad se prepara para llevar personas a Marte.",
+  "texto_tts": "Desde entonces, la humanidad se prepara para llevar personas a Marte."
+ },
+ {
+  "id": "ia_juego_es_097",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Hoy, en 2030, un equipo pequeño hace su misión de prueba en la Base Marte Uno. Es una simulación, pero se parece mucho a la realidad.",
+  "texto_tts": "Hoy, en 2030, un equipo pequeño hace su misión de prueba en la Base Marte Uno. Es una simulación, pero se parece mucho a la realidad."
+ },
+ {
+  "id": "ia_juego_es_098",
+  "escena": "ia_juego",
+  "personaje": "IA",
+  "cara": "sereno",
+  "texto": "Las luces se apagan una por una.",
+  "texto_tts": "Las luces se apagan una por una."
+ },
+ {
+  "id": "ia_juego_es_099",
+  "escena": "ia_juego",
+  "personaje": "IA",
   "cara": "feliz",
   "texto": "Noticias del Sol, de la NASA: en los últimos 7 días no se registró ninguna llamarada solar. El Sol ha estado tranquilo.",
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días no se registró ninguna llamarada solar. El Sol ha estado tranquilo."
  },
  {
-  "id": "ia_juego_es_077",
+  "id": "ia_juego_es_100",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "feliz",
@@ -616,7 +800,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días no se registró ninguna llamarada solar."
  },
  {
-  "id": "ia_juego_es_078",
+  "id": "ia_juego_es_101",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "feliz",
@@ -624,7 +808,7 @@
   "texto_tts": "El Sol ha estado tranquilo."
  },
  {
-  "id": "ia_juego_es_079",
+  "id": "ia_juego_es_102",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -632,7 +816,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron dos llamaradas solares."
  },
  {
-  "id": "ia_juego_es_080",
+  "id": "ia_juego_es_103",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -640,7 +824,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron tres llamaradas solares."
  },
  {
-  "id": "ia_juego_es_081",
+  "id": "ia_juego_es_104",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -648,7 +832,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron cuatro llamaradas solares."
  },
  {
-  "id": "ia_juego_es_082",
+  "id": "ia_juego_es_105",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -656,7 +840,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron cinco llamaradas solares."
  },
  {
-  "id": "ia_juego_es_083",
+  "id": "ia_juego_es_106",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -664,7 +848,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron seis llamaradas solares."
  },
  {
-  "id": "ia_juego_es_084",
+  "id": "ia_juego_es_107",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -672,7 +856,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron siete llamaradas solares."
  },
  {
-  "id": "ia_juego_es_085",
+  "id": "ia_juego_es_108",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -680,7 +864,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron ocho llamaradas solares."
  },
  {
-  "id": "ia_juego_es_086",
+  "id": "ia_juego_es_109",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -688,7 +872,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron nueve llamaradas solares."
  },
  {
-  "id": "ia_juego_es_087",
+  "id": "ia_juego_es_110",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -696,7 +880,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron diez llamaradas solares."
  },
  {
-  "id": "ia_juego_es_088",
+  "id": "ia_juego_es_111",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -704,7 +888,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron once llamaradas solares."
  },
  {
-  "id": "ia_juego_es_089",
+  "id": "ia_juego_es_112",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -712,7 +896,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron doce llamaradas solares."
  },
  {
-  "id": "ia_juego_es_090",
+  "id": "ia_juego_es_113",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -720,7 +904,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron trece llamaradas solares."
  },
  {
-  "id": "ia_juego_es_091",
+  "id": "ia_juego_es_114",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -728,7 +912,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron catorce llamaradas solares."
  },
  {
-  "id": "ia_juego_es_092",
+  "id": "ia_juego_es_115",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -736,7 +920,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron quince llamaradas solares."
  },
  {
-  "id": "ia_juego_es_093",
+  "id": "ia_juego_es_116",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -744,7 +928,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron dieciséis llamaradas solares."
  },
  {
-  "id": "ia_juego_es_094",
+  "id": "ia_juego_es_117",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -752,7 +936,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron diecisiete llamaradas solares."
  },
  {
-  "id": "ia_juego_es_095",
+  "id": "ia_juego_es_118",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -760,7 +944,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron dieciocho llamaradas solares."
  },
  {
-  "id": "ia_juego_es_096",
+  "id": "ia_juego_es_119",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -768,7 +952,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron diecinueve llamaradas solares."
  },
  {
-  "id": "ia_juego_es_097",
+  "id": "ia_juego_es_120",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -776,7 +960,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron veinte llamaradas solares."
  },
  {
-  "id": "ia_juego_es_098",
+  "id": "ia_juego_es_121",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -784,7 +968,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron veintiuno llamaradas solares."
  },
  {
-  "id": "ia_juego_es_099",
+  "id": "ia_juego_es_122",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -792,7 +976,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron veintidós llamaradas solares."
  },
  {
-  "id": "ia_juego_es_100",
+  "id": "ia_juego_es_123",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -800,7 +984,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron veintitrés llamaradas solares."
  },
  {
-  "id": "ia_juego_es_101",
+  "id": "ia_juego_es_124",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -808,7 +992,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron veinticuatro llamaradas solares."
  },
  {
-  "id": "ia_juego_es_102",
+  "id": "ia_juego_es_125",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -816,7 +1000,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron veinticinco llamaradas solares."
  },
  {
-  "id": "ia_juego_es_103",
+  "id": "ia_juego_es_126",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -824,7 +1008,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron veintiséis llamaradas solares."
  },
  {
-  "id": "ia_juego_es_104",
+  "id": "ia_juego_es_127",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -832,7 +1016,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron veintisiete llamaradas solares."
  },
  {
-  "id": "ia_juego_es_105",
+  "id": "ia_juego_es_128",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -840,7 +1024,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron veintiocho llamaradas solares."
  },
  {
-  "id": "ia_juego_es_106",
+  "id": "ia_juego_es_129",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -848,7 +1032,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron veintinueve llamaradas solares."
  },
  {
-  "id": "ia_juego_es_107",
+  "id": "ia_juego_es_130",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "procesando",
@@ -856,7 +1040,7 @@
   "texto_tts": "Noticias del Sol, de la NASA: en los últimos siete días se registraron treinta llamaradas solares."
  },
  {
-  "id": "ia_juego_es_108",
+  "id": "ia_juego_es_131",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -864,7 +1048,7 @@
   "texto_tts": "Es la última copia guardada: la NASA no respondió."
  },
  {
-  "id": "ia_juego_es_109",
+  "id": "ia_juego_es_132",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -872,7 +1056,7 @@
   "texto_tts": "Las llamaradas se nombran con letras: A, B, C, M y equis. Cada letra es diez veces más fuerte que la anterior. Esto pasa en el Sol: no es una medición en Marte."
  },
  {
-  "id": "ia_juego_es_110",
+  "id": "ia_juego_es_133",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -880,7 +1064,7 @@
   "texto_tts": "Antes de repartir, mira las tres barras."
  },
  {
-  "id": "ia_juego_es_111",
+  "id": "ia_juego_es_134",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -888,7 +1072,7 @@
   "texto_tts": "La más baja es la que más te necesita."
  },
  {
-  "id": "ia_juego_es_112",
+  "id": "ia_juego_es_135",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -896,7 +1080,7 @@
   "texto_tts": "Pregúntate primero: ¿qué barra está más baja hoy?"
  },
  {
-  "id": "ia_juego_es_113",
+  "id": "ia_juego_es_136",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -904,7 +1088,7 @@
   "texto_tts": "Una pista: los núcleos van donde más falta."
  },
  {
-  "id": "ia_juego_es_114",
+  "id": "ia_juego_es_137",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -912,7 +1096,7 @@
   "texto_tts": "Mira tu energía: está muy baja."
  },
  {
-  "id": "ia_juego_es_115",
+  "id": "ia_juego_es_138",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -920,7 +1104,7 @@
   "texto_tts": "Dale más núcleos a los Colectores Solares."
  },
  {
-  "id": "ia_juego_es_116",
+  "id": "ia_juego_es_139",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -928,7 +1112,7 @@
   "texto_tts": "Mira tu energía: está baja."
  },
  {
-  "id": "ia_juego_es_117",
+  "id": "ia_juego_es_140",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -936,7 +1120,7 @@
   "texto_tts": "Mira tu energía: está más baja que lo demás."
  },
  {
-  "id": "ia_juego_es_118",
+  "id": "ia_juego_es_141",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -944,7 +1128,7 @@
   "texto_tts": "Mira tu oxígeno: está muy bajo."
  },
  {
-  "id": "ia_juego_es_119",
+  "id": "ia_juego_es_142",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -952,7 +1136,7 @@
   "texto_tts": "Dale más núcleos al Soporte Vital."
  },
  {
-  "id": "ia_juego_es_120",
+  "id": "ia_juego_es_143",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -960,7 +1144,7 @@
   "texto_tts": "Mira tu oxígeno: está bajo."
  },
  {
-  "id": "ia_juego_es_121",
+  "id": "ia_juego_es_144",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -968,7 +1152,7 @@
   "texto_tts": "Mira tu oxígeno: está más bajo que lo demás."
  },
  {
-  "id": "ia_juego_es_122",
+  "id": "ia_juego_es_145",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -976,7 +1160,7 @@
   "texto_tts": "Mira tu blindaje: está muy bajo."
  },
  {
-  "id": "ia_juego_es_123",
+  "id": "ia_juego_es_146",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -984,7 +1168,7 @@
   "texto_tts": "Dale más núcleos a los Escudos del Casco."
  },
  {
-  "id": "ia_juego_es_124",
+  "id": "ia_juego_es_147",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -992,7 +1176,7 @@
   "texto_tts": "Mira tu blindaje: está bajo."
  },
  {
-  "id": "ia_juego_es_125",
+  "id": "ia_juego_es_148",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1000,7 +1184,7 @@
   "texto_tts": "Mira tu blindaje: está más bajo que lo demás."
  },
  {
-  "id": "ia_juego_es_126",
+  "id": "ia_juego_es_149",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1008,7 +1192,7 @@
   "texto_tts": "Pista: tu energía está muy baja."
  },
  {
-  "id": "ia_juego_es_127",
+  "id": "ia_juego_es_150",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1016,7 +1200,7 @@
   "texto_tts": "Busca su sistema en la consola: los Colectores Solares."
  },
  {
-  "id": "ia_juego_es_128",
+  "id": "ia_juego_es_151",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1024,7 +1208,7 @@
   "texto_tts": "Pista: tu energía está baja."
  },
  {
-  "id": "ia_juego_es_129",
+  "id": "ia_juego_es_152",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1032,7 +1216,7 @@
   "texto_tts": "Pista: tu energía está más baja que lo demás."
  },
  {
-  "id": "ia_juego_es_130",
+  "id": "ia_juego_es_153",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1040,7 +1224,7 @@
   "texto_tts": "Pista: tu oxígeno está muy bajo."
  },
  {
-  "id": "ia_juego_es_131",
+  "id": "ia_juego_es_154",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1048,7 +1232,7 @@
   "texto_tts": "Busca su sistema en la consola: el Soporte Vital."
  },
  {
-  "id": "ia_juego_es_132",
+  "id": "ia_juego_es_155",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1056,7 +1240,7 @@
   "texto_tts": "Pista: tu oxígeno está bajo."
  },
  {
-  "id": "ia_juego_es_133",
+  "id": "ia_juego_es_156",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1064,7 +1248,7 @@
   "texto_tts": "Pista: tu oxígeno está más bajo que lo demás."
  },
  {
-  "id": "ia_juego_es_134",
+  "id": "ia_juego_es_157",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1072,7 +1256,7 @@
   "texto_tts": "Pista: tu blindaje está muy bajo."
  },
  {
-  "id": "ia_juego_es_135",
+  "id": "ia_juego_es_158",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1080,7 +1264,7 @@
   "texto_tts": "Busca su sistema en la consola: los Escudos del Casco."
  },
  {
-  "id": "ia_juego_es_136",
+  "id": "ia_juego_es_159",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1088,7 +1272,7 @@
   "texto_tts": "Pista: tu blindaje está bajo."
  },
  {
-  "id": "ia_juego_es_137",
+  "id": "ia_juego_es_160",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1096,7 +1280,7 @@
   "texto_tts": "Pista: tu blindaje está más bajo que lo demás."
  },
  {
-  "id": "ia_juego_es_138",
+  "id": "ia_juego_es_161",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1104,7 +1288,7 @@
   "texto_tts": "Hoy lo que más falta es la energía."
  },
  {
-  "id": "ia_juego_es_139",
+  "id": "ia_juego_es_162",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1112,7 +1296,7 @@
   "texto_tts": "Ya sabes a qué sistema darle núcleos."
  },
  {
-  "id": "ia_juego_es_140",
+  "id": "ia_juego_es_163",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1120,7 +1304,7 @@
   "texto_tts": "Hoy lo que más falta es el oxígeno."
  },
  {
-  "id": "ia_juego_es_141",
+  "id": "ia_juego_es_164",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1128,7 +1312,7 @@
   "texto_tts": "Hoy lo que más falta es el blindaje."
  },
  {
-  "id": "ia_juego_es_142",
+  "id": "ia_juego_es_165",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1136,7 +1320,7 @@
   "texto_tts": "Te enseño cómo lo pienso yo."
  },
  {
-  "id": "ia_juego_es_143",
+  "id": "ia_juego_es_166",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1144,7 +1328,7 @@
   "texto_tts": "Tu energía está muy baja."
  },
  {
-  "id": "ia_juego_es_144",
+  "id": "ia_juego_es_167",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1152,7 +1336,7 @@
   "texto_tts": "Tu oxígeno está mejor."
  },
  {
-  "id": "ia_juego_es_145",
+  "id": "ia_juego_es_168",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1160,7 +1344,7 @@
   "texto_tts": "Entonces le doy más núcleos a los Colectores Solares."
  },
  {
-  "id": "ia_juego_es_146",
+  "id": "ia_juego_es_169",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1168,7 +1352,7 @@
   "texto_tts": "¡Ahora tú!"
  },
  {
-  "id": "ia_juego_es_147",
+  "id": "ia_juego_es_170",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1176,7 +1360,7 @@
   "texto_tts": "Tu energía está baja."
  },
  {
-  "id": "ia_juego_es_148",
+  "id": "ia_juego_es_171",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1184,7 +1368,7 @@
   "texto_tts": "Tu energía está más baja que lo demás."
  },
  {
-  "id": "ia_juego_es_149",
+  "id": "ia_juego_es_172",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1192,7 +1376,7 @@
   "texto_tts": "Tu blindaje está mejor."
  },
  {
-  "id": "ia_juego_es_150",
+  "id": "ia_juego_es_173",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1200,7 +1384,7 @@
   "texto_tts": "Tu oxígeno está muy bajo."
  },
  {
-  "id": "ia_juego_es_151",
+  "id": "ia_juego_es_174",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1208,7 +1392,7 @@
   "texto_tts": "Tu energía está mejor."
  },
  {
-  "id": "ia_juego_es_152",
+  "id": "ia_juego_es_175",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1216,7 +1400,7 @@
   "texto_tts": "Entonces le doy más núcleos al Soporte Vital."
  },
  {
-  "id": "ia_juego_es_153",
+  "id": "ia_juego_es_176",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1224,7 +1408,7 @@
   "texto_tts": "Tu oxígeno está bajo."
  },
  {
-  "id": "ia_juego_es_154",
+  "id": "ia_juego_es_177",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1232,7 +1416,7 @@
   "texto_tts": "Tu oxígeno está más bajo que lo demás."
  },
  {
-  "id": "ia_juego_es_155",
+  "id": "ia_juego_es_178",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1240,7 +1424,7 @@
   "texto_tts": "Tu blindaje está muy bajo."
  },
  {
-  "id": "ia_juego_es_156",
+  "id": "ia_juego_es_179",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1248,7 +1432,7 @@
   "texto_tts": "Entonces le doy más núcleos a los Escudos del Casco."
  },
  {
-  "id": "ia_juego_es_157",
+  "id": "ia_juego_es_180",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1256,7 +1440,7 @@
   "texto_tts": "Tu blindaje está bajo."
  },
  {
-  "id": "ia_juego_es_158",
+  "id": "ia_juego_es_181",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1264,7 +1448,7 @@
   "texto_tts": "Tu blindaje está más bajo que lo demás."
  },
  {
-  "id": "ia_juego_es_159",
+  "id": "ia_juego_es_182",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1272,7 +1456,7 @@
   "texto_tts": "Vamos paso a paso."
  },
  {
-  "id": "ia_juego_es_160",
+  "id": "ia_juego_es_183",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1280,7 +1464,7 @@
   "texto_tts": "Primero busco la barra más baja: la energía."
  },
  {
-  "id": "ia_juego_es_161",
+  "id": "ia_juego_es_184",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1288,7 +1472,7 @@
   "texto_tts": "Después le doy más núcleos a los Colectores Solares."
  },
  {
-  "id": "ia_juego_es_162",
+  "id": "ia_juego_es_185",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1296,7 +1480,7 @@
   "texto_tts": "¡Inténtalo!"
  },
  {
-  "id": "ia_juego_es_163",
+  "id": "ia_juego_es_186",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1304,7 +1488,7 @@
   "texto_tts": "Primero busco la barra más baja: el oxígeno."
  },
  {
-  "id": "ia_juego_es_164",
+  "id": "ia_juego_es_187",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1312,7 +1496,7 @@
   "texto_tts": "Después le doy más núcleos al Soporte Vital."
  },
  {
-  "id": "ia_juego_es_165",
+  "id": "ia_juego_es_188",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1320,7 +1504,7 @@
   "texto_tts": "Primero busco la barra más baja: el blindaje."
  },
  {
-  "id": "ia_juego_es_166",
+  "id": "ia_juego_es_189",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1328,7 +1512,7 @@
   "texto_tts": "Después le doy más núcleos a los Escudos del Casco."
  },
  {
-  "id": "ia_juego_es_167",
+  "id": "ia_juego_es_190",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1336,7 +1520,7 @@
   "texto_tts": "Hoy no te doy pista, Wenceslao."
  },
  {
-  "id": "ia_juego_es_168",
+  "id": "ia_juego_es_191",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1344,7 +1528,7 @@
   "texto_tts": "¡Confío en tu plan!"
  },
  {
-  "id": "ia_juego_es_169",
+  "id": "ia_juego_es_192",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1352,7 +1536,7 @@
   "texto_tts": "Hoy no te doy pista, Judith."
  },
  {
-  "id": "ia_juego_es_170",
+  "id": "ia_juego_es_193",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1360,7 +1544,7 @@
   "texto_tts": "Hoy no te doy pista, Atlas."
  },
  {
-  "id": "ia_juego_es_171",
+  "id": "ia_juego_es_194",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1368,7 +1552,7 @@
   "texto_tts": "Ya sabes repartir la energía."
  },
  {
-  "id": "ia_juego_es_172",
+  "id": "ia_juego_es_195",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1376,7 +1560,7 @@
   "texto_tts": "Esta vez el plan es todo tuyo."
  },
  {
-  "id": "ia_juego_es_173",
+  "id": "ia_juego_es_196",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1384,7 +1568,7 @@
   "texto_tts": "Mi pronóstico dice: de diez días como hoy, en cero hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_174",
+  "id": "ia_juego_es_197",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1392,7 +1576,7 @@
   "texto_tts": "Piensa qué sistema nos protege."
  },
  {
-  "id": "ia_juego_es_175",
+  "id": "ia_juego_es_198",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1400,7 +1584,7 @@
   "texto_tts": "Mi pronóstico dice: de diez días como hoy, en uno hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_176",
+  "id": "ia_juego_es_199",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1408,7 +1592,7 @@
   "texto_tts": "Mi pronóstico dice: de diez días como hoy, en dos hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_177",
+  "id": "ia_juego_es_200",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1416,7 +1600,7 @@
   "texto_tts": "Mi pronóstico dice: de diez días como hoy, en tres hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_178",
+  "id": "ia_juego_es_201",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1424,7 +1608,7 @@
   "texto_tts": "Mi pronóstico dice: de diez días como hoy, en cuatro hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_179",
+  "id": "ia_juego_es_202",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1432,7 +1616,7 @@
   "texto_tts": "Mi pronóstico dice: de diez días como hoy, en cinco hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_180",
+  "id": "ia_juego_es_203",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1440,7 +1624,7 @@
   "texto_tts": "Mi pronóstico dice: de diez días como hoy, en seis hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_181",
+  "id": "ia_juego_es_204",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1448,7 +1632,7 @@
   "texto_tts": "Mi pronóstico dice: de diez días como hoy, en siete hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_182",
+  "id": "ia_juego_es_205",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1456,7 +1640,7 @@
   "texto_tts": "Mi pronóstico dice: de diez días como hoy, en ocho hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_183",
+  "id": "ia_juego_es_206",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1464,7 +1648,7 @@
   "texto_tts": "Mi pronóstico dice: de diez días como hoy, en nueve hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_184",
+  "id": "ia_juego_es_207",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1472,7 +1656,7 @@
   "texto_tts": "Mi pronóstico dice: de diez días como hoy, en diez hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_185",
+  "id": "ia_juego_es_208",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1480,7 +1664,7 @@
   "texto_tts": "Hay riesgo de llamarada."
  },
  {
-  "id": "ia_juego_es_186",
+  "id": "ia_juego_es_209",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1488,7 +1672,7 @@
   "texto_tts": "Los Escudos del Casco van a necesitar núcleos."
  },
  {
-  "id": "ia_juego_es_187",
+  "id": "ia_juego_es_210",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1496,7 +1680,7 @@
   "texto_tts": "De diez días como hoy, en cero hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_188",
+  "id": "ia_juego_es_211",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1504,7 +1688,7 @@
   "texto_tts": "Pon núcleos en los Escudos."
  },
  {
-  "id": "ia_juego_es_189",
+  "id": "ia_juego_es_212",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1512,7 +1696,7 @@
   "texto_tts": "De diez días como hoy, en uno hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_190",
+  "id": "ia_juego_es_213",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1520,7 +1704,7 @@
   "texto_tts": "De diez días como hoy, en dos hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_191",
+  "id": "ia_juego_es_214",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1528,7 +1712,7 @@
   "texto_tts": "De diez días como hoy, en tres hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_192",
+  "id": "ia_juego_es_215",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1536,7 +1720,7 @@
   "texto_tts": "De diez días como hoy, en cuatro hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_193",
+  "id": "ia_juego_es_216",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1544,7 +1728,7 @@
   "texto_tts": "De diez días como hoy, en cinco hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_194",
+  "id": "ia_juego_es_217",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1552,7 +1736,7 @@
   "texto_tts": "De diez días como hoy, en seis hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_195",
+  "id": "ia_juego_es_218",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1560,7 +1744,7 @@
   "texto_tts": "De diez días como hoy, en siete hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_196",
+  "id": "ia_juego_es_219",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1568,7 +1752,7 @@
   "texto_tts": "De diez días como hoy, en ocho hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_197",
+  "id": "ia_juego_es_220",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1576,7 +1760,7 @@
   "texto_tts": "De diez días como hoy, en nueve hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_198",
+  "id": "ia_juego_es_221",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1584,7 +1768,7 @@
   "texto_tts": "De diez días como hoy, en diez hubo llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_199",
+  "id": "ia_juego_es_222",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1592,7 +1776,7 @@
   "texto_tts": "Mi pronóstico avisa llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_200",
+  "id": "ia_juego_es_223",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1600,7 +1784,7 @@
   "texto_tts": "La llamarada daña el blindaje."
  },
  {
-  "id": "ia_juego_es_201",
+  "id": "ia_juego_es_224",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1608,7 +1792,7 @@
   "texto_tts": "Entonces le doy dos núcleos a los Escudos del Casco."
  },
  {
-  "id": "ia_juego_es_202",
+  "id": "ia_juego_es_225",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1616,7 +1800,7 @@
   "texto_tts": "Tú decides cómo protegernos."
  },
  {
-  "id": "ia_juego_es_203",
+  "id": "ia_juego_es_226",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1624,7 +1808,7 @@
   "texto_tts": "¡Buena estrategia, Wenceslao!"
  },
  {
-  "id": "ia_juego_es_204",
+  "id": "ia_juego_es_227",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1632,7 +1816,7 @@
   "texto_tts": "Le diste más a lo que más faltaba."
  },
  {
-  "id": "ia_juego_es_205",
+  "id": "ia_juego_es_228",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1640,7 +1824,7 @@
   "texto_tts": "¡Buena estrategia, Judith!"
  },
  {
-  "id": "ia_juego_es_206",
+  "id": "ia_juego_es_229",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1648,7 +1832,7 @@
   "texto_tts": "¡Buena estrategia, Atlas!"
  },
  {
-  "id": "ia_juego_es_207",
+  "id": "ia_juego_es_230",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1656,7 +1840,7 @@
   "texto_tts": "¡Así se piensa!"
  },
  {
-  "id": "ia_juego_es_208",
+  "id": "ia_juego_es_231",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1664,7 +1848,7 @@
   "texto_tts": "Primero miraste las barras y luego decidiste."
  },
  {
-  "id": "ia_juego_es_209",
+  "id": "ia_juego_es_232",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1672,7 +1856,7 @@
   "texto_tts": "¡Muy bien!"
  },
  {
-  "id": "ia_juego_es_210",
+  "id": "ia_juego_es_233",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1680,7 +1864,7 @@
   "texto_tts": "Cuidaste la energía, que era lo más bajo."
  },
  {
-  "id": "ia_juego_es_211",
+  "id": "ia_juego_es_234",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1688,7 +1872,7 @@
   "texto_tts": "Cuidaste el oxígeno, que era lo más bajo."
  },
  {
-  "id": "ia_juego_es_212",
+  "id": "ia_juego_es_235",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1696,7 +1880,7 @@
   "texto_tts": "Cuidaste el blindaje, que era lo más bajo."
  },
  {
-  "id": "ia_juego_es_213",
+  "id": "ia_juego_es_236",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1704,7 +1888,7 @@
   "texto_tts": "Pregunta rápida: ¿por qué le diste más núcleos a los Colectores Solares?"
  },
  {
-  "id": "ia_juego_es_214",
+  "id": "ia_juego_es_237",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1712,7 +1896,7 @@
   "texto_tts": "¡Exacto!"
  },
  {
-  "id": "ia_juego_es_215",
+  "id": "ia_juego_es_238",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1720,7 +1904,7 @@
   "texto_tts": "Porque la energía era lo más bajo."
  },
  {
-  "id": "ia_juego_es_216",
+  "id": "ia_juego_es_239",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1728,7 +1912,7 @@
   "texto_tts": "Pregunta rápida: ¿por qué le diste más núcleos al Soporte Vital?"
  },
  {
-  "id": "ia_juego_es_217",
+  "id": "ia_juego_es_240",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1736,7 +1920,7 @@
   "texto_tts": "Porque el oxígeno era lo más bajo."
  },
  {
-  "id": "ia_juego_es_218",
+  "id": "ia_juego_es_241",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1744,7 +1928,7 @@
   "texto_tts": "Pregunta rápida: ¿por qué le diste más núcleos a los Escudos del Casco?"
  },
  {
-  "id": "ia_juego_es_219",
+  "id": "ia_juego_es_242",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1752,7 +1936,7 @@
   "texto_tts": "Porque el blindaje era lo más bajo."
  },
  {
-  "id": "ia_juego_es_220",
+  "id": "ia_juego_es_243",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1760,7 +1944,7 @@
   "texto_tts": "Piensa un momento: ¿cómo elegiste?"
  },
  {
-  "id": "ia_juego_es_221",
+  "id": "ia_juego_es_244",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1768,7 +1952,7 @@
   "texto_tts": "Yo lo vi así: miraste la barra más baja y le diste más."
  },
  {
-  "id": "ia_juego_es_222",
+  "id": "ia_juego_es_245",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1776,7 +1960,7 @@
   "texto_tts": "¡Eso es decidir con datos!"
  },
  {
-  "id": "ia_juego_es_223",
+  "id": "ia_juego_es_246",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1784,7 +1968,7 @@
   "texto_tts": "Un consejo: tu energía estaba muy baja."
  },
  {
-  "id": "ia_juego_es_224",
+  "id": "ia_juego_es_247",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1792,7 +1976,7 @@
   "texto_tts": "Había que darle más núcleos a los Colectores Solares."
  },
  {
-  "id": "ia_juego_es_225",
+  "id": "ia_juego_es_248",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1800,7 +1984,7 @@
   "texto_tts": "Un consejo: tu energía estaba baja."
  },
  {
-  "id": "ia_juego_es_226",
+  "id": "ia_juego_es_249",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1808,7 +1992,7 @@
   "texto_tts": "Un consejo: tu energía estaba más baja que lo demás."
  },
  {
-  "id": "ia_juego_es_227",
+  "id": "ia_juego_es_250",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1816,7 +2000,7 @@
   "texto_tts": "Un consejo: tu oxígeno estaba muy bajo."
  },
  {
-  "id": "ia_juego_es_228",
+  "id": "ia_juego_es_251",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1824,7 +2008,7 @@
   "texto_tts": "Había que darle más núcleos al Soporte Vital."
  },
  {
-  "id": "ia_juego_es_229",
+  "id": "ia_juego_es_252",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1832,7 +2016,7 @@
   "texto_tts": "Un consejo: tu oxígeno estaba bajo."
  },
  {
-  "id": "ia_juego_es_230",
+  "id": "ia_juego_es_253",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1840,7 +2024,7 @@
   "texto_tts": "Un consejo: tu oxígeno estaba más bajo que lo demás."
  },
  {
-  "id": "ia_juego_es_231",
+  "id": "ia_juego_es_254",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1848,7 +2032,7 @@
   "texto_tts": "Un consejo: tu blindaje estaba muy bajo."
  },
  {
-  "id": "ia_juego_es_232",
+  "id": "ia_juego_es_255",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1856,7 +2040,7 @@
   "texto_tts": "Había que darle más núcleos a los Escudos del Casco."
  },
  {
-  "id": "ia_juego_es_233",
+  "id": "ia_juego_es_256",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1864,7 +2048,7 @@
   "texto_tts": "Un consejo: tu blindaje estaba bajo."
  },
  {
-  "id": "ia_juego_es_234",
+  "id": "ia_juego_es_257",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1872,7 +2056,7 @@
   "texto_tts": "Un consejo: tu blindaje estaba más bajo que lo demás."
  },
  {
-  "id": "ia_juego_es_235",
+  "id": "ia_juego_es_258",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1880,7 +2064,7 @@
   "texto_tts": "Casi."
  },
  {
-  "id": "ia_juego_es_236",
+  "id": "ia_juego_es_259",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1888,7 +2072,7 @@
   "texto_tts": "Lo que más faltaba era la energía."
  },
  {
-  "id": "ia_juego_es_237",
+  "id": "ia_juego_es_260",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1896,7 +2080,7 @@
   "texto_tts": "La próxima vez, dale más núcleos a los Colectores Solares."
  },
  {
-  "id": "ia_juego_es_238",
+  "id": "ia_juego_es_261",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1904,7 +2088,7 @@
   "texto_tts": "Lo que más faltaba era el oxígeno."
  },
  {
-  "id": "ia_juego_es_239",
+  "id": "ia_juego_es_262",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1912,7 +2096,7 @@
   "texto_tts": "La próxima vez, dale más núcleos al Soporte Vital."
  },
  {
-  "id": "ia_juego_es_240",
+  "id": "ia_juego_es_263",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1920,7 +2104,7 @@
   "texto_tts": "Lo que más faltaba era el blindaje."
  },
  {
-  "id": "ia_juego_es_241",
+  "id": "ia_juego_es_264",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1928,7 +2112,7 @@
   "texto_tts": "La próxima vez, dale más núcleos a los Escudos del Casco."
  },
  {
-  "id": "ia_juego_es_242",
+  "id": "ia_juego_es_265",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1936,7 +2120,7 @@
   "texto_tts": "Vamos a verlo juntos."
  },
  {
-  "id": "ia_juego_es_243",
+  "id": "ia_juego_es_266",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1944,7 +2128,7 @@
   "texto_tts": "Tu energía estaba muy baja."
  },
  {
-  "id": "ia_juego_es_244",
+  "id": "ia_juego_es_267",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1952,7 +2136,7 @@
   "texto_tts": "Tu oxígeno estaba mejor."
  },
  {
-  "id": "ia_juego_es_245",
+  "id": "ia_juego_es_268",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1960,7 +2144,7 @@
   "texto_tts": "Por eso convenía darle más núcleos a los Colectores Solares."
  },
  {
-  "id": "ia_juego_es_246",
+  "id": "ia_juego_es_269",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1968,7 +2152,7 @@
   "texto_tts": "¡Mañana lo intentas!"
  },
  {
-  "id": "ia_juego_es_247",
+  "id": "ia_juego_es_270",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1976,7 +2160,7 @@
   "texto_tts": "Tu energía estaba baja."
  },
  {
-  "id": "ia_juego_es_248",
+  "id": "ia_juego_es_271",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1984,7 +2168,7 @@
   "texto_tts": "Tu energía estaba más baja que lo demás."
  },
  {
-  "id": "ia_juego_es_249",
+  "id": "ia_juego_es_272",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -1992,7 +2176,7 @@
   "texto_tts": "Tu blindaje estaba mejor."
  },
  {
-  "id": "ia_juego_es_250",
+  "id": "ia_juego_es_273",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2000,7 +2184,7 @@
   "texto_tts": "Tu oxígeno estaba muy bajo."
  },
  {
-  "id": "ia_juego_es_251",
+  "id": "ia_juego_es_274",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2008,7 +2192,7 @@
   "texto_tts": "Tu energía estaba mejor."
  },
  {
-  "id": "ia_juego_es_252",
+  "id": "ia_juego_es_275",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2016,7 +2200,7 @@
   "texto_tts": "Por eso convenía darle más núcleos al Soporte Vital."
  },
  {
-  "id": "ia_juego_es_253",
+  "id": "ia_juego_es_276",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2024,7 +2208,7 @@
   "texto_tts": "Tu oxígeno estaba bajo."
  },
  {
-  "id": "ia_juego_es_254",
+  "id": "ia_juego_es_277",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2032,7 +2216,7 @@
   "texto_tts": "Tu oxígeno estaba más bajo que lo demás."
  },
  {
-  "id": "ia_juego_es_255",
+  "id": "ia_juego_es_278",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2040,7 +2224,7 @@
   "texto_tts": "Tu blindaje estaba muy bajo."
  },
  {
-  "id": "ia_juego_es_256",
+  "id": "ia_juego_es_279",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2048,7 +2232,7 @@
   "texto_tts": "Por eso convenía darle más núcleos a los Escudos del Casco."
  },
  {
-  "id": "ia_juego_es_257",
+  "id": "ia_juego_es_280",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2056,7 +2240,7 @@
   "texto_tts": "Tu blindaje estaba bajo."
  },
  {
-  "id": "ia_juego_es_258",
+  "id": "ia_juego_es_281",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2064,7 +2248,7 @@
   "texto_tts": "Tu blindaje estaba más bajo que lo demás."
  },
  {
-  "id": "ia_juego_es_259",
+  "id": "ia_juego_es_282",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2072,7 +2256,7 @@
   "texto_tts": "Un consejo: mi pronóstico decía llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_260",
+  "id": "ia_juego_es_283",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2080,7 +2264,7 @@
   "texto_tts": "Con más núcleos en los Escudos, el blindaje se cuida."
  },
  {
-  "id": "ia_juego_es_261",
+  "id": "ia_juego_es_284",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2088,7 +2272,7 @@
   "texto_tts": "Mi pronóstico avisaba llamarada fuerte."
  },
  {
-  "id": "ia_juego_es_262",
+  "id": "ia_juego_es_285",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2096,7 +2280,7 @@
   "texto_tts": "Por eso convenía poner dos núcleos en los Escudos."
  },
  {
-  "id": "ia_juego_es_263",
+  "id": "ia_juego_es_286",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2104,7 +2288,7 @@
   "texto_tts": "Pista: antes de elegir, mira cuál de tus recursos está más alto."
  },
  {
-  "id": "ia_juego_es_264",
+  "id": "ia_juego_es_287",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2112,7 +2296,7 @@
   "texto_tts": "Pista: gasta lo que te sobra y cuida lo que falta."
  },
  {
-  "id": "ia_juego_es_265",
+  "id": "ia_juego_es_288",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2120,7 +2304,7 @@
   "texto_tts": "Pista: ahora tienes más la energía."
  },
  {
-  "id": "ia_juego_es_266",
+  "id": "ia_juego_es_289",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2128,7 +2312,7 @@
   "texto_tts": "Gasta lo que tienes de sobra."
  },
  {
-  "id": "ia_juego_es_267",
+  "id": "ia_juego_es_290",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2136,7 +2320,7 @@
   "texto_tts": "Pista: ahora tienes más el oxígeno."
  },
  {
-  "id": "ia_juego_es_268",
+  "id": "ia_juego_es_291",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2144,7 +2328,7 @@
   "texto_tts": "Pista: ahora tienes más el blindaje."
  },
  {
-  "id": "ia_juego_es_269",
+  "id": "ia_juego_es_292",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2152,7 +2336,7 @@
   "texto_tts": "Pista: tu oxígeno está mejor y tu energía está muy baja."
  },
  {
-  "id": "ia_juego_es_270",
+  "id": "ia_juego_es_293",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2160,7 +2344,7 @@
   "texto_tts": "Elige la opción que gasta el oxígeno."
  },
  {
-  "id": "ia_juego_es_271",
+  "id": "ia_juego_es_294",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2168,7 +2352,7 @@
   "texto_tts": "Pista: tu oxígeno está mejor y tu energía está baja."
  },
  {
-  "id": "ia_juego_es_272",
+  "id": "ia_juego_es_295",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2176,7 +2360,7 @@
   "texto_tts": "Pista: tu oxígeno está mejor y tu energía está más baja que lo demás."
  },
  {
-  "id": "ia_juego_es_273",
+  "id": "ia_juego_es_296",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2184,7 +2368,7 @@
   "texto_tts": "Pista: tu blindaje está mejor y tu energía está muy baja."
  },
  {
-  "id": "ia_juego_es_274",
+  "id": "ia_juego_es_297",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2192,7 +2376,7 @@
   "texto_tts": "Elige la opción que gasta el blindaje."
  },
  {
-  "id": "ia_juego_es_275",
+  "id": "ia_juego_es_298",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2200,7 +2384,7 @@
   "texto_tts": "Pista: tu blindaje está mejor y tu energía está baja."
  },
  {
-  "id": "ia_juego_es_276",
+  "id": "ia_juego_es_299",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2208,7 +2392,7 @@
   "texto_tts": "Pista: tu blindaje está mejor y tu energía está más baja que lo demás."
  },
  {
-  "id": "ia_juego_es_277",
+  "id": "ia_juego_es_300",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2216,7 +2400,7 @@
   "texto_tts": "Pista: tu energía está mejor y tu oxígeno está muy bajo."
  },
  {
-  "id": "ia_juego_es_278",
+  "id": "ia_juego_es_301",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2224,7 +2408,7 @@
   "texto_tts": "Elige la opción que gasta la energía."
  },
  {
-  "id": "ia_juego_es_279",
+  "id": "ia_juego_es_302",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2232,7 +2416,7 @@
   "texto_tts": "Pista: tu energía está mejor y tu oxígeno está bajo."
  },
  {
-  "id": "ia_juego_es_280",
+  "id": "ia_juego_es_303",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2240,7 +2424,7 @@
   "texto_tts": "Pista: tu energía está mejor y tu oxígeno está más bajo que lo demás."
  },
  {
-  "id": "ia_juego_es_281",
+  "id": "ia_juego_es_304",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2248,7 +2432,7 @@
   "texto_tts": "Pista: tu blindaje está mejor y tu oxígeno está muy bajo."
  },
  {
-  "id": "ia_juego_es_282",
+  "id": "ia_juego_es_305",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2256,7 +2440,7 @@
   "texto_tts": "Pista: tu blindaje está mejor y tu oxígeno está bajo."
  },
  {
-  "id": "ia_juego_es_283",
+  "id": "ia_juego_es_306",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2264,7 +2448,7 @@
   "texto_tts": "Pista: tu blindaje está mejor y tu oxígeno está más bajo que lo demás."
  },
  {
-  "id": "ia_juego_es_284",
+  "id": "ia_juego_es_307",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2272,7 +2456,7 @@
   "texto_tts": "Pista: tu energía está mejor y tu blindaje está muy bajo."
  },
  {
-  "id": "ia_juego_es_285",
+  "id": "ia_juego_es_308",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2280,7 +2464,7 @@
   "texto_tts": "Pista: tu energía está mejor y tu blindaje está bajo."
  },
  {
-  "id": "ia_juego_es_286",
+  "id": "ia_juego_es_309",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2288,7 +2472,7 @@
   "texto_tts": "Pista: tu energía está mejor y tu blindaje está más bajo que lo demás."
  },
  {
-  "id": "ia_juego_es_287",
+  "id": "ia_juego_es_310",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2296,7 +2480,7 @@
   "texto_tts": "Pista: tu oxígeno está mejor y tu blindaje está muy bajo."
  },
  {
-  "id": "ia_juego_es_288",
+  "id": "ia_juego_es_311",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2304,7 +2488,7 @@
   "texto_tts": "Pista: tu oxígeno está mejor y tu blindaje está bajo."
  },
  {
-  "id": "ia_juego_es_289",
+  "id": "ia_juego_es_312",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2312,7 +2496,7 @@
   "texto_tts": "Pista: tu oxígeno está mejor y tu blindaje está más bajo que lo demás."
  },
  {
-  "id": "ia_juego_es_290",
+  "id": "ia_juego_es_313",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2320,7 +2504,7 @@
   "texto_tts": "Esta vez la decisión es toda tuya."
  },
  {
-  "id": "ia_juego_es_291",
+  "id": "ia_juego_es_314",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2328,7 +2512,7 @@
   "texto_tts": "¡Bien pensado!"
  },
  {
-  "id": "ia_juego_es_292",
+  "id": "ia_juego_es_315",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2336,7 +2520,7 @@
   "texto_tts": "Gastaste el oxígeno, que tenías de sobra, y cuidaste la energía, que era lo más bajo."
  },
  {
-  "id": "ia_juego_es_293",
+  "id": "ia_juego_es_316",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2344,7 +2528,7 @@
   "texto_tts": "Gastaste el blindaje, que tenías de sobra, y cuidaste la energía, que era lo más bajo."
  },
  {
-  "id": "ia_juego_es_294",
+  "id": "ia_juego_es_317",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2352,7 +2536,7 @@
   "texto_tts": "Gastaste la energía, que tenías de sobra, y cuidaste el oxígeno, que era lo más bajo."
  },
  {
-  "id": "ia_juego_es_295",
+  "id": "ia_juego_es_318",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2360,7 +2544,7 @@
   "texto_tts": "Gastaste el blindaje, que tenías de sobra, y cuidaste el oxígeno, que era lo más bajo."
  },
  {
-  "id": "ia_juego_es_296",
+  "id": "ia_juego_es_319",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2368,7 +2552,7 @@
   "texto_tts": "Gastaste la energía, que tenías de sobra, y cuidaste el blindaje, que era lo más bajo."
  },
  {
-  "id": "ia_juego_es_297",
+  "id": "ia_juego_es_320",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2376,7 +2560,7 @@
   "texto_tts": "Gastaste el oxígeno, que tenías de sobra, y cuidaste el blindaje, que era lo más bajo."
  },
  {
-  "id": "ia_juego_es_298",
+  "id": "ia_juego_es_321",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2384,7 +2568,7 @@
   "texto_tts": "¡Decisión de astronauta, Wenceslao!"
  },
  {
-  "id": "ia_juego_es_299",
+  "id": "ia_juego_es_322",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2392,7 +2576,7 @@
   "texto_tts": "Cuidaste lo que más faltaba."
  },
  {
-  "id": "ia_juego_es_300",
+  "id": "ia_juego_es_323",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2400,7 +2584,7 @@
   "texto_tts": "¡Decisión de astronauta, Judith!"
  },
  {
-  "id": "ia_juego_es_301",
+  "id": "ia_juego_es_324",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2408,7 +2592,7 @@
   "texto_tts": "¡Decisión de astronauta, Atlas!"
  },
  {
-  "id": "ia_juego_es_302",
+  "id": "ia_juego_es_325",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2416,7 +2600,7 @@
   "texto_tts": "Pregunta rápida: ¿por qué no gastaste la energía?"
  },
  {
-  "id": "ia_juego_es_303",
+  "id": "ia_juego_es_326",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2424,7 +2608,7 @@
   "texto_tts": "¡Claro!"
  },
  {
-  "id": "ia_juego_es_304",
+  "id": "ia_juego_es_327",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2432,7 +2616,7 @@
   "texto_tts": "Porque era lo que menos teníamos."
  },
  {
-  "id": "ia_juego_es_305",
+  "id": "ia_juego_es_328",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2440,7 +2624,7 @@
   "texto_tts": "Pregunta rápida: ¿por qué no gastaste el oxígeno?"
  },
  {
-  "id": "ia_juego_es_306",
+  "id": "ia_juego_es_329",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2448,7 +2632,7 @@
   "texto_tts": "Pregunta rápida: ¿por qué no gastaste el blindaje?"
  },
  {
-  "id": "ia_juego_es_307",
+  "id": "ia_juego_es_330",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2456,7 +2640,7 @@
   "texto_tts": "Ojo: la energía era lo más bajo y gastaste justo eso."
  },
  {
-  "id": "ia_juego_es_308",
+  "id": "ia_juego_es_331",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2464,7 +2648,7 @@
   "texto_tts": "La próxima vez, gasta lo que más tienes: el oxígeno."
  },
  {
-  "id": "ia_juego_es_309",
+  "id": "ia_juego_es_332",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2472,7 +2656,7 @@
   "texto_tts": "La próxima vez, gasta lo que más tienes: el blindaje."
  },
  {
-  "id": "ia_juego_es_310",
+  "id": "ia_juego_es_333",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2480,7 +2664,7 @@
   "texto_tts": "Ojo: el oxígeno era lo más bajo y gastaste justo eso."
  },
  {
-  "id": "ia_juego_es_311",
+  "id": "ia_juego_es_334",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2488,7 +2672,7 @@
   "texto_tts": "La próxima vez, gasta lo que más tienes: la energía."
  },
  {
-  "id": "ia_juego_es_312",
+  "id": "ia_juego_es_335",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2496,7 +2680,7 @@
   "texto_tts": "Ojo: el blindaje era lo más bajo y gastaste justo eso."
  },
  {
-  "id": "ia_juego_es_313",
+  "id": "ia_juego_es_336",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2504,7 +2688,7 @@
   "texto_tts": "Primero miro la barra más baja: la energía."
  },
  {
-  "id": "ia_juego_es_314",
+  "id": "ia_juego_es_337",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2512,7 +2696,7 @@
   "texto_tts": "Esa la cuido."
  },
  {
-  "id": "ia_juego_es_315",
+  "id": "ia_juego_es_338",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2520,7 +2704,7 @@
   "texto_tts": "Luego elijo la opción que gasta el oxígeno, que me sobra."
  },
  {
-  "id": "ia_juego_es_316",
+  "id": "ia_juego_es_339",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2528,7 +2712,7 @@
   "texto_tts": "Luego elijo la opción que gasta el blindaje, que me sobra."
  },
  {
-  "id": "ia_juego_es_317",
+  "id": "ia_juego_es_340",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2536,7 +2720,7 @@
   "texto_tts": "Primero miro la barra más baja: el oxígeno."
  },
  {
-  "id": "ia_juego_es_318",
+  "id": "ia_juego_es_341",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2544,7 +2728,7 @@
   "texto_tts": "Luego elijo la opción que gasta la energía, que me sobra."
  },
  {
-  "id": "ia_juego_es_319",
+  "id": "ia_juego_es_342",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2552,7 +2736,7 @@
   "texto_tts": "Primero miro la barra más baja: el blindaje."
  },
  {
-  "id": "ia_juego_es_320",
+  "id": "ia_juego_es_343",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2560,7 +2744,7 @@
   "texto_tts": "Se acabó el tiempo y la base eligió sola."
  },
  {
-  "id": "ia_juego_es_321",
+  "id": "ia_juego_es_344",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2568,7 +2752,7 @@
   "texto_tts": "Si miras las barras primero, decides más rápido."
  },
  {
-  "id": "ia_juego_es_322",
+  "id": "ia_juego_es_345",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2576,7 +2760,7 @@
   "texto_tts": "Pregunta rápida: ¿de dónde sale nuestra energía de día?"
  },
  {
-  "id": "ia_juego_es_323",
+  "id": "ia_juego_es_346",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2584,7 +2768,7 @@
   "texto_tts": "¡Del Sol!"
  },
  {
-  "id": "ia_juego_es_324",
+  "id": "ia_juego_es_347",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2592,7 +2776,7 @@
   "texto_tts": "Los paneles la guardan en baterías para la noche."
  },
  {
-  "id": "ia_juego_es_325",
+  "id": "ia_juego_es_348",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2600,7 +2784,7 @@
   "texto_tts": "A ver si te acuerdas: ¿qué le pasa a los paneles si se llenan de polvo?"
  },
  {
-  "id": "ia_juego_es_326",
+  "id": "ia_juego_es_349",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2608,7 +2792,7 @@
   "texto_tts": "Dan menos energía."
  },
  {
-  "id": "ia_juego_es_327",
+  "id": "ia_juego_es_350",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2616,7 +2800,7 @@
   "texto_tts": "Por eso los limpiamos."
  },
  {
-  "id": "ia_juego_es_328",
+  "id": "ia_juego_es_351",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2624,7 +2808,7 @@
   "texto_tts": "Pregunta rápida: ¿qué limpia el dióxido de carbono que respiramos?"
  },
  {
-  "id": "ia_juego_es_329",
+  "id": "ia_juego_es_352",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2632,7 +2816,7 @@
   "texto_tts": "¡El filtro!"
  },
  {
-  "id": "ia_juego_es_330",
+  "id": "ia_juego_es_353",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2640,7 +2824,7 @@
   "texto_tts": "Y las plantas también ayudan: sueltan oxígeno."
  },
  {
-  "id": "ia_juego_es_331",
+  "id": "ia_juego_es_354",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2648,7 +2832,7 @@
   "texto_tts": "A ver si te acuerdas: ¿qué sueltan las plantas del invernadero?"
  },
  {
-  "id": "ia_juego_es_332",
+  "id": "ia_juego_es_355",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2656,7 +2840,7 @@
   "texto_tts": "¡Oxígeno!"
  },
  {
-  "id": "ia_juego_es_333",
+  "id": "ia_juego_es_356",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2664,7 +2848,7 @@
   "texto_tts": "Por eso las cuidamos tanto."
  },
  {
-  "id": "ia_juego_es_334",
+  "id": "ia_juego_es_357",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2672,7 +2856,7 @@
   "texto_tts": "Pregunta rápida: ¿qué nos protege de la radiación al dormir?"
  },
  {
-  "id": "ia_juego_es_335",
+  "id": "ia_juego_es_358",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2680,7 +2864,7 @@
   "texto_tts": "¡El agua de las paredes del refugio!"
  },
  {
-  "id": "ia_juego_es_336",
+  "id": "ia_juego_es_359",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2688,7 +2872,7 @@
   "texto_tts": "Frena la radiación."
  },
  {
-  "id": "ia_juego_es_337",
+  "id": "ia_juego_es_360",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2696,7 +2880,7 @@
   "texto_tts": "A ver si te acuerdas: ¿de dónde vienen las llamaradas?"
  },
  {
-  "id": "ia_juego_es_338",
+  "id": "ia_juego_es_361",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2704,7 +2888,7 @@
   "texto_tts": "Por eso miramos el pronóstico cada día."
  },
  {
-  "id": "ia_juego_es_339",
+  "id": "ia_juego_es_362",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2712,7 +2896,7 @@
   "texto_tts": "Pregunta rápida: en una emergencia, ¿qué recurso conviene gastar?"
  },
  {
-  "id": "ia_juego_es_340",
+  "id": "ia_juego_es_363",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2720,7 +2904,7 @@
   "texto_tts": "¡El que más tienes!"
  },
  {
-  "id": "ia_juego_es_341",
+  "id": "ia_juego_es_364",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2728,7 +2912,7 @@
   "texto_tts": "Y cuidas el más bajo."
  },
  {
-  "id": "ia_juego_es_342",
+  "id": "ia_juego_es_365",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2736,7 +2920,7 @@
   "texto_tts": "Hoy aprendiste más sobre la energía."
  },
  {
-  "id": "ia_juego_es_343",
+  "id": "ia_juego_es_366",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2744,7 +2928,7 @@
   "texto_tts": "Hoy aprendiste más sobre el aire."
  },
  {
-  "id": "ia_juego_es_344",
+  "id": "ia_juego_es_367",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2752,7 +2936,7 @@
   "texto_tts": "Hoy aprendiste más sobre el escudo contra la radiación."
  },
  {
-  "id": "ia_juego_es_345",
+  "id": "ia_juego_es_368",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2760,7 +2944,7 @@
   "texto_tts": "Hoy aprendiste más sobre decidir con datos."
  },
  {
-  "id": "ia_juego_es_346",
+  "id": "ia_juego_es_369",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2768,7 +2952,7 @@
   "texto_tts": "Hoy mejoraste en la energía."
  },
  {
-  "id": "ia_juego_es_347",
+  "id": "ia_juego_es_370",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2776,7 +2960,7 @@
   "texto_tts": "¡Se nota!"
  },
  {
-  "id": "ia_juego_es_348",
+  "id": "ia_juego_es_371",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2784,7 +2968,7 @@
   "texto_tts": "Hoy mejoraste en el aire."
  },
  {
-  "id": "ia_juego_es_349",
+  "id": "ia_juego_es_372",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2792,7 +2976,7 @@
   "texto_tts": "Hoy mejoraste en el escudo contra la radiación."
  },
  {
-  "id": "ia_juego_es_350",
+  "id": "ia_juego_es_373",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2800,7 +2984,7 @@
   "texto_tts": "Hoy mejoraste en decidir con datos."
  },
  {
-  "id": "ia_juego_es_351",
+  "id": "ia_juego_es_374",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2808,7 +2992,7 @@
   "texto_tts": "Mañana practiquemos la energía."
  },
  {
-  "id": "ia_juego_es_352",
+  "id": "ia_juego_es_375",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2816,7 +3000,7 @@
   "texto_tts": "Mañana practiquemos el aire."
  },
  {
-  "id": "ia_juego_es_353",
+  "id": "ia_juego_es_376",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2824,7 +3008,7 @@
   "texto_tts": "Mañana practiquemos el escudo contra la radiación."
  },
  {
-  "id": "ia_juego_es_354",
+  "id": "ia_juego_es_377",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2832,7 +3016,7 @@
   "texto_tts": "Mañana practiquemos decidir con datos."
  },
  {
-  "id": "ia_juego_es_355",
+  "id": "ia_juego_es_378",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2840,7 +3024,7 @@
   "texto_tts": "Mañana te ayudo más con la energía."
  },
  {
-  "id": "ia_juego_es_356",
+  "id": "ia_juego_es_379",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2848,7 +3032,7 @@
   "texto_tts": "Mañana te ayudo más con el aire."
  },
  {
-  "id": "ia_juego_es_357",
+  "id": "ia_juego_es_380",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2856,7 +3040,7 @@
   "texto_tts": "Mañana te ayudo más con el escudo contra la radiación."
  },
  {
-  "id": "ia_juego_es_358",
+  "id": "ia_juego_es_381",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2864,7 +3048,7 @@
   "texto_tts": "Mañana te ayudo más con decidir con datos."
  },
  {
-  "id": "ia_juego_es_359",
+  "id": "ia_juego_es_382",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
@@ -2872,195 +3056,11 @@
   "texto_tts": "¡Vas muy bien en todo!"
  },
  {
-  "id": "ia_juego_es_360",
+  "id": "ia_juego_es_383",
   "escena": "ia_juego",
   "personaje": "IA",
   "cara": "neutral",
   "texto": "Mañana te daré menos pistas.",
   "texto_tts": "Mañana te daré menos pistas."
- },
- {
-  "id": "narracion_prologo_01",
-  "escena": "prologo",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Humanos, seres vivos, converjan entre sí. Afuera de este planeta hay un mundo todavía más grande… infinito, inmenso, colmado de enigmas, preguntas que esperan una respuesta y tesoros que buscan ser encontrados.",
-  "texto_tts": "Humanos, seres vivos, converjan entre sí. Afuera de este planeta hay un mundo todavía más grande… infinito, inmenso, colmado de enigmas, preguntas que esperan una respuesta y tesoros que buscan ser encontrados."
- },
- {
-  "id": "narracion_prologo_02",
-  "escena": "prologo",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Neil Armstrong, en 1969, fue el primer individuo en llegar a la Luna.",
-  "texto_tts": "Neil Armstrong, en 1969, fue el primer individuo en llegar a la Luna."
- },
- {
-  "id": "narracion_prologo_03",
-  "escena": "prologo",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "¿Qué nos hace humanos? ¿Qué nos hace ser lo que realmente somos? No son nuestras habilidades sociales, no es nuestra anatomía y, claramente, no es nuestra inteligencia…",
-  "texto_tts": "¿Qué nos hace humanos? ¿Qué nos hace ser lo que realmente somos? No son nuestras habilidades sociales, no es nuestra anatomía y, claramente, no es nuestra inteligencia…"
- },
- {
-  "id": "narracion_prologo_04",
-  "escena": "prologo",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Entonces… ¿Qué es?...",
-  "texto_tts": "Entonces… ¿Qué es?..."
- },
- {
-  "id": "narracion_prologo_05",
-  "escena": "prologo",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Sí, es la necesidad de saber qué más, el saber qué hay más allá de lo que nuestra visión es capaz de alcanzar a ver. Es tener esa sed de conocimiento, tener ganas de tomar al mundo y devorarlo por completo de un solo bocado, saber qué es lo que mueve al planeta, cada dimensión, cada partícula, cada onda y cada electrón.",
-  "texto_tts": "Sí, es la necesidad de saber qué más, el saber qué hay más allá de lo que nuestra visión es capaz de alcanzar a ver. Es tener esa sed de conocimiento, tener ganas de tomar al mundo y devorarlo por completo de un solo bocado, saber qué es lo que mueve al planeta, cada dimensión, cada partícula, cada onda y cada electrón."
- },
- {
-  "id": "narracion_prologo_06",
-  "escena": "prologo",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Todo se mueve gracias al querer saber más, hacer más, lograr más y llegar más alto… No solo mirar el cielo y tapar el sol con el dedo; es estar frente al sol y ver en el reflejo de tus ojos esas olas que danzan tan voraces al compás de las estrellas…",
-  "texto_tts": "Todo se mueve gracias al querer saber más, hacer más, lograr más y llegar más alto… No solo mirar el cielo y tapar el sol con el dedo; es estar frente al sol y ver en el reflejo de tus ojos esas olas que danzan tan voraces al compás de las estrellas…"
- },
- {
-  "id": "narracion_prologo_07",
-  "escena": "prologo",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "El tiempo pasa y, entre más pasa el tiempo, más cosas van surgiendo de entre la Tierra y el espacio. Todo esto es el legado de miles de personas, el cual ha sido transferido generación por generación y han dedicado su vida entera para encontrar respuestas.",
-  "texto_tts": "El tiempo pasa y, entre más pasa el tiempo, más cosas van surgiendo de entre la Tierra y el espacio. Todo esto es el legado de miles de personas, el cual ha sido transferido generación por generación y han dedicado su vida entera para encontrar respuestas."
- },
- {
-  "id": "narracion_prologo_08",
-  "escena": "prologo",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Nada es imposible, porque cuando lo intentas… no siempre será lo que esperas, pero siempre tendrás un resultado…",
-  "texto_tts": "Nada es imposible, porque cuando lo intentas… no siempre será lo que esperas, pero siempre tendrás un resultado…"
- },
- {
-  "id": "narracion_prologo_09",
-  "escena": "prologo",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Ahora a ti te toca… Tienes la antorcha de la sabiduría, del conocimiento, de la necesidad y de la perseverancia… Demuestra tus capacidades, supérate y demuestra lo capaz que eres.",
-  "texto_tts": "Ahora a ti te toca… Tienes la antorcha de la sabiduría, del conocimiento, de la necesidad y de la perseverancia… Demuestra tus capacidades, supérate y demuestra lo capaz que eres."
- },
- {
-  "id": "narracion_prologo_10",
-  "escena": "prologo",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Porque si lo intentas, lo logras…",
-  "texto_tts": "Porque si lo intentas, lo logras…"
- },
- {
-  "id": "narracion_carta_wen_01",
-  "escena": "carta_wen",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Construye y arregla máquinas, robots y naves espaciales.",
-  "texto_tts": "Construye y arregla máquinas, robots y naves espaciales."
- },
- {
-  "id": "narracion_carta_wen_02",
-  "escena": "carta_wen",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Entiende cómo se mueven las cosas y cómo viaja la electricidad.",
-  "texto_tts": "Entiende cómo se mueven las cosas y cómo viaja la electricidad."
- },
- {
-  "id": "narracion_carta_wen_03",
-  "escena": "carta_wen",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Cuida las computadoras de la base y trabaja con disciplina bajo presión.",
-  "texto_tts": "Cuida las computadoras de la base y trabaja con disciplina bajo presión."
- },
- {
-  "id": "narracion_carta_jud_01",
-  "escena": "carta_jud",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Estudia las plantas y sabe cómo cuidarlas en el invernadero.",
-  "texto_tts": "Estudia las plantas y sabe cómo cuidarlas en el invernadero."
- },
- {
-  "id": "narracion_carta_jud_02",
-  "escena": "carta_jud",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Lee las rocas y el suelo para entender cómo es Marte.",
-  "texto_tts": "Lee las rocas y el suelo para entender cómo es Marte."
- },
- {
-  "id": "narracion_carta_jud_03",
-  "escena": "carta_jud",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Vigila el clima: el viento, el polvo y las tormentas.",
-  "texto_tts": "Vigila el clima: el viento, el polvo y las tormentas."
- },
- {
-  "id": "narracion_carta_atl_01",
-  "escena": "carta_atl",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Conoce el cuerpo humano y sabe cómo cuidarlo en el espacio.",
-  "texto_tts": "Conoce el cuerpo humano y sabe cómo cuidarlo en el espacio."
- },
- {
-  "id": "narracion_carta_atl_02",
-  "escena": "carta_atl",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Da primeros auxilios y mantiene al equipo sano y tranquilo.",
-  "texto_tts": "Da primeros auxilios y mantiene al equipo sano y tranquilo."
- },
- {
-  "id": "narracion_introduccion_01",
-  "escena": "introduccion",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Año 2030…",
-  "texto_tts": "Año 2030…"
- },
- {
-  "id": "narracion_introduccion_02",
-  "escena": "introduccion",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Todo empezó en 2023, cuando cuatro voluntarios de la NASA vivieron 378 días dentro de una base simulada de Marte, en Houston.",
-  "texto_tts": "Todo empezó en 2023, cuando cuatro voluntarios de la NASA vivieron 378 días dentro de una base simulada de Marte, en Houston."
- },
- {
-  "id": "narracion_introduccion_03",
-  "escena": "introduccion",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Desde entonces, la humanidad se prepara para llevar personas a Marte.",
-  "texto_tts": "Desde entonces, la humanidad se prepara para llevar personas a Marte."
- },
- {
-  "id": "narracion_introduccion_04",
-  "escena": "introduccion",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Hoy, en 2030, un equipo pequeño hace su misión de prueba en la Base Marte Uno. Es una simulación, pero se parece mucho a la realidad.",
-  "texto_tts": "Hoy, en 2030, un equipo pequeño hace su misión de prueba en la Base Marte Uno. Es una simulación, pero se parece mucho a la realidad."
- },
- {
-  "id": "narracion_fin_energia_01",
-  "escena": "fin_energia",
-  "personaje": "NARRADOR",
-  "cara": "sereno",
-  "texto": "Las luces se apagan una por una.",
-  "texto_tts": "Las luces se apagan una por una."
  }
 ]

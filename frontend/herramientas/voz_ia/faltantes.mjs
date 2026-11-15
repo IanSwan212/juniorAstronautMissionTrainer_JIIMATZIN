@@ -2,7 +2,7 @@
 // { id, escena, personaje, cara, texto, texto_tts }. Lo leen tal cual sus scripts generar_voz.py y organiza.py.
 //   1. IA del juego (avisos, guía, repaso, noticias del Sol): lineas_ia.json (enumerar.mjs), español e inglés
 //   2. Historia de Ink en inglés: las 127 líneas de WEN, JUD y ATL de lineas_es_en.json (las de la IA van en el 1)
-//   3. Narración sin personaje (prólogo, cartas, introducción, final): docs/voces-pendientes.md + historia_en.js
+//   (la narración la dice P.I.E.D.R.A: va en el 1, desde enumerar.mjs)
 // Uso: node faltantes.mjs   (desde frontend/herramientas/voz_ia) -> para_rol5/
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
@@ -42,25 +42,11 @@ for (const x of leer('public/assets/audio/voces/lineas_es_en.json')) {
     cara: caras[x.id] ?? 'neutral', texto, texto_tts: tts(texto, true) });
 }
 
-// 3. Narración sin personaje
-const { HISTORIA_EN } = await import(pathToFileURL(path.join(FRONT, 'src/textos/historia_en.js')).href);
-const enDe = new Map(HISTORIA_EN);
-const md = readFileSync(path.join(FRONT, 'docs/voces-pendientes.md'), 'utf8').split('## 2.')[0];
-const narr = [...md.matchAll(/^\| `([a-z_]+)` \| (.+) \|$/gm)].map(([, nudo, t]) => [nudo, t.trim()]);
-const cuenta = {};
-for (const [nudo, t] of narr) {
-  const n = (cuenta[nudo] = (cuenta[nudo] ?? 0) + 1);
-  const id = `narracion_${nudo}_${String(n).padStart(2, '0')}`;
-  es.push({ id, escena: nudo, personaje: 'NARRADOR', cara: 'sereno', texto: t, texto_tts: tts(t, false) });
-  const tEn = enDe.get(t);
-  if (tEn) en.push({ id, escena: nudo, personaje: 'NARRADOR', cara: 'sereno', texto: tEn, texto_tts: tts(tEn, true) });
-  else console.warn('narración sin inglés:', t.slice(0, 60));
-}
+// 3. La narración (prólogo, cartas, introducción, final) la dice P.I.E.D.R.A: ya viene en el bloque 1
 
 // Las líneas de IA de Ink en inglés ya vienen en el bloque 2: se quitan del bloque 1 para no grabarlas dos veces
 const textosInk = new Set(ink.map(x => x.texto));
-const enFinal = [...enSinInk, ...ink,
-  ...en.filter(x => x.personaje === 'NARRADOR')];
+const enFinal = [...enSinInk, ...ink];
 const uniq = l => [...new Map(l.map(x => [x.id, x])).values()];
 const esF = uniq(es), enF = uniq(enFinal);
 writeFileSync(path.join(SAL, 'lineas_faltan_es.json'), JSON.stringify(esF, null, 1));
