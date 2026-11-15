@@ -86,8 +86,10 @@ Formato y errores en [docs/04-api.md](docs/04-api.md).
 
 ## Hoja de ruta
 
-1. **Base de datos e importador:** carga de REMS, DONKI, NOAA y OSDR con verificación de hashes y política de calidad. *(en curso)*
-2. **Endpoints con datos reales:** pruebas de integración, publicación de escenarios y respaldo estático.
+1. **Base de datos e importador:** modelo `ciencia`, importador y controles de publicación implementados; hashes, política, linaje, carga idempotente y protección de revisiones. La publicación efectiva espera revisión humana. Ver [importación](docs/05-importacion.md) y [publicación](docs/12-publicacion.md).
+2. **Escenarios:** endpoints conectados a `ciencia` mediante `juego`, contrato 2,
+   versiones de reglas y respaldo estático implementados. Falta la definición
+   editorial y revisión del primer escenario real; ver [escenarios](docs/13-escenarios.md).
 3. **Integración con el juego:** carga de escenarios desde Phaser.
 4. **Despliegue en Google Cloud.**
 

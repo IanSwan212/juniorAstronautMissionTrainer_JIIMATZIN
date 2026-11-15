@@ -1,0 +1,74 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "child_explanation": {
+      "type": "string"
+    },
+    "fact_key": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "game_adaptation": {
+      "type": "string"
+    },
+    "language": {
+      "enum": [
+        "es"
+      ],
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "mechanic_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "mission_context": {
+      "type": "string"
+    },
+    "reference_ids": {
+      "items": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "review_status": {
+      "enum": [
+        "pending_human_review",
+        "reviewed"
+      ],
+      "type": "string"
+    },
+    "scientific_statement": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "title": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "fact_key",
+    "language",
+    "title",
+    "scientific_statement",
+    "child_explanation",
+    "mission_context",
+    "game_adaptation",
+    "limitations",
+    "reference_ids",
+    "mechanic_ids",
+    "review_status"
+  ],
+  "type": "object"
+}

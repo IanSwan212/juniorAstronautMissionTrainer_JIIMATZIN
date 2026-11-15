@@ -1,5 +1,15 @@
 # Modelo de datos
 
+El modelo descrito aquí corresponde al esquema inicial `public`. El paquete
+estandarizado ajustado se modela en el nuevo esquema `ciencia`, con 28 tablas
+(26 científicas y 2 de publicación):
+ver [diseño y mapeo](08-diseno-dataset-cientifico.md) y
+[acceso local](09-acceso-postgresql-local.md). Los endpoints de fuentes y fichas
+ya consultan `ciencia`; escenarios usa `juego` y las membresías científicas.
+El importador y el vínculo escenario-publicación están implementados;
+ver [13-escenarios.md](13-escenarios.md) para las cinco tablas adicionales.
+Ver [API](04-api.md) e [importación](05-importacion.md).
+
 Implementado en [backend/migrations/20261114000000_esquema-inicial.sql](../backend/migrations/20261114000000_esquema-inicial.sql). Es el esquema propuesto en el doc 04, **todavía sujeto a aprobación**.
 
 ```mermaid
@@ -53,7 +63,9 @@ erDiagram
 
 ## Observaciones de diseño
 
-- `fact_cards.code` es el id de la etiqueta `dato:<id>` de Ink; `GET /facts/{id}` busca por ese código.
+- `public.fact_cards.code` identifica las fichas del escenario inicial. El nuevo
+  `GET /facts/{id}` busca por `ciencia.fact_cards.fact_key`; ambos catálogos
+  requieren una correspondencia editorial explícita.
 - `mission_sol` es el sol de Curiosity; `game_sol` es el día de la misión ficticia (1 a 10). No confundirlos.
 - JSONB conserva el payload pero no sustituye al archivo original: el hash vive en `source_files`.
 - Pendiente de decidir: tabla editorial para `uso_candidato`/`limite` de OSDR (doc 03 §8) y política de calidad REMS.

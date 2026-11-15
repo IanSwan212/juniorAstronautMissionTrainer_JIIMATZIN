@@ -1,0 +1,188 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "aggregation_rule": {
+      "type": "string"
+    },
+    "event_annotation_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "lmst_hour": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "mission_day": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "pressure": {
+      "additionalProperties": false,
+      "properties": {
+        "count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "coverage_label": {
+          "type": "string"
+        },
+        "first_lmst": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "last_lmst": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "max": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "min": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "rows_in_group": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "sample_mean": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "selection_fraction": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "source_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "unit": {
+          "enum": [
+            "K",
+            "Pa"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "unit",
+        "count",
+        "source_count",
+        "rows_in_group",
+        "min",
+        "max",
+        "sample_mean",
+        "first_lmst",
+        "last_lmst",
+        "coverage_label",
+        "selection_fraction"
+      ],
+      "type": "object"
+    },
+    "source_sol": {
+      "type": "integer"
+    },
+    "temperature": {
+      "additionalProperties": false,
+      "properties": {
+        "count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "coverage_label": {
+          "type": "string"
+        },
+        "first_lmst": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "last_lmst": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "max": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "min": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "rows_in_group": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "sample_mean": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "selection_fraction": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "source_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "unit": {
+          "enum": [
+            "K",
+            "Pa"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "unit",
+        "count",
+        "source_count",
+        "rows_in_group",
+        "min",
+        "max",
+        "sample_mean",
+        "first_lmst",
+        "last_lmst",
+        "coverage_label",
+        "selection_fraction"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "source_sol",
+    "mission_day",
+    "lmst_hour",
+    "temperature",
+    "pressure",
+    "event_annotation_ids"
+  ],
+  "type": "object"
+}

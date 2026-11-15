@@ -1,0 +1,26 @@
+{
+  "scenarioId": "mi-escenario",
+  "version": 1,
+  "releaseId": "rel_40afe5ce9bfa07d6bf26fa729478db67",
+  "rulesVersion": "reglas-del-equipo-v1",
+  "rules": {},
+  "language": "es",
+  "title": "Título definido por el equipo",
+  "modelAssumptions": [],
+  "conditions": [
+    {
+      "recordId": "REEMPLAZAR_POR_RECORD_ID_CIENTIFICO",
+      "role": "environment",
+      "gameSol": 1,
+      "gamePhase": null,
+      "justification": "Explicar por qué se selecciona este registro y este momento del juego"
+    }
+  ],
+  "facts": [
+    {
+      "recordId": "REEMPLAZAR_POR_RECORD_ID_DE_FICHA",
+      "gameSol": 1,
+      "gamePhase": null
+    }
+  ]
+}

@@ -11,11 +11,12 @@ backend/
 │   ├── index.js           arranque y cierre ordenado
 │   ├── app.js             fábrica de la app Express (recibe el pool)
 │   ├── rutas.js           monta escenarios, fichas y fuentes bajo /api/v1
-│   ├── escenarios/       contenido de la misión; MVC + repositorio
+│   ├── escenarios/       contenido de la misión; MVC + repositorio, CLI y exportación
 │   ├── fichas/           fichas científicas y evidencias; MVC + repositorio
 │   ├── fuentes/          procedencia y atribución; MVC + repositorio
 │   ├── salud/            /health, /health/listo; MVC + repositorio
-│   ├── importador/       comando administrativo de carga (esqueleto)
+│   ├── importador/       verificación offline del ZIP y carga transaccional a ciencia
+│   ├── publicaciones/    CLI administrativa de validación, publicación y retiro
 │   ├── compartido/       errores de aplicación independientes de HTTP
 │   └── infraestructura/
 │       ├── config/env.js variables de entorno validadas con zod
@@ -44,8 +45,49 @@ Se leen del `.env` de la raíz (ver [../.env.example](../.env.example)). `DATABA
 
 ## Pruebas
 
-`pnpm test` usa un pool simulado: valida rutas, respuestas completas, parámetros SQL, validación de entrada, cabeceras y errores sin necesitar PostgreSQL. Las pruebas de regresión cubren observaciones faltantes, eventos, evidencias, versiones e idioma. La comprobación manual previa con PostgreSQL 17 está registrada en la documentación; **falta automatizar pruebas de integración con BD**.
+`pnpm test` ejecuta 47 pruebas sin PostgreSQL: rutas, contratos, validación,
+cabeceras, errores, DONKI con cliente simulado y el importador con paquetes ZIP
+mínimos. Requiere Python 3; las suites de integración se omiten en esa ejecución.
+
+`pnpm test:integracion` usa `DATABASE_URL` de `../.env` para crear una BD
+temporal `jiimatzin_test_<uuid>` por suite, aplicar las cuatro migraciones desde cero y
+ejecutar 37 pruebas de API, importación, publicación y escenarios con SQL real. Las BD se eliminan en `finally`, incluso
+si falla una prueba; no se escriben fixtures en la BD de desarrollo. Requiere
+PostgreSQL accesible y un rol con permiso `CREATEDB` (el rol local de Compose lo
+tiene). Si el proceso se termina forzosamente puede quedar la BD temporal.
+Con `DATASET_TEST_ARCHIVE` y `DATASET_TEST_SHA256` se añade la prueba de carga y
+reimportación del paquete real completo, también en una BD temporal.
+
+Fuentes y fichas leen `ciencia`. Las fichas requieren última revisión humana
+aprobada, calidad aceptable y todas sus evidencias verificadas. `recordId` fija
+la revisión de contenido; no se inventa una versión numérica. Los escenarios
+usan `juego` y fijan miembros de `ciencia`; el adaptador consume `schemaVersion: "2"`. Detalle en
+[04-api.md](../docs/04-api.md).
 
 ## Pendiente
 
-Importador, política de calidad REMS, vista de fichas aprobadas, pruebas de integración, despliegue. Ver [../docs/README.md](../docs/README.md).
+Revisión humana de fichas, definición editorial de escenarios/reglas,
+correspondencia con las etiquetas narrativas y despliegue. Ver [../docs/README.md](../docs/README.md).
+
+## Importación
+
+El comando `pnpm --filter @jiimatzin/backend importar -- --archivo <ZIP> --sha256 <hash>`
+verifica el paquete y carga `ciencia` de forma idempotente. `--validar` verifica sin
+conectar a PostgreSQL. Conserva estado `candidate` y no aprueba fichas ni crea
+escenarios. Requisitos, transacciones y ejemplos en [05-importacion.md](../docs/05-importacion.md).
+
+## Publicaciones
+
+`pnpm --filter @jiimatzin/backend publicaciones -- validar|publicar|retirar ...`
+administra una construcción. `validar` coteja la BD con el ZIP y registra
+pendientes; `publicar` exige ese cotejo y aprobación humana vigente; `retirar`
+conserva el contenido sellado. La migración incorpora bitácora, protección de
+revisiones y límites de escritura; ver [12-publicacion.md](../docs/12-publicacion.md).
+
+## Escenarios
+
+`pnpm escenarios -- crear|publicar|retirar|exportar ...` prepara contenido desde
+una definición JSON y exporta únicamente versiones disponibles. Cada escenario
+fija publicación, reglas y registros; los datos de juego viven en `juego`.
+La API los recupera en una sola instantánea. Definición, contrato, plantilla y
+respaldo en [13-escenarios.md](../docs/13-escenarios.md).

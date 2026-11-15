@@ -1,0 +1,154 @@
+{
+  "schemaVersion": "2",
+  "scenarioId": "mars-demo",
+  "scenarioVersion": "2",
+  "title": "Escenario de prueba",
+  "language": "es",
+  "releaseId": "rel_11111111111111111111111111111111",
+  "datasetVersion": "1.0.0",
+  "datasetSchemaVersion": "1.0.0",
+  "rulesVersion": "educational-1",
+  "rules": {
+    "mode": "educational"
+  },
+  "dataMode": "historical",
+  "sourceCoverage": {
+    "start": null,
+    "end": null
+  },
+  "marsCoverage": {
+    "startSol": 10,
+    "endSol": 10,
+    "timeBasis": "mars_lmst"
+  },
+  "retrievedAt": null,
+  "conditions": [
+    {
+      "kind": "observation",
+      "recordId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "role": "environment",
+      "gameSol": 1,
+      "gamePhase": null,
+      "justification": "Selección explícita de prueba",
+      "context": "mars_historical_observation",
+      "dataset": "test_dataset",
+      "usageTier": "runtime",
+      "quality": "accepted",
+      "qualityReasons": [],
+      "variable": "ambient_temperature",
+      "value": 207,
+      "unit": "K",
+      "data": {
+        "variable": "ambient_temperature",
+        "value": 207,
+        "unit": "K",
+        "source_sol": 10,
+        "time_basis": "mars_lmst",
+        "lmst": "00010M00:00:00.000",
+        "ltst": "00010 00:35:00",
+        "sclk": 398334263,
+        "flags_original": "111111111",
+        "flags_normalized": "111111111"
+      },
+      "provenance": {
+        "processorId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "selectionPolicyId": null,
+        "lineageId": null,
+        "sourceRefs": [
+          {
+            "sourceFileId": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "locator": {
+              "section": "body"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "environment_hour",
+      "recordId": "2222222222222222222222222222222222222222222222222222222222222222",
+      "role": "environment",
+      "gameSol": 1,
+      "gamePhase": null,
+      "justification": "Selección explícita de prueba",
+      "context": "mars_historical_observation",
+      "dataset": "test_dataset",
+      "usageTier": "runtime",
+      "quality": "not_applicable",
+      "qualityReasons": [],
+      "variable": "environment_hour",
+      "value": null,
+      "unit": null,
+      "data": {
+        "source_sol": 10,
+        "mission_day": 1,
+        "lmst_hour": 1,
+        "aggregation_rule": "hourly_lmst_sample_stats_v1",
+        "event_annotation_ids": [],
+        "temperature": {
+          "unit": "K",
+          "count": 0,
+          "source_count": 0,
+          "rows_in_group": 0,
+          "min": null,
+          "max": null,
+          "sample_mean": null,
+          "first_lmst": null,
+          "last_lmst": null,
+          "coverage_label": "empty",
+          "selection_fraction": null
+        },
+        "pressure": {
+          "unit": "Pa",
+          "count": 0,
+          "source_count": 0,
+          "rows_in_group": 0,
+          "min": null,
+          "max": null,
+          "sample_mean": null,
+          "first_lmst": null,
+          "last_lmst": null,
+          "coverage_label": "empty",
+          "selection_fraction": null
+        }
+      },
+      "provenance": {
+        "processorId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "selectionPolicyId": null,
+        "lineageId": "2222222222222222222222222222222222222222222222222222222222222222",
+        "sourceRefs": [
+          {
+            "sourceFileId": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "locator": {
+              "section": "body"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "factIds": [
+    "fact_demo"
+  ],
+  "facts": [
+    {
+      "id": "fact_demo",
+      "recordId": "3333333333333333333333333333333333333333333333333333333333333333",
+      "language": "es",
+      "title": "Título",
+      "explanation": "Explicación",
+      "gameAdaptation": "Adaptación",
+      "limitations": [
+        "Sin fórmula"
+      ],
+      "sourceContext": "other_mission_educational",
+      "appearsAt": {
+        "gameSol": 1,
+        "gamePhase": "night"
+      }
+    }
+  ],
+  "modelAssumptions": [
+    "Parámetros de prueba, sin fórmula física"
+  ]
+}

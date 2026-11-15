@@ -23,6 +23,12 @@ const esquema = z
     // Caché pública del contenido servido (los escenarios publicados son estables).
     CACHE_SECONDS: z.coerce.number().int().min(0).max(86400).default(60),
     DATA_DIR: z.string().default('../../muestras'),
+    // DONKI en vivo (NASA CCMC). Endpoint oficial; no requiere clave.
+    DONKI_BASE_URL: z.url().default('https://ccmc.gsfc.nasa.gov/DONKI-API'),
+    // Caché en servidor: casi en tiempo real sin consultar a NASA en cada petición del cliente.
+    DONKI_CACHE_SECONDS: z.coerce.number().int().min(30).max(3600).default(300),
+    DONKI_TIMEOUT_MS: z.coerce.number().int().min(1000).max(30000).default(10000),
+    DONKI_MAX_DAYS: z.coerce.number().int().min(1).max(90).default(30),
   })
   .superRefine((cfg, ctx) => {
     if (cfg.NODE_ENV !== 'production') return;
@@ -39,6 +45,9 @@ const esquema = z
     }
     if (cfg.RATE_LIMIT_MAX === 0) {
       falla('RATE_LIMIT_MAX', 'en producción el límite de peticiones no puede desactivarse');
+    }
+    if (!cfg.DONKI_BASE_URL.startsWith('https://')) {
+      falla('DONKI_BASE_URL', 'en producción debe ser https');
     }
     if (cfg.DATABASE_SSL === 'disable') {
       falla('DATABASE_SSL', 'en producción usa "require" (o "no-verify" si el proveedor lo exige)');

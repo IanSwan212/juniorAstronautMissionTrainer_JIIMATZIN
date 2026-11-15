@@ -1,5 +1,5 @@
 import { ZodError } from 'zod';
-import { ErrorNoEncontrado } from '../../compartido/errores.js';
+import { ErrorNoEncontrado, ErrorFuenteExterna } from '../../compartido/errores.js';
 
 export class ErrorHttp extends Error {
   constructor(estado, codigo, mensaje) {
@@ -27,6 +27,10 @@ export function manejadorErrores(err, _req, res, _next) {
     });
   }
   if (err instanceof ErrorHttp) {
+    return res.status(err.estado).json({ error: { codigo: err.codigo, mensaje: err.message } });
+  }
+  if (err instanceof ErrorFuenteExterna) {
+    if (err.reintentarEnS) res.set('Retry-After', String(err.reintentarEnS));
     return res.status(err.estado).json({ error: { codigo: err.codigo, mensaje: err.message } });
   }
   if (err instanceof ErrorNoEncontrado) {

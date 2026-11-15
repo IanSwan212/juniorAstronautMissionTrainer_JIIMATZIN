@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Fuente científica JIIMATZIN (borrador v1)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "institution", "product", "url"],
+  "properties": {
+    "id": { "type": "string" },
+    "institution": { "type": "string" },
+    "product": { "type": "string" },
+    "url": { "type": ["string", "null"] }
+  }
+}

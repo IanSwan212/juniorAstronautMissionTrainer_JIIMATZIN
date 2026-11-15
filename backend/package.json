@@ -11,10 +11,13 @@
     "dev": "node --watch --env-file-if-exists=../.env src/index.js",
     "start": "node --env-file-if-exists=../.env src/index.js",
     "test": "node --test",
+    "test:integracion": "node --env-file-if-exists=../.env scripts/probar-integracion.mjs",
     "migrar": "node --env-file-if-exists=../.env node_modules/node-pg-migrate/bin/node-pg-migrate.js -m migrations up",
     "migrar:revertir": "node --env-file-if-exists=../.env node_modules/node-pg-migrate/bin/node-pg-migrate.js -m migrations down",
     "migrar:crear": "node node_modules/node-pg-migrate/bin/node-pg-migrate.js -m migrations --migration-file-language sql create",
-    "importar": "node --env-file-if-exists=../.env src/importador/cli.js"
+    "importar": "node --env-file-if-exists=../.env src/importador/cli.js",
+    "publicaciones": "node --env-file-if-exists=../.env src/publicaciones/cli.js",
+    "escenarios": "node --env-file-if-exists=../.env src/escenarios/cli.js"
   },
   "dependencies": {
     "cors": "^2.8.6",

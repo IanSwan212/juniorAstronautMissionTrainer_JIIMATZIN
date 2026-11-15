@@ -1,22 +1,20 @@
-/** Proyección pública: conserva afirmación, adaptación y evidencia por separado. */
-export function presentarFicha({ ficha, evidencias }) {
+/** Proyección explícita: no devuelve payload ni identidad/notas del revisor. */
+export function presentarFicha(ficha) {
   return {
-    id: ficha.code,
+    id: ficha.fact_key,
+    recordId: ficha.record_id,
+    schemaVersion: ficha.schema_version,
+    processorId: ficha.processor_id,
     language: ficha.language,
-    version: ficha.version,
     title: ficha.title,
-    explanation: ficha.explanation,
-    backedFact: ficha.backed_fact,
+    explanation: ficha.child_explanation,
+    backedFact: ficha.scientific_statement,
     missionContext: ficha.mission_context,
+    sourceContext: ficha.source_context,
     gameAdaptation: ficha.game_adaptation,
-    references: ficha.source_refs,
-    evidence: evidencias.map((e) => ({
-      claim: e.claim,
-      locator: e.locator,
-      studyAccession: e.accession,
-      publicationDoi: e.publication_doi,
-      dataDoi: e.data_doi,
-      source: { id: e.source_code, name: e.source_name, url: e.source_url },
-    })),
+    limitations: ficha.limitations,
+    mechanicIds: ficha.mechanic_ids,
+    references: [...new Set(ficha.evidence.map((e) => e.sourceFileId))],
+    evidence: ficha.evidence,
   };
 }

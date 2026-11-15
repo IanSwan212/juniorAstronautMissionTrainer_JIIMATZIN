@@ -11,8 +11,9 @@ import { crearRutasApi } from './rutas.js';
 /**
  * Fábrica de la aplicación. Recibe el pool para poder sustituirlo en pruebas.
  * El prototipo es de solo lectura: no hay endpoints públicos de importación ni edición.
+ * `donki` (opcional) inyecta cliente/reloj del endpoint en vivo para pruebas.
  */
-export function crearApp({ pool }) {
+export function crearApp({ pool, donki }) {
   const app = express();
   app.disable('x-powered-by');
   app.set('trust proxy', env.TRUST_PROXY); // detrás de un balanceador: IP/protocolo reales
@@ -22,7 +23,7 @@ export function crearApp({ pool }) {
   app.use(registroSolicitudes);
 
   app.use('/health', sinCache, crearRutasSalud({ pool }));
-  app.use('/api/v1', limitarPeticiones, cacheContenido, crearRutasApi({ pool }));
+  app.use('/api/v1', limitarPeticiones, cacheContenido, crearRutasApi({ pool, donki }));
 
   app.use(noEncontrado);
   app.use(manejadorErrores);

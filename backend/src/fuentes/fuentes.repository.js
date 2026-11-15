@@ -1,12 +1,12 @@
-/** Atribución y contexto público de una fuente (p. ej. donki, osdr, rems). */
+/** Catálogo científico; no expone ubicaciones de archivos ni metadatos de captura. */
 export function crearRepositorioFuentes(pool) {
   return {
-    async buscarPorCodigo(code) {
+    async buscarPorId(id) {
       const { rows } = await pool.query(
-        `SELECT code, name, provider, url, access_type, attribution, challenge_resource
-           FROM sources
-          WHERE code = $1`,
-        [code],
+        `SELECT source_id, institution, product, url
+           FROM ciencia.sources
+          WHERE source_id = $1`,
+        [id],
       );
       return rows[0] ?? null;
     },

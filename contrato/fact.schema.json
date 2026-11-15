@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ficha científica JIIMATZIN (borrador v1, NO aprobado)",
+  "description": "Ficha editorial aprobada; no certifica una publicación científica ni su uso en un escenario.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "recordId", "schemaVersion", "processorId", "language", "title", "explanation", "backedFact", "missionContext", "sourceContext", "gameAdaptation", "limitations", "mechanicIds", "references", "evidence"],
+  "properties": {
+    "id": { "type": "string" },
+    "recordId": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "schemaVersion": { "type": "string" },
+    "processorId": { "type": "string" },
+    "language": { "type": "string", "pattern": "^[a-z]{2}$" },
+    "title": { "type": "string" },
+    "explanation": { "type": "string" },
+    "backedFact": { "type": "string" },
+    "missionContext": { "type": "string" },
+    "sourceContext": { "type": "string" },
+    "gameAdaptation": { "type": "string" },
+    "limitations": { "type": "array", "items": { "type": "string" } },
+    "mechanicIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "references": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "$ref": "#/$defs/sourceFileId" }
+    },
+    "evidence": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/evidence" } }
+  },
+  "$defs": {
+    "sourceFileId": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["index", "type", "sourceFileId", "locator", "expected", "verifiedAgainstPreservedSource"],
+      "properties": {
+        "index": { "type": "integer", "minimum": 0 },
+        "type": { "type": "string" },
+        "sourceFileId": { "$ref": "#/$defs/sourceFileId" },
+        "locator": {},
+        "expected": {},
+        "verifiedAgainstPreservedSource": { "const": true }
+      }
+    }
+  }
+}

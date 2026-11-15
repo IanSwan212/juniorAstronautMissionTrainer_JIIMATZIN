@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jiimatzin.local/contrato/donki-live.schema.json",
+  "title": "DONKI FLR en vivo (borrador v1, NO aprobado)",
+  "description": "Respuesta de GET /api/v1/live/donki/flares. Cada elemento de `events` es el sobre `envelope.schema.json` de la limpieza (JIIMATZIN_Dataset v1.0.0) con data conforme a `solar_event.data.schema.json`. Es un catálogo de eventos solares: NO es una medición en Marte ni una alerta de juego. Independiente de scenario.schema.json (que sigue siendo solo histórico).",
+  "type": "object",
+  "required": ["schema_version", "data_mode", "source_context", "is_mars_surface_measurement", "retrieved_at", "period_requested", "coverage", "source", "freshness", "count", "input_count", "ordering", "review", "completeness", "events"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "data_mode": { "const": "near_real_time", "description": "Casi en tiempo real: DONKI publica análisis con retraso y puede revisar versiones. No es telemetría en vivo." },
+    "source_context": { "const": "solar_event_catalogue" },
+    "is_mars_surface_measurement": { "const": false },
+    "retrieved_at": { "type": "string", "format": "date-time", "description": "Captura UTC en el servidor; distinta de begin_time/peak_time de cada evento." },
+    "period_requested": {
+      "type": "object",
+      "required": ["startDate", "endDate"],
+      "properties": { "startDate": { "type": "string", "format": "date" }, "endDate": { "type": "string", "format": "date" } }
+    },
+    "coverage": {
+      "type": "object",
+      "description": "Primer y último begin_time devueltos; null si no hay eventos. No afirma cobertura completa.",
+      "required": ["start", "end"],
+      "properties": { "start": { "type": ["string", "null"] }, "end": { "type": ["string", "null"] } }
+    },
+    "source": {
+      "type": "object",
+      "required": ["id", "product", "params", "http_status", "source_file_id", "empty_body"],
+      "properties": {
+        "id": { "const": "nasa_ccmc_donki" },
+        "product": { "const": "FLR" },
+        "params": { "type": "object", "description": "startDate, endDate, catalog=M2M_CATALOG, class=ALL, version=Latest" },
+        "http_status": { "type": "integer" },
+        "source_file_id": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$", "description": "SHA-256 del cuerpo recibido; mismo criterio que la limpieza." },
+        "empty_body": { "type": "boolean", "description": "true si NASA respondió 200 sin cuerpo (se trata como cero eventos)." }
+      }
+    },
+    "freshness": {
+      "type": "object",
+      "required": ["cache", "age_s", "ttl_s", "stale"],
+      "properties": {
+        "cache": { "enum": ["miss", "hit", "stale"] },
+        "age_s": { "type": "integer", "minimum": 0 },
+        "ttl_s": { "type": "integer" },
+        "stale": { "type": "boolean", "description": "true = NASA falló y se sirve la última copia buena (≤ 1 h)." }
+      }
+    },
+    "count": { "type": "integer", "minimum": 0 },
+    "input_count": { "type": "integer", "minimum": 0, "description": "Objetos recibidos de NASA antes de aplicar las reglas de aceptación." },
+    "ordering": { "const": "begin_time, external_id" },
+    "review": {
+      "type": "object",
+      "required": ["excluded", "duplicates_ignored", "time_sequence_flagged"],
+      "properties": {
+        "excluded": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["pointer", "event_id", "decision", "reasons"],
+            "properties": {
+              "pointer": { "type": "string" },
+              "event_id": { "type": ["string", "null"] },
+              "decision": { "enum": ["excluded", "conflict"] },
+              "reasons": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "duplicates_ignored": { "type": "integer" },
+        "time_sequence_flagged": { "type": "array", "items": { "type": "string" }, "description": "Eventos aceptados con begin ≤ peak ≤ end incumplido (data.time_sequence_consistent = false)." }
+      }
+    },
+    "completeness": { "const": "not_asserted" },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["schema_version", "record_id", "record_type", "dataset_id", "source_context", "processor_id", "selection_policy_id", "quality_status", "quality_reasons", "usage_tier", "provenance", "data"],
+        "properties": {
+          "schema_version": { "const": "1.0.0" },
+          "record_id": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "Estable por (external_id, source_version): una revisión nueva de NASA cambia el id." },
+          "record_type": { "const": "solar_event" },
+          "dataset_id": { "const": "donki_flr_live" },
+          "source_context": { "const": "solar_event_catalogue" },
+          "processor_id": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "selection_policy_id": { "type": "null" },
+          "quality_status": { "const": "accepted" },
+          "quality_reasons": { "type": "array", "items": { "type": "string" } },
+          "usage_tier": { "const": "runtime" },
+          "provenance": {
+            "type": "object",
+            "required": ["source_refs", "lineage_id"],
+            "properties": {
+              "lineage_id": { "type": "null" },
+              "source_refs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["source_file_id", "locator"],
+                  "properties": {
+                    "source_file_id": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+                    "locator": { "type": "object", "properties": { "kind": { "const": "json_pointer" }, "pointer": { "type": "string" } } }
+                  }
+                }
+              }
+            }
+          },
+          "data": {
+            "type": "object",
+            "required": ["external_id", "event_type", "begin_time", "peak_time", "end_time", "class_type", "catalog", "instruments", "linked_events", "source_url", "source_version"],
+            "properties": {
+              "external_id": { "type": "string", "minLength": 1 },
+              "event_type": { "const": "FLR" },
+              "begin_time": { "type": "string", "pattern": "^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d(\\.\\d+)?Z$" },
+              "begin_time_original": { "type": "string" },
+              "peak_time": { "type": ["string", "null"] },
+              "peak_time_original": { "type": ["string", "null"] },
+              "end_time": { "type": ["string", "null"] },
+              "end_time_original": { "type": ["string", "null"] },
+              "class_type": { "type": "string", "minLength": 1, "description": "Clase tal como la entrega DONKI; sin etiqueta de peligro derivada." },
+              "catalog": { "type": ["string", "null"] },
+              "instruments": { "type": "array", "items": { "type": "string" } },
+              "source_location": { "type": ["string", "null"] },
+              "active_region": { "type": ["integer", "null"] },
+              "linked_events": { "type": "array" },
+              "linked_events_supplied": { "type": "boolean" },
+              "source_url": { "type": "string", "minLength": 1 },
+              "source_version": { "type": ["integer", "null"] },
+              "time_sequence_consistent": { "type": "boolean" },
+              "is_mars_surface_measurement": { "const": false }
+            }
+          }
+        }
+      }
+    }
+  }
+}

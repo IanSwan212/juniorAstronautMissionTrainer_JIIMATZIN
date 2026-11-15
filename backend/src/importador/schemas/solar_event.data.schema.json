@@ -1,0 +1,111 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "active_region": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "begin_time": {
+      "pattern": "^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$",
+      "type": "string"
+    },
+    "begin_time_original": {
+      "type": "string"
+    },
+    "catalog": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "class_type": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "end_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "end_time_original": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "event_type": {
+      "enum": [
+        "FLR"
+      ],
+      "type": "string"
+    },
+    "external_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "instruments": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "is_mars_surface_measurement": {
+      "const": false,
+      "type": "boolean"
+    },
+    "linked_events": {
+      "type": "array"
+    },
+    "linked_events_supplied": {
+      "type": "boolean"
+    },
+    "peak_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "peak_time_original": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_location": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_url": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "source_version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "time_sequence_consistent": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "external_id",
+    "event_type",
+    "begin_time",
+    "peak_time",
+    "end_time",
+    "class_type",
+    "catalog",
+    "instruments",
+    "linked_events",
+    "source_url",
+    "source_version"
+  ],
+  "type": "object"
+}

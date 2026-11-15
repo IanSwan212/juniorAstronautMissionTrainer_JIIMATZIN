@@ -1,63 +1,384 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://jiimatzin.local/contrato/scenario.schema.json",
-  "title": "Escenario JIIMATZIN (borrador v1, NO aprobado)",
-  "description": "Contrato entre la API de contenido y el adaptador de Phaser. Debe acordarse con los roles 1, 2 y 3 antes de congelarse.",
+  "title": "Escenario científico JIIMATZIN (borrador 2, NO aprobado)",
+  "description": "API v1; fija publicación científica, reglas y revisiones de contenido. Sustituye el borrador de public.",
   "type": "object",
-  "required": ["schemaVersion", "scenarioId", "scenarioVersion", "rulesVersion", "dataMode", "sourceCoverage", "retrievedAt", "conditions", "factIds", "modelAssumptions"],
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "scenarioId",
+    "scenarioVersion",
+    "title",
+    "language",
+    "releaseId",
+    "datasetVersion",
+    "datasetSchemaVersion",
+    "rulesVersion",
+    "rules",
+    "dataMode",
+    "sourceCoverage",
+    "marsCoverage",
+    "retrievedAt",
+    "conditions",
+    "factIds",
+    "facts",
+    "modelAssumptions"
+  ],
   "properties": {
-    "schemaVersion": { "const": "1" },
-    "scenarioId": { "type": "string" },
-    "scenarioVersion": { "type": "string" },
-    "rulesVersion": { "type": "string" },
-    "language": { "type": "string", "pattern": "^[a-z]{2}$" },
-    "dataMode": { "enum": ["historical"], "description": "Solo histórico en la v1. No llamarlo 'tiempo real'." },
+    "schemaVersion": {
+      "const": "2"
+    },
+    "scenarioId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
+    },
+    "scenarioVersion": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$"
+    },
+    "title": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string",
+      "pattern": "^[a-z]{2}$"
+    },
+    "releaseId": {
+      "type": "string",
+      "pattern": "^rel_[0-9a-f]{32}$"
+    },
+    "datasetVersion": {
+      "type": "string"
+    },
+    "datasetSchemaVersion": {
+      "type": "string"
+    },
+    "rulesVersion": {
+      "type": "string"
+    },
+    "rules": {
+      "type": "object"
+    },
+    "dataMode": {
+      "const": "historical"
+    },
     "sourceCoverage": {
       "type": "object",
-      "required": ["start", "end"],
+      "additionalProperties": false,
+      "required": [
+        "start",
+        "end"
+      ],
       "properties": {
-        "start": { "type": ["string", "null"], "format": "date-time" },
-        "end": { "type": ["string", "null"], "format": "date-time" }
+        "start": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "end": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
       }
     },
-    "retrievedAt": { "type": ["string", "null"], "format": "date-time", "description": "Captura UTC; distinta de la fecha del fenómeno." },
-    "conditions": { "type": "array", "items": { "$ref": "#/$defs/condition" } },
-    "factIds": { "type": "array", "items": { "type": "string" } },
-    "facts": { "type": "array", "items": { "$ref": "#/$defs/factEssential" } },
-    "modelAssumptions": { "type": "array", "items": { "type": "string" } }
+    "marsCoverage": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "startSol",
+            "endSol",
+            "timeBasis"
+          ],
+          "properties": {
+            "startSol": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "endSol": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "timeBasis": {
+              "const": "mars_lmst"
+            }
+          }
+        }
+      ]
+    },
+    "retrievedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "conditions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2000,
+      "items": {
+        "$ref": "#/$defs/condition"
+      }
+    },
+    "factIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "facts": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/fact"
+      }
+    },
+    "modelAssumptions": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "string"
+      }
+    }
   },
   "$defs": {
     "condition": {
       "type": "object",
-      "required": ["kind", "variable", "value", "unit", "evidenceId", "quality", "context"],
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "recordId",
+        "role",
+        "gameSol",
+        "gamePhase",
+        "justification",
+        "context",
+        "dataset",
+        "usageTier",
+        "quality",
+        "qualityReasons",
+        "variable",
+        "value",
+        "unit",
+        "data",
+        "provenance"
+      ],
       "properties": {
-        "kind": { "enum": ["observation", "record"] },
-        "variable": { "type": "string" },
-        "value": { "type": ["number", "null"], "description": "null = faltante; nunca -999 ni 0 inventado." },
-        "unit": { "type": ["string", "null"] },
-        "evidenceId": { "type": "string", "description": "obs:<id> o rec:<id>" },
-        "quality": { "type": ["string", "null"] },
-        "context": { "type": ["string", "null"] },
-        "justification": { "type": "string" },
-        "gameSol": { "type": ["integer", "null"], "description": "Sol del JUEGO, no de la misión real." },
-        "gamePhase": { "enum": ["morning", "day", "emergency", "night", null] },
-        "missionSol": { "type": ["integer", "null"] },
-        "observedAt": { "type": ["string", "null"] },
-        "occurredAt": { "type": ["string", "null"] },
-        "payload": { "type": ["object", "null"] }
+        "kind": {
+          "enum": [
+            "observation",
+            "environment_hour",
+            "solar_event",
+            "radiation_sample"
+          ]
+        },
+        "recordId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "role": {
+          "enum": [
+            "environment",
+            "reference"
+          ]
+        },
+        "gameSol": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "gamePhase": {
+          "enum": [
+            "morning",
+            "day",
+            "emergency",
+            "night",
+            null
+          ]
+        },
+        "justification": {
+          "type": "string"
+        },
+        "context": {
+          "type": "string"
+        },
+        "dataset": {
+          "type": "string"
+        },
+        "usageTier": {
+          "enum": [
+            "runtime",
+            "educational"
+          ]
+        },
+        "quality": {
+          "enum": [
+            "accepted",
+            "not_applicable"
+          ]
+        },
+        "qualityReasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "variable": {
+          "type": "string"
+        },
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data": {
+          "type": "object"
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "processorId",
+            "selectionPolicyId",
+            "lineageId",
+            "sourceRefs"
+          ],
+          "properties": {
+            "processorId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "selectionPolicyId": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lineageId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "sourceRefs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "sourceFileId",
+                  "locator"
+                ],
+                "properties": {
+                  "sourceFileId": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "locator": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
-    "factEssential": {
+    "fact": {
       "type": "object",
-      "required": ["id", "language", "title", "explanation"],
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "recordId",
+        "language",
+        "title",
+        "explanation",
+        "gameAdaptation",
+        "limitations",
+        "sourceContext",
+        "appearsAt"
+      ],
       "properties": {
-        "id": { "type": "string" },
-        "language": { "type": "string" },
-        "version": { "type": "integer" },
-        "title": { "type": "string" },
-        "explanation": { "type": "string" },
-        "gameAdaptation": { "type": ["string", "null"] },
-        "appearsAt": { "type": "object" }
+        "id": {
+          "type": "string"
+        },
+        "recordId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "language": {
+          "type": "string",
+          "pattern": "^[a-z]{2}$"
+        },
+        "title": {
+          "type": "string"
+        },
+        "explanation": {
+          "type": "string"
+        },
+        "gameAdaptation": {
+          "type": "string"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceContext": {
+          "type": "string"
+        },
+        "appearsAt": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "gameSol",
+            "gamePhase"
+          ],
+          "properties": {
+            "gameSol": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1,
+              "maximum": 10
+            },
+            "gamePhase": {
+              "enum": [
+                "morning",
+                "day",
+                "emergency",
+                "night",
+                null
+              ]
+            }
+          }
+        }
       }
     }
   }

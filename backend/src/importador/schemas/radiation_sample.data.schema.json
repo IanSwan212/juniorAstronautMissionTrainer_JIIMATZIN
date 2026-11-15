@@ -1,0 +1,67 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "instrument_id": {
+      "enum": [
+        "DosTel1"
+      ],
+      "type": "string"
+    },
+    "observed_at_utc": {
+      "type": "null"
+    },
+    "row_index_supplied": {
+      "type": "integer"
+    },
+    "row_position": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "seconds_since_previous": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "spacecraft": {
+      "enum": [
+        "ISS"
+      ],
+      "type": "string"
+    },
+    "time_basis": {
+      "enum": [
+        "radlab_original_convention_unspecified"
+      ],
+      "type": "string"
+    },
+    "timestamp_original": {
+      "type": "string"
+    },
+    "unit": {
+      "enum": [
+        "uGy/h"
+      ],
+      "type": "string"
+    },
+    "value": {
+      "type": "number"
+    },
+    "variable": {
+      "enum": [
+        "absorbed_dose_rate"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "variable",
+    "value",
+    "unit",
+    "timestamp_original",
+    "time_basis",
+    "spacecraft",
+    "instrument_id"
+  ],
+  "type": "object"
+}

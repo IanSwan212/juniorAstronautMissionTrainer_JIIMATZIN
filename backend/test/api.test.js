@@ -5,6 +5,7 @@ process.env.NODE_ENV = 'test';
 process.env.DATABASE_URL ??= 'postgresql://test:test@localhost:5432/test';
 
 const { crearApp } = await import('../src/app.js');
+const { filaEscenario } = await import('../test-support/escenario.js');
 
 // Pool simulado: sin filas. Permite probar rutas, validación y errores sin PostgreSQL.
 let consultaFalla = false;
@@ -78,9 +79,9 @@ test('ficha y fuente inexistentes → 404', async () => {
   assert.equal((await get('/api/v1/sources/no-existe')).status, 404);
 });
 
-test('cabeceras: contenido cacheable, salud y errores sin caché, límite informado', async () => {
+test('cabeceras: escenarios, salud y errores sin caché, límite informado', async () => {
   const ok = await get('/api/v1/scenarios');
-  assert.match(ok.headers.get('cache-control'), /^public, max-age=\d+$/);
+  assert.equal(ok.headers.get('cache-control'), 'no-store');
   assert.ok(ok.headers.get('ratelimit') || ok.headers.get('ratelimit-policy'));
   assert.equal(ok.headers.get('x-powered-by'), null);
   assert.equal((await get('/health')).headers.get('cache-control'), 'no-store');
@@ -104,113 +105,96 @@ test('salud básica no consulta la BD y disponibilidad sana responde 200', async
   assert.equal(consultas[0].sql, 'SELECT 1');
 });
 
-test('lista de escenarios conserva el contrato público y versiones como texto', async () => {
-  respuestas = [[{ code: 'mars-demo', version: 2, rules_version: 'educational-1', language: 'es' }]];
+test('lista de escenarios fija publicación científica y versiones como texto', async () => {
+  respuestas = [[filaEscenario()]];
   const r = await get('/api/v1/scenarios');
   assert.equal(r.status, 200);
-  assert.deepEqual(await r.json(), {
-    escenarios: [{ scenarioId: 'mars-demo', scenarioVersion: '2', rulesVersion: 'educational-1', language: 'es' }],
-  });
-  assert.match(consultas[0].sql, /publication_status = 'published'/);
+  assert.deepEqual(await r.json(), { escenarios: [{ scenarioId:'mars-demo',scenarioVersion:'2',
+    releaseId:'rel_'+'1'.repeat(32),rulesVersion:'educational-1',language:'es',title:'Escenario de prueba' }] });
+  assert.match(consultas[0].sql,/juego.available_scenarios/);
 });
 
-test('escenario completo conserva faltantes, contexto, eventos y fichas', async () => {
-  respuestas = [
-    [{ id: 10, code: 'mars-demo', version: 2, rules_version: 'educational-1', language: 'es', config: {
-      dataMode: 'historical', sourceCoverage: { start: '2024-05-01T00:00:00Z', end: '2024-05-02T00:00:00Z' },
-      retrievedAt: '2026-11-14T00:00:00Z', modelAssumptions: ['Ejemplo de prueba'],
-    } }],
-    [
-      { game_sol: 1, game_phase: 'morning', justification: 'Ejemplo faltante', dataset_context: 'Marte exterior',
-        dataset_external_id: 'rems-test', obs_id: 20, variable: 'AMBIENT_TEMP', value: null, unit: 'K',
-        quality_status: 'missing', observed_at: '2012-08-17T00:00:00Z', mission_sol: 11 },
-      { game_sol: 2, game_phase: 'day', justification: 'Antecedente', rec_id: 21, record_type: 'CME',
-        occurred_at: '2024-05-01T00:00:00Z', payload: { externalId: 'test-event' } },
-    ],
-    [{ code: 'ficha-demo', language: 'es', version: 1, title: 'Título', explanation: 'Explicación',
-      game_adaptation: 'Adaptación', game_sol: 1, game_phase: 'night' }],
-  ];
+test('escenario completo usa una sola consulta y conserva horas vacías y revisiones', async () => {
+  respuestas = [[filaEscenario()]];
   const r = await get('/api/v1/scenarios/mars-demo?version=2');
   assert.equal(r.status, 200);
-  assert.deepEqual(await r.json(), {
-    schemaVersion: '1', scenarioId: 'mars-demo', scenarioVersion: '2', rulesVersion: 'educational-1', language: 'es',
-    dataMode: 'historical', sourceCoverage: { start: '2024-05-01T00:00:00Z', end: '2024-05-02T00:00:00Z' },
-    retrievedAt: '2026-11-14T00:00:00Z',
-    conditions: [
-      { gameSol: 1, gamePhase: 'morning', justification: 'Ejemplo faltante', context: 'Marte exterior',
-        dataset: 'rems-test', kind: 'observation', evidenceId: 'obs:20', variable: 'AMBIENT_TEMP', value: null,
-        unit: 'K', quality: 'missing', observedAt: '2012-08-17T00:00:00Z', missionSol: 11 },
-      { gameSol: 2, gamePhase: 'day', justification: 'Antecedente', context: null, dataset: null,
-        kind: 'record', evidenceId: 'rec:21', variable: 'CME', value: null, unit: null, quality: null,
-        occurredAt: '2024-05-01T00:00:00Z', payload: { externalId: 'test-event' } },
-    ],
-    factIds: ['ficha-demo'],
-    facts: [{ id: 'ficha-demo', language: 'es', version: 1, title: 'Título', explanation: 'Explicación',
-      gameAdaptation: 'Adaptación', appearsAt: { gameSol: 1, gamePhase: 'night' } }],
-    modelAssumptions: ['Ejemplo de prueba'],
-  });
-  assert.deepEqual(consultas.map((c) => c.parametros), [['mars-demo', 2], [10], [10]]);
-  assert.match(consultas[0].sql, /publication_status = 'published'/);
-  assert.match(consultas[2].sql, /review_status = 'approved'/);
+  const body = await r.json();
+  assert.equal(body.schemaVersion,'2');assert.equal(body.scenarioVersion,'2');
+  assert.equal(body.releaseId,'rel_'+'1'.repeat(32));assert.deepEqual(body.rules,{mode:'educational'});
+  assert.equal(body.conditions[0].recordId,'1'.repeat(64));assert.equal(body.conditions[0].value,207);
+  assert.equal(body.conditions[1].data.temperature.sample_mean,null);
+  assert.equal(body.conditions[1].data.pressure.sample_mean,null);
+  assert.equal(body.facts[0].recordId,'3'.repeat(64));assert.deepEqual(body.factIds,['fact_demo']);
+  assert.deepEqual(body.sourceCoverage,{start:null,end:null});assert.equal(body.retrievedAt,null);
+  assert.deepEqual(body.marsCoverage,{startSol:10,endSol:10,timeBasis:'mars_lmst'});
+  assert.equal(consultas.length,1);assert.deepEqual(consultas[0].parametros,['mars-demo',2]);
 });
 
-test('escenario sin versión y sin configuración conserva los valores predeterminados', async () => {
-  respuestas = [[{ id: 10, code: 'mars-demo', version: 1, rules_version: 'v1', language: 'es', config: null }], [], []];
+test('escenario sin versión solicita la última publicada sin perder su identidad científica', async () => {
+  respuestas = [[filaEscenario()]];
   const r = await get('/api/v1/scenarios/mars-demo');
-  assert.equal(r.status, 200);
-  assert.deepEqual(await r.json(), {
-    schemaVersion: '1', scenarioId: 'mars-demo', scenarioVersion: '1', rulesVersion: 'v1', language: 'es',
-    dataMode: 'historical', sourceCoverage: { start: null, end: null }, retrievedAt: null,
-    conditions: [], factIds: [], facts: [], modelAssumptions: [],
-  });
-  assert.deepEqual(consultas[0].parametros, ['mars-demo', null]);
+  assert.equal(r.status,200);
+  const body=await r.json();assert.equal(body.dataMode,'historical');assert.equal(body.datasetVersion,'1.0.0');
+  assert.deepEqual(consultas[0].parametros,['mars-demo',null]);
 });
 
-test('ficha conserva evidencia y consulta por código e idioma', async () => {
-  respuestas = [
-    [{ id: 30, code: 'ficha-demo', language: 'en', version: 3, title: 'Title', explanation: 'Explanation',
-      backed_fact: 'Claim', mission_context: 'ISS', game_adaptation: 'Adaptation', source_refs: ['reference'] }],
-    [{ claim: 'Claim', locator: 'Table 1', accession: 'OSD-test', publication_doi: null, data_doi: 'test-doi',
-      source_code: 'osdr', source_name: 'OSDR', source_url: 'https://example.org/osdr' }],
-  ];
-  const r = await get('/api/v1/facts/ficha-demo?lang=en');
+test('ficha científica conserva evidencia, límites e identidad de contenido', async () => {
+  const recordId = 'a'.repeat(64);
+  const evidence = [{ index: 0, type: 'document_quote', sourceFileId: `sha256:${'b'.repeat(64)}`,
+    locator: { section: 'body' }, expected: 'Quote', verifiedAgainstPreservedSource: true }];
+  respuestas = [[{ fact_key: 'fact_demo', record_id: recordId, language: 'en', title: 'Title',
+    schema_version: '1.0.0', processor_id: 'processor', source_context: 'other_mission_educational',
+    child_explanation: 'Explanation', scientific_statement: 'Claim', mission_context: 'ISS',
+    game_adaptation: 'Adaptation', limitations: ['Limit'], mechanic_ids: ['mechanic'], evidence }]];
+  const r = await get(`/api/v1/facts/fact_demo?lang=en&recordId=${recordId}`);
   assert.equal(r.status, 200);
+  assert.equal(r.headers.get('cache-control'), 'no-store');
   assert.deepEqual(await r.json(), {
-    id: 'ficha-demo', language: 'en', version: 3, title: 'Title', explanation: 'Explanation',
-    backedFact: 'Claim', missionContext: 'ISS', gameAdaptation: 'Adaptation', references: ['reference'],
-    evidence: [{ claim: 'Claim', locator: 'Table 1', studyAccession: 'OSD-test', publicationDoi: null, dataDoi: 'test-doi',
-      source: { id: 'osdr', name: 'OSDR', url: 'https://example.org/osdr' } }],
+    id: 'fact_demo', recordId, schemaVersion: '1.0.0', processorId: 'processor', language: 'en',
+    title: 'Title', explanation: 'Explanation', backedFact: 'Claim', missionContext: 'ISS',
+    sourceContext: 'other_mission_educational', gameAdaptation: 'Adaptation', limitations: ['Limit'],
+    mechanicIds: ['mechanic'], references: [evidence[0].sourceFileId], evidence,
   });
-  assert.deepEqual(consultas.map((c) => c.parametros), [['ficha-demo', 'en'], [30]]);
-  assert.match(consultas[0].sql, /review_status = 'approved'/);
+  assert.deepEqual(consultas.map((c) => c.parametros), [['fact_demo', 'en', recordId]]);
+  assert.match(consultas[0].sql, /FROM ciencia.fact_cards/);
 });
 
-test('ficha sin lang usa es y no consulta evidencias si no existe', async () => {
+test('ficha sin lang usa es; ausencia usa una única consulta', async () => {
   const r = await get('/api/v1/facts/no-existe');
   assert.equal(r.status, 404);
   assert.equal((await r.json()).error.codigo, 'ficha_no_encontrada');
   assert.equal(consultas.length, 1);
-  assert.deepEqual(consultas[0].parametros, ['no-existe', 'es']);
+  assert.deepEqual(consultas[0].parametros, ['no-existe', 'es', null]);
 });
 
-test('fuente conserva atribución y campos públicos', async () => {
-  respuestas = [[{ code: 'rems', name: 'REMS', provider: 'NASA', url: 'https://example.org/rems',
-    access_type: 'download', attribution: 'Atribución', challenge_resource: true }]];
-  const r = await get('/api/v1/sources/rems');
+test('fuente científica conserva institución y producto sin inventar atribución', async () => {
+  respuestas = [[{ source_id: 'nasa_pds_nmsu_rems', institution: 'NASA PDS', product: 'MSL REMS', url: null }]];
+  const r = await get('/api/v1/sources/nasa_pds_nmsu_rems');
   assert.equal(r.status, 200);
-  assert.deepEqual(await r.json(), {
-    id: 'rems', name: 'REMS', provider: 'NASA', url: 'https://example.org/rems',
-    accessType: 'download', attribution: 'Atribución', challengeResource: true,
-  });
-  assert.deepEqual(consultas[0].parametros, ['rems']);
+  assert.match(r.headers.get('cache-control'), /^public, max-age=\d+$/);
+  assert.deepEqual(await r.json(), { id: 'nasa_pds_nmsu_rems', institution: 'NASA PDS', product: 'MSL REMS', url: null });
+  assert.deepEqual(consultas[0].parametros, ['nasa_pds_nmsu_rems']);
+  assert.match(consultas[0].sql, /FROM ciencia.sources/);
 });
 
 test('validación de fichas y fuentes rechaza entradas antes de consultar SQL', async () => {
-  for (const ruta of ['/api/v1/facts/ficha?lang=english', '/api/v1/facts/%27%3B--', '/api/v1/sources/%27%3B--']) {
+  for (const ruta of [
+    '/api/v1/facts/ficha?lang=english', '/api/v1/facts/%27%3B--', '/api/v1/sources/%27%3B--',
+    '/api/v1/facts/ficha?lang=es&lang=en', '/api/v1/facts/ficha?recordId=invalid',
+    '/api/v1/facts/ficha?version=1', '/api/v1/facts/ficha?recordId[]=abc',
+    '/api/v1/facts/ficha?recordId=' + 'a'.repeat(65),
+  ]) {
     const r = await get(ruta);
     assert.equal(r.status, 400, ruta);
     assert.equal((await r.json()).error.codigo, 'consulta_invalida');
     assert.equal(r.headers.get('cache-control'), 'no-store');
+  }
+  assert.equal(consultas.length, 0);
+});
+
+test('versiones inválidas no se convierten en consultas ambiguas ni errores SQL', async () => {
+  for (const query of ['version=', 'version=0', 'version=1.0', 'version=1e2', 'version=2147483648', 'version=1&version=2', 'version[]=1', 'version=1&otro=2']) {
+    assert.equal((await get(`/api/v1/scenarios/demo?${query}`)).status, 400, query);
   }
   assert.equal(consultas.length, 0);
 });

@@ -1,0 +1,124 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "type": "object"
+    },
+    "dataset_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "processor_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "lineage_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_refs": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "locator": {
+                "type": "object"
+              },
+              "source_file_id": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "source_file_id",
+              "locator"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "source_refs",
+        "lineage_id"
+      ],
+      "type": "object"
+    },
+    "quality_reasons": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "quality_status": {
+      "enum": [
+        "accepted",
+        "rejected",
+        "unknown",
+        "not_applicable"
+      ],
+      "type": "string"
+    },
+    "record_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "record_type": {
+      "enum": [
+        "observation",
+        "solar_event",
+        "radiation_sample",
+        "fact",
+        "environment_hour"
+      ],
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "type": "string"
+    },
+    "selection_policy_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_context": {
+      "enum": [
+        "mars_historical_observation",
+        "solar_event_catalogue",
+        "other_mission_educational",
+        "mars_historical_reference",
+        "game_design_parameter"
+      ],
+      "type": "string"
+    },
+    "usage_tier": {
+      "enum": [
+        "runtime",
+        "educational",
+        "archive"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "record_id",
+    "record_type",
+    "dataset_id",
+    "source_context",
+    "processor_id",
+    "selection_policy_id",
+    "quality_status",
+    "quality_reasons",
+    "usage_tier",
+    "provenance",
+    "data"
+  ],
+  "type": "object"
+}

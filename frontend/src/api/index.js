@@ -4,5 +4,5 @@ export { apiGet, ErrorApi } from './cliente.js';
 export { API_BASE } from './config.js';
 
 import { apiGet } from './cliente.js';
-export const obtenerFicha = (id, lang = 'es') => apiGet(`/facts/${encodeURIComponent(id)}`, { lang });
+export const obtenerFicha = (id, lang = 'es', { recordId } = {}) => apiGet(`/facts/${encodeURIComponent(id)}`, { lang, recordId });
 export const obtenerFuente = (id) => apiGet(`/sources/${encodeURIComponent(id)}`);

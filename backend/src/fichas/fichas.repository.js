@@ -1,37 +1,46 @@
-/** Persistencia del modelo de fichas y su evidencia. */
+/** Fichas editoriales de ciencia, independientes de la publicación de escenarios. */
 export function crearRepositorioFichas(pool) {
   return {
-    /** Última versión aprobada de la ficha (code = etiqueta dato:<id> de Ink). */
-    async buscarAprobada(code, language) {
+    async buscarAprobada(code, language, recordId) {
+      // Una sentencia mantiene ficha, revisión y evidencias en la misma instantánea.
+      // Una aprobación antigua nunca se salta un rechazo o revisión pendiente posterior.
       const { rows } = await pool.query(
-        `SELECT id, code, language, version, title, explanation, backed_fact,
-                mission_context, game_adaptation, source_refs
-           FROM fact_cards
-          WHERE code = $1 AND language = $2 AND review_status = 'approved'
-          ORDER BY version DESC
+        `SELECT f.fact_key, f.record_id, f.language, f.title,
+                f.scientific_statement, f.child_explanation, f.mission_context,
+                f.game_adaptation, f.limitations,
+                p.schema_version, p.processor_id, p.source_context,
+                evidence.items AS evidence, mechanics.ids AS mechanic_ids
+           FROM ciencia.fact_cards f
+           JOIN ciencia.processed_records p USING (record_id)
+           JOIN LATERAL (
+             SELECT decision, reviewed_at, review_id
+               FROM ciencia.fact_reviews
+              WHERE fact_record_id = f.record_id
+              ORDER BY reviewed_at DESC, review_id DESC LIMIT 1
+           ) review ON review.decision = 'approved'
+           JOIN LATERAL (
+             SELECT jsonb_agg(jsonb_build_object(
+                      'index', e.evidence_index, 'type', e.evidence_type,
+                      'sourceFileId', e.source_file_id, 'locator', e.locator,
+                      'expected', e.expected,
+                      'verifiedAgainstPreservedSource', e.verified_against_preserved_source
+                    ) ORDER BY e.evidence_index) AS items,
+                    bool_and(e.verified_against_preserved_source) AS verified
+               FROM ciencia.fact_evidence e
+              WHERE e.fact_record_id = f.record_id
+           ) evidence ON evidence.items IS NOT NULL AND evidence.verified
+           CROSS JOIN LATERAL (
+             SELECT COALESCE(jsonb_agg(m.mechanic_id ORDER BY m.mechanic_id), '[]'::jsonb) AS ids
+               FROM ciencia.fact_mechanics m WHERE m.fact_record_id = f.record_id
+           ) mechanics
+          WHERE f.fact_key = $1 AND f.language = $2
+            AND ($3::text IS NULL OR f.record_id = $3)
+            AND p.quality_status IN ('accepted', 'not_applicable')
+          ORDER BY review.reviewed_at DESC, review.review_id DESC, f.record_id
           LIMIT 1`,
-        [code, language],
+        [code, language, recordId ?? null],
       );
       return rows[0] ?? null;
-    },
-
-    /** Cada evidencia apunta a exactamente una referencia (estudio, registro o archivo). */
-    async listarEvidencias(factId) {
-      const { rows } = await pool.query(
-        `SELECT e.claim, e.locator, st.accession, st.publication_doi, st.data_doi,
-                s.code AS source_code, s.name AS source_name, s.url AS source_url
-           FROM fact_evidence e
-           LEFT JOIN studies st          ON st.id = e.study_id
-           LEFT JOIN external_records er ON er.id = e.external_record_id
-           LEFT JOIN source_files sf     ON sf.id = e.source_file_id
-           LEFT JOIN import_runs ir      ON ir.id = sf.import_run_id
-           JOIN datasets d ON d.id = COALESCE(st.dataset_id, er.dataset_id, ir.dataset_id)
-           JOIN sources s  ON s.id = d.source_id
-          WHERE e.fact_id = $1
-          ORDER BY e.id`,
-        [factId],
-      );
-      return rows;
     },
   };
 }

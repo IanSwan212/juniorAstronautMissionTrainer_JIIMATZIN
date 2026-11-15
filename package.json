@@ -17,6 +17,7 @@
     "migrar": "pnpm --filter @jiimatzin/backend migrar",
     "migrar:revertir": "pnpm --filter @jiimatzin/backend migrar:revertir",
     "test": "pnpm --filter @jiimatzin/backend test",
+    "test:integracion": "pnpm --filter @jiimatzin/backend test:integracion",
     "prepare": "git config core.hooksPath .githooks || exit 0"
   }
 }

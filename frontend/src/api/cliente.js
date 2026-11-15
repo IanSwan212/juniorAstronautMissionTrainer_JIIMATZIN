@@ -26,7 +26,8 @@ export async function obtenerJson(url, { timeoutMs = TIEMPO_MAX_MS } = {}) {
   if (!res.headers.get('content-type')?.includes('application/json')) {
     throw new ErrorApi('La respuesta no es JSON', { estado: res.status, codigo: 'respuesta_invalida' });
   }
-  return res.json();
+  try { return await res.json(); }
+  catch (causa) { throw new ErrorApi('La respuesta no contiene JSON válido', { estado: res.status, codigo: 'respuesta_invalida', causa }); }
 }
 
 /** Llama a la API del juego: apiGet('/scenarios', { version: 1 }) */

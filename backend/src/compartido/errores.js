@@ -6,3 +6,17 @@ export class ErrorNoEncontrado extends Error {
     this.codigo = codigo;
   }
 }
+
+/**
+ * Falla de una fuente externa (p. ej. NASA DONKI). `estado` es el HTTP que verá el cliente
+ * (502 respuesta inválida, 503 fuente limitada, 504 sin respuesta a tiempo).
+ */
+export class ErrorFuenteExterna extends Error {
+  constructor(codigo, mensaje, { estado = 502, reintentarEnS = null } = {}) {
+    super(mensaje);
+    this.name = 'ErrorFuenteExterna';
+    this.codigo = codigo;
+    this.estado = estado;
+    this.reintentarEnS = reintentarEnS;
+  }
+}
