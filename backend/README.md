@@ -82,7 +82,7 @@ escenarios. Requisitos, transacciones y ejemplos en [05-importacion.md](../docs/
 administra una construcción. `validar` coteja la BD con el ZIP y registra
 pendientes; `publicar` exige ese cotejo y aprobación humana vigente; `retirar`
 conserva el contenido sellado. La migración incorpora bitácora, protección de
-revisiones y límites de escritura; ver [12-publicacion.md](../docs/12-publicacion.md).
+revisiones y límites de escritura; ver `src/publicaciones/` y las migraciones.
 
 ## Escenarios
 
@@ -90,4 +90,4 @@ revisiones y límites de escritura; ver [12-publicacion.md](../docs/12-publicaci
 una definición JSON y exporta únicamente versiones disponibles. Cada escenario
 fija publicación, reglas y registros; los datos de juego viven en `juego`.
 La API los recupera en una sola instantánea. Definición, contrato, plantilla y
-respaldo en [13-escenarios.md](../docs/13-escenarios.md).
+respaldo en `src/escenarios/` y `migrations/`.

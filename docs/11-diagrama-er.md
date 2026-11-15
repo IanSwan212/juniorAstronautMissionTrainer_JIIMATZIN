@@ -10,8 +10,7 @@ El DDL exige el tipo correcto del subtipo, pero no exige su existencia al
 insertar el registro padre: ese cierre lo verifican el importador y el control de publicación.
 
 `release_resources` referencia claves lógicas de metadatos mediante JSON; esa
-relación se verifica contra el ZIP y no añade FK SQL hacia cada tabla. Ver
-[12-publicacion.md](12-publicacion.md).
+relación se verifica contra el ZIP y no añade FK SQL hacia cada tabla.
 
 ```mermaid
 erDiagram
@@ -166,5 +165,4 @@ erDiagram
 
 Fuente Mermaid independiente: [ciencia-er.mmd](diagramas/ciencia-er.mmd).
 
-Para obtener un ER con todas las columnas de tu instancia real, genera el
-diagrama en pgAdmin siguiendo la [guía de acceso](09-acceso-postgresql-local.md).
+Para obtener un ER con todas las columnas de una instancia real, genéralo con pgAdmin.

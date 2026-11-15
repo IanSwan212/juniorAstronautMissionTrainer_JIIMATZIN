@@ -21,7 +21,7 @@ frontend/
 
 Los JSON se generan con el comando administrativo de exportación; no se incluyen
 borradores, ZIP originales ni herramientas de importación en el frontend.
-Ver [13-escenarios.md](../docs/13-escenarios.md).
+El contrato está en `contrato/scenario.schema.json`.
 
 ## Uso del adaptador
 

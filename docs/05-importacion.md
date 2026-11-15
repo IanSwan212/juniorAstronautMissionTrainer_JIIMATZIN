@@ -15,14 +15,14 @@ dependencias npm. Para cargar se requieren `DATABASE_URL` y, si corresponde,
 Desde `desarrollo`, en PowerShell:
 
 ```powershell
-$paquete = (Resolve-Path '../JIIMATZIN_Dataset_v1.0.0_ajustado (2).zip').Path
+$paquete = (Resolve-Path '../<paquete>.zip').Path
 $huella = '3fe144ab34f0f11a8e3c4eccf701d6c8567a365d12a0bf5f9114991e70c28f67'
 pnpm --filter @jiimatzin/backend importar -- --archivo "$paquete" --sha256 $huella --validar
 pnpm --filter @jiimatzin/backend importar -- --archivo "$paquete" --sha256 $huella
 ```
 
 El SHA-256 esperado es obligatorio y debe proceder de un registro externo al ZIP.
-Para este archivo es la huella auditada en [08](08-diseno-dataset-cientifico.md).
+Debe obtenerse del registro de publicación del paquete.
 No uses la huella de otro ZIP con nombre parecido. Las rutas relativas pasadas
 al comando se resuelven desde `backend`; el ejemplo evita esa ambigüedad.
 
@@ -104,7 +104,7 @@ se reportan por CLI, sin crear un `import_run` con una FK inexistente.
 Una interrupción forzosa puede dejar un intento `running` y temporales del sistema;
 no se reclasifica automáticamente sin comprobar si el proceso sigue activo.
 
-Importar no completa los [controles de publicación](08-diseno-dataset-cientifico.md#condiciones-antes-de-importar-y-publicar).
+Importar no completa los controles de publicación (`backend/src/publicaciones/`).
 Las fichas importadas seguirán devolviendo 404 en la API hasta su revisión humana.
 
 ## Pruebas
@@ -121,31 +121,3 @@ Las fichas importadas seguirán devolviendo 404 en la API hasta su revisión hum
 Las reglas exploratorias antiguas M01–M06 (29 CME, FLR 404, RadLab 500 y 70 hashes)
 no se aplican a este paquete ajustado. Sus errores originales permanecen como
 capturas o contenido de archivo, sin convertirse en mediciones seleccionadas.
-
-## Estado comprobado en desarrollo
-
-El 14 de noviembre de 2026 se cargó
-`rel_40afe5ce9bfa07d6bf26fa729478db67` en PostgreSQL local. El intento
-`import_run_id=1` terminó `succeeded`; la publicación permanece `candidate`.
-
-| Contenido persistido | Cantidad |
-| --- | ---: |
-| Observaciones REMS | 263 358 (122 578 temperatura, 140 780 presión) |
-| Horas | 240 |
-| Eventos FLR | 93 |
-| Muestras ISS | 84 |
-| Fichas | 7 |
-| Total de registros procesados / membresías | 263 782 / 263 782 |
-| Referencias de procedencia | 263 795 |
-| Evidencias de fichas | 20 |
-| Revisiones humanas | 0 |
-
-Se comprobaron 31 horas sin temperatura, 34 sin presión y 31 vacías en ambas,
-sin rellenar valores. La API respondió 200 en `/health/listo` y en la fuente
-`nasa_pds_nmsu_rems`; la ficha `fact_apollo13_mailbox_co2` respondió 404 por no
-tener aprobación humana, como corresponde.
-
-En el cierre inicial de la importación pasaron 41 pruebas sin BD y 13 de integración con PostgreSQL, incluida la carga
-completa y una segunda carga que insertó cero filas de contenido. Se verificó
-que no quedaron bases `jiimatzin_test_*`. Esta comprobación describe el estado
-local observado; no sustituye la revisión ni el cierre de publicación pendientes.

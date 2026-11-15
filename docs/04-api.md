@@ -12,13 +12,12 @@ Solo lectura (`GET`). No hay endpoints públicos de importación ni edición (el
 | `GET /api/v1/sources/{id}` | Institución, producto y URL por `source_id` | Adaptado a `ciencia` |
 | `GET /api/v1/live/donki/flares` | Fulguraciones (FLR) de DONKI casi en tiempo real, formato de la limpieza | Implementado (borrador) |
 
-Adaptación al [modelo científico](08-diseno-dataset-cientifico.md) y a [escenarios](13-escenarios.md).
+Adaptación al modelo científico (`ciencia`) y a escenarios (`juego`).
 Fuentes y fichas consultan `ciencia`; escenarios usa `juego` y las membresías de `ciencia`.
 No se mezclan claves ni se convierten las membresías del paquete en escenarios.
-Salud y DONKI conservan su comportamiento. El paquete ajustado ya está importado
-en desarrollo como `candidate`: 263 782 registros, intento de carga `1` exitoso.
-Las siete fichas siguen pendientes de revisión humana y devuelven 404; las cinco
-fuentes ya están disponibles. La importación no habilita escenarios científicos.
+Salud y DONKI conservan su comportamiento. Las fichas sin aprobación humana
+devuelven 404; las fuentes se sirven desde el catálogo importado.
+La importación no habilita escenarios científicos.
 
 Verificación automatizada: `pnpm test` (47 pruebas sin BD) y
 `pnpm test:integracion` (37 pruebas con PostgreSQL, migraciones desde cero y
@@ -84,8 +83,8 @@ El adaptador del frontend consume el borrador 2 de escenarios y comprueba la rev
 Este endpoint publica contenido editorial aprobado de forma independiente; no
 declara validado un `dataset_release`, no selecciona una publicación ni alimenta
 automáticamente las partidas. Los controles administrativos de publicación ya
-están implementados en [12](12-publicacion.md); falta la revisión humana y definir el
-primer escenario editorial para esa publicación ([13](13-escenarios.md)).
+están implementados en `backend/src/publicaciones/`; falta la revisión humana y definir el
+primer escenario editorial para esa publicación.
 
 ## Escenarios científicos
 
@@ -123,7 +122,7 @@ el escenario entero: 404, sin contenido parcial. Las tablas anteriores de
 repetidos, desconocidos, notación exponencial, decimales o cadenas vacías → 400.
 
 Definición editorial, publicación, retiro, exportación y comportamiento del
-respaldo del frontend: [13-escenarios.md](13-escenarios.md). Los comandos son
+respaldo del frontend: `backend/src/escenarios/`. Los comandos son
 administrativos; no se añaden endpoints públicos de escritura.
 
 ## DONKI en vivo

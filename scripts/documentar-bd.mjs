@@ -71,9 +71,8 @@ const dictionary = [
   'valores por defecto y restricciones SQL. Una columna de PK es obligatoria aunque',
   'su declaración individual no incluya `NOT NULL`. Las FK usan la acción por defecto',
   '`NO ACTION`; no hay borrado automático en cascada en este esquema.', '',
-  'El modelo se explica en [08](08-diseno-dataset-cientifico.md) y los controles',
-  'administrativos en [12-publicacion.md](12-publicacion.md). Los triggers, funciones',
-  'y permisos se consultan en `backend/migrations/20261116000000_publicaciones.sql`.', '',
+  'Los triggers, funciones y permisos de los controles de publicación se consultan en',
+  '`backend/migrations/20261116000000_publicaciones.sql`.', '',
   '## Tablas', '', '| Tabla | Propósito |', '| --- | --- |',
   ...tables.map(t => `| [${t.name}](#${t.name}) | ${descriptions[t.name]} |`), ''
 ];
@@ -129,11 +128,9 @@ await writeFile(new URL('docs/11-diagrama-er.md', root), [
   'El DDL exige el tipo correcto del subtipo, pero no exige su existencia al',
   'insertar el registro padre: ese cierre lo verifican el importador y el control de publicación.', '',
   '`release_resources` referencia claves lógicas de metadatos mediante JSON; esa',
-  'relación se verifica contra el ZIP y no añade FK SQL hacia cada tabla. Ver',
-  '[12-publicacion.md](12-publicacion.md).', '',
+  'relación se verifica contra el ZIP y no añade FK SQL hacia cada tabla.', '',
   '```mermaid', ...er, '```', '',
   'Fuente Mermaid independiente: [ciencia-er.mmd](diagramas/ciencia-er.mmd).', '',
-  'Para obtener un ER con todas las columnas de tu instancia real, genera el',
-  'diagrama en pgAdmin siguiendo la [guía de acceso](09-acceso-postgresql-local.md).', ''
+  'Para obtener un ER con todas las columnas de una instancia real, genéralo con pgAdmin.', ''
 ].join('\n'));
 console.log(JSON.stringify({ tables: tables.length, foreign_keys: er.filter(l => l.includes('--')).length, documents: 3 }));

@@ -9,9 +9,8 @@ valores por defecto y restricciones SQL. Una columna de PK es obligatoria aunque
 su declaración individual no incluya `NOT NULL`. Las FK usan la acción por defecto
 `NO ACTION`; no hay borrado automático en cascada en este esquema.
 
-El modelo se explica en [08](08-diseno-dataset-cientifico.md) y los controles
-administrativos en [12-publicacion.md](12-publicacion.md). Los triggers, funciones
-y permisos se consultan en `backend/migrations/20261116000000_publicaciones.sql`.
+Los triggers, funciones y permisos de los controles de publicación se consultan en
+`backend/migrations/20261116000000_publicaciones.sql`.
 
 ## Tablas
 
