@@ -4,10 +4,10 @@ VOZ DE LA IA: LÍNEAS QUE FALTAN (para el rol 5)
 El juego ya no usa la voz del navegador para la IA. Todo lo que dice la IA tiene que sonar con TU voz de la IA
 (Chatterbox clonando voces/IA.wav), igual que las 86 líneas que ya grabaste. Faltan:
 
-  - 139 líneas en español: los avisos que arma el juego. Son el amanecer de cada sol y personaje, los avisos de
+  - 360 líneas en español: los avisos que arma el juego. Son el amanecer de cada sol y personaje, los avisos de
     las estaciones, la antena, el anochecer con su gasto de energía, el resumen del día, las pistas y el porqué de
     la IA guía y las noticias del Sol.
-  - 229 líneas en inglés: lo mismo en inglés, más tus 90 líneas de la IA de historia.ink en inglés.
+  - 450 líneas en inglés: lo mismo en inglés, más tus 90 líneas de la IA de historia.ink en inglés.
 
 Todas están en lineas_ia.json, con estos campos:
   - id
@@ -55,5 +55,5 @@ QUÉ PRODUCE (en el repo, rama front)
 El juego las encuentra solas. No hay que tocar código. Escucha unas cuantas antes de subirlas.
 Detalles en frontend/public/assets/audio/voces/ia/LEEME.md.
 
-TIEMPO: tu README medía 25 a 36 s por frase en CPU (Ryzen 5 5500). Son unas 368 líneas, así que calcula 3 a 4 horas
-en total, o la mitad si solo haces el español.
+TIEMPO: tu README medía 25 a 36 s por frase en CPU (Ryzen 5 5500). Son unas 810 líneas cortas, así que calcula
+5 a 7 horas en total. Conviene empezar por el español (unas 2,5 a 3,5 horas). Se puede cortar y retomar.
