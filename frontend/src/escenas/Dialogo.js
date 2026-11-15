@@ -109,7 +109,7 @@ export default class Dialogo extends Phaser.Scene {
     if (this.retrato.visible) {
       this.retrato.setDisplaySize(lado, lado).setPosition(x0 + lado / 2 - 10 * e, y0 + alto - 8 * e);
     }
-    this.robot.setScale(1.5 * e).setPosition(x0 + izq / 2, y0 + alto * 0.72);
+    this.robot.setScale(0.9 * e).setPosition(x0 + izq / 2, y0 + alto * 0.72);
     this.sigue.setPosition(x0 + ancho - 18 * e, y0 + alto - 12 * e).setFontSize(Math.round(18 * e));
     // "Saltar", encima del panel a la derecha (arriba quedan el tablero y el sol de la interfaz)
     if (this.modoNarracion) this.saltar.setOrigin(1, 0).setPosition(w - 12, 12);

@@ -10,7 +10,7 @@ export default class Inicio extends Phaser.Scene {
 
   create() {
     const fuente = 'system-ui, -apple-system, "Segoe UI", sans-serif';
-    this.titulo = this.add.text(0, 0, 'Misión Marte', { fontFamily: fuente, fontSize: '40px', fontStyle: 'bold', color: '#f1e3d3' }).setOrigin(0.5);
+    this.titulo = this.add.text(0, 0, 'Misión P.I.E.D.R.A', { fontFamily: fuente, fontSize: '40px', fontStyle: 'bold', color: '#f1e3d3' }).setOrigin(0.5);
     this.sub = this.add.text(0, 0, 'Base Marte Uno · 10 soles de entrenamiento', { fontFamily: fuente, fontSize: '16px', color: '#c9a99a' }).setOrigin(0.5);
     this.boton = this.add.rectangle(0, 0, 240, 56, 0xd9653b).setInteractive({ useHandCursor: true });
     this.textoBoton = this.add.text(0, 0, 'Comenzar misión', { fontFamily: fuente, fontSize: '20px', fontStyle: 'bold', color: '#1a1110' }).setOrigin(0.5);

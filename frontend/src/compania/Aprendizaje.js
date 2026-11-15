@@ -152,7 +152,7 @@ export default class Aprendizaje extends Phaser.Scene {
 
   vistaNino(capa, cx, arriba, izq, hojaW, hojaH) {
     capa.add(texto(this, cx, arriba + 20, 'Lo que estás aprendiendo', { fontSize: hojaW < 420 ? '20px' : '24px', fontStyle: 'bold', color: TINTA_TXT }).setOrigin(0.5, 0));
-    capa.add(texto(this, cx, arriba + 54, 'La IA de la base lo ve en lo que haces: minijuegos, energía y emergencias', {
+    capa.add(texto(this, cx, arriba + 54, 'P.I.E.D.R.A lo ve en lo que haces: minijuegos, energía y emergencias', {
       fontSize: '14px', color: TINTA_TXT, align: 'center', wordWrap: { width: hojaW - 40 } }).setOrigin(0.5, 0).setAlpha(0.8));
     const r = guia.rastreador;
     const filaH = Math.min(92, (hojaH - 200) / 4), y0 = arriba + 98;
@@ -175,8 +175,8 @@ export default class Aprendizaje extends Phaser.Scene {
     // lo que dice la IA
     const flojo = r.masFlojo();
     const frase = r.pruebas.length
-      ? (r.dominio[flojo] < 0.7 ? `IA: «Practiquemos ${SOBRE[flojo]}: ahí te daré pistas y más tiempo.»` : 'IA: «¡Vas muy bien en todo! Ahora te doy menos pistas.»')
-      : 'IA: «Todavía no hay pruebas: juega un minijuego o reparte la energía.»';
+      ? (r.dominio[flojo] < 0.7 ? `P.I.E.D.R.A: «Practiquemos ${SOBRE[flojo]}: ahí te daré pistas y más tiempo.»` : 'P.I.E.D.R.A: «¡Vas muy bien en todo! Ahora te doy menos pistas.»')
+      : 'P.I.E.D.R.A: «Todavía no hay pruebas: juega un minijuego o reparte la energía.»';
     capa.add(texto(this, cx, y0 + 4 * filaH + 4, frase, { fontSize: '15px', fontStyle: 'bold', color: TINTA_TXT, align: 'center',
       wordWrap: { width: hojaW - 40 } }).setOrigin(0.5, 0));
     const yb = arriba + hojaH - 34;

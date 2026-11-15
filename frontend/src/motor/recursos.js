@@ -67,7 +67,7 @@ export const DATOS = {
 
 // Hojas de cuadros: clave -> [ruta, ancho de cuadro, alto de cuadro]
 export const HOJAS = {
-  robot_ia: ['assets/arte/robot_ia.png', 64, 72],   // 0 neutral · 1 feliz · 2 procesando
+  robot_ia: ['assets/arte/robot_ia.png', 128, 144],  // P.I.E.D.R.A (herramientas/robot_piedra.py): 0 neutral · 1 feliz · 2 procesando
   // Los astronautas en el mapa (dibujos de la compañera de arte; herramientas/cuadros_astronautas.py):
   // 8 cuadros del paso de frente, 0 = parado. Medidas y origen de los pies en assets/personajes/mapa/hojas.json
   ...Object.fromEntries(['wenceslao', 'judith', 'atlas'].map(p => [`pj_${p}`, [`assets/personajes/mapa/${p}.png`, 110, 177]])),
