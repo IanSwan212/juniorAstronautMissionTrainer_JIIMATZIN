@@ -1,11 +1,14 @@
 // Álbum de recuerdos de la IA: los archivos de memoria que el jugador va abriendo.
 // Escena propia, encima de Interfaz (no la modifica). Se abre con el botón de la esquina
-// inferior derecha o con la tecla M; se cierra con M, Esc, E o el botón Cerrar.
+// inferior derecha o con la tecla R (recuerdos); se cierra con R, Esc o el botón Cerrar.
+// (La M es la del silencio: antes las dos usaban la M y abrir el álbum silenciaba el juego.)
+// Son 16 recuerdos (src/mecanicas/recuerdos.js): se ven de 8 en 8, con páginas.
 // Estilo: papel crema con tinta y sello rojo (docs/estilo-mapa.md: datos = documento real).
 // Accesibilidad: texto de 14-16 px o más, botón de 48 px, lo cerrado se ve con candado y "???",
 // no solo con color (docs/accesibilidad.md).
 import { bus, EV, control } from '../motor/eventos.js';
 import { MEMORIAS } from './robot.js';
+import { cargas } from '../motor/cargas.js';
 
 const FUENTE = '"Trebuchet MS", "Segoe UI", system-ui, sans-serif';
 const TINTA = 0x141026, TINTA_TXT = '#141026', LUZ_TXT = '#f3e3c3', SELLO = 0xb8473d, SELLO_TXT = '#b8473d';
@@ -23,7 +26,8 @@ export default class Album extends Phaser.Scene {
     this.nuevas = 0;
     this.crearBoton();
 
-    const tecla = this.input.keyboard.addKey('M');
+    this.pagina = 0;
+    const tecla = this.input.keyboard.addKey('R');
     tecla.on('down', () => this.alternar());
     this.input.keyboard.addKey('ESC').on('down', () => this.abierto && this.cerrar());
 
@@ -141,28 +145,47 @@ export default class Album extends Phaser.Scene {
     const arriba = cy - hojaH / 2;
     capa.add(texto(this, cx, arriba + 22, 'Archivos de memoria de la IA', {
       fontSize: hojaW < 420 ? '19px' : '22px', fontStyle: 'bold', color: TINTA_TXT }).setOrigin(0.5, 0));
-    capa.add(texto(this, cx, arriba + 52, `Abiertos: ${abiertas} de ${ms.length}`, {
+    if (ms.length <= 8) capa.add(texto(this, cx, arriba + 52, `Abiertos: ${abiertas} de ${ms.length}`, {
       fontSize: '16px', color: TINTA_TXT }).setOrigin(0.5, 0));
     const angosta = hojaW < 520;                              // en el teléfono el sello baja para no tapar el título
     capa.add(texto(this, cx + hojaW / 2 - (angosta ? 18 : 24), arriba + (angosta ? 52 : 20), 'ARCHIVO', {
       fontSize: '14px', fontStyle: 'bold', color: SELLO_TXT, letterSpacing: 2 }).setOrigin(1, 0).setAngle(-8));
 
-    // Rejilla de tarjetas: 4 columnas si cabe, si no 2
-    const cols = hojaW >= 600 ? 4 : 2, filas = Math.ceil(ms.length / cols);
+    // Rejilla de tarjetas: 4 columnas si cabe, si no 2; 8 tarjetas por página
+    const cols = hojaW >= 600 ? 4 : 2, porPagina = 8, filas = porPagina / cols;
+    const paginas = Math.ceil(ms.length / porPagina);
+    this.pagina = Phaser.Math.Clamp(this.pagina ?? 0, 0, paginas - 1);
+    const visibles = ms.slice(this.pagina * porPagina, (this.pagina + 1) * porPagina);
     const margen = 16, sep = 10;
     const zonaArriba = arriba + 84, zonaAbajo = cy + hojaH / 2 - 64;
     const cw = (hojaW - margen * 2 - sep * (cols - 1)) / cols;
     const ch = Math.min(190, (zonaAbajo - zonaArriba - sep * (filas - 1)) / filas);
     const x0 = cx - hojaW / 2 + margen, y0 = zonaArriba;
-    ms.forEach((m, i) => {
+    visibles.forEach((m, i) => {
       const x = x0 + (i % cols) * (cw + sep), y = y0 + Math.floor(i / cols) * (ch + sep);
       capa.add(this.tarjeta(m, x, y, cw, ch));
     });
 
+    // Páginas: ‹ 1 / 2 ›
+    if (paginas > 1) {
+      const yp = cy + hojaH / 2 - 34;
+      const flecha = (dx, t, destino) => {
+        const b = this.add.container(cx + dx, yp);
+        b.add([this.pieza('ui_placa', 0, 0, 52, 44, 20), texto(this, 0, 0, t, { fontSize: '20px', fontStyle: 'bold', color: LUZ_TXT }).setOrigin(0.5)]);
+        b.setSize(52, 44).setInteractive({ useHandCursor: true }).setAlpha(destino === this.pagina ? 0.35 : 1);
+        b.on('pointerdown', (p, x, y, ev) => { ev.stopPropagation(); if (destino !== this.pagina) { this.pagina = destino; this.dibujar(); } });
+        capa.add(b);
+      };
+      flecha(-150, '‹', Math.max(0, this.pagina - 1));
+      flecha(150, '›', Math.min(paginas - 1, this.pagina + 1));
+      capa.add(texto(this, cx, arriba + 52, `Abiertos: ${abiertas} de ${ms.length}  ·  página ${this.pagina + 1} de ${paginas}`, {
+        fontSize: '16px', color: TINTA_TXT }).setOrigin(0.5, 0));
+    }
+
     // Botón Cerrar (48 px de alto)
     const cerrar = this.add.container(cx, cy + hojaH / 2 - 34);
     cerrar.add([this.pieza('ui_placa', 0, 0, 170, 44, 20),
-      texto(this, 0, 0, 'Cerrar  ·  M', { fontSize: '16px', fontStyle: 'bold', color: LUZ_TXT }).setOrigin(0.5)]);
+      texto(this, 0, 0, 'Cerrar  ·  R', { fontSize: '16px', fontStyle: 'bold', color: LUZ_TXT }).setOrigin(0.5)]);
     cerrar.setSize(170, 44).setInteractive({ useHandCursor: true });
     cerrar.on('pointerdown', (p, x, y, ev) => { ev.stopPropagation(); this.cerrar(); });
     capa.add(cerrar);
@@ -177,18 +200,38 @@ export default class Album extends Phaser.Scene {
     const velo = this.add.rectangle(0, 0, W, H, 0x070516, 0.55).setOrigin(0).setInteractive();
     const cerrar = (p, x, y, ev) => { ev?.stopPropagation(); v.destroy(); this.vista = null; };
     velo.on('pointerdown', cerrar);
-    const w = Math.min(W - 40, 420), cx = W / 2;
-    const num = texto(this, 0, 0, `#${String(m.numero).padStart(2, '0')}  ·  ${m.año}`, { fontSize: '16px', fontStyle: 'bold', color: SELLO_TXT });
+    const w = Math.min(W - 40, 460), cx = W / 2;
+    const num = texto(this, 0, 0, [`#${String(m.numero).padStart(2, '0')}`, m.año, m.lugar].filter(Boolean).join('  ·  '),
+      { fontSize: '16px', fontStyle: 'bold', color: SELLO_TXT, wordWrap: { width: w - 40 } });
     const tit = texto(this, 0, 0, m.titulo, { fontSize: '20px', fontStyle: 'bold', color: TINTA_TXT, wordWrap: { width: w - 40 } });
     const dat = texto(this, 0, 0, m.dato, { fontSize: '17px', color: TINTA_TXT, wordWrap: { width: w - 40 }, lineSpacing: 4 });
     const pie = texto(this, 0, 0, 'Toca para cerrar', { fontSize: '14px', color: TINTA_TXT }).setAlpha(0.7);
-    const h = 28 + num.height + 8 + tit.height + 12 + dat.height + 18 + pie.height + 20;
+    // La ilustración del recuerdo (holograma), en una pantallita oscura
+    const ilW = w - 40, ilH = Math.min(Math.round(ilW * 9 / 16), Math.max(0, H - 330));
+    const conIlustracion = ilH >= 90;
+    const h = 28 + (conIlustracion ? ilH + 14 : 0) + num.height + 8 + tit.height + 12 + dat.height + 18 + pie.height + 20;
     const top = H / 2 - h / 2;
     let y = top + 24;
+    const pantalla = this.add.graphics();
+    const clave = `recuerdo_${m.id}`;
+    const yIl = y;
+    if (conIlustracion) {
+      pantalla.fillStyle(0x06141f, 1).fillRoundedRect(cx - ilW / 2, y, ilW, ilH, 8);
+      pantalla.lineStyle(2, TINTA, 1).strokeRoundedRect(cx - ilW / 2, y, ilW, ilH, 8);
+      y += ilH + 14;
+    }
+    // la ilustración va encima de la pantallita (se añade al final del contenedor)
+    const poner = () => {
+      if (this.vista !== v || !this.textures.exists(clave)) return;
+      const imagen = this.add.image(cx, yIl + ilH / 2, clave);
+      imagen.setScale(Math.min((ilW - 8) / imagen.width, (ilH - 8) / imagen.height));
+      v.add(imagen);
+    };
     for (const [t, sep] of [[num, 8], [tit, 12], [dat, 18], [pie, 0]]) { t.setPosition(cx - w / 2 + 20, y); y += t.height + sep; }
     const papel = this.pieza('ui_papel', cx, H / 2, w, h, 30);
     papel.setInteractive?.(); papel.on?.('pointerdown', cerrar);
-    v.add([velo, papel, num, tit, dat, pie]);
+    v.add([velo, papel, pantalla, num, tit, dat, pie]);
+    if (conIlustracion) { if (this.textures.exists(clave)) poner(); else cargas.asegurar(`recuerdo:${m.id}`).then(poner); }
   }
 
   tarjeta(m, x, y, w, h) {
@@ -200,7 +243,8 @@ export default class Album extends Phaser.Scene {
       g.fillStyle(PAPEL_OSC, 1).fillRoundedRect(0, 0, w, h, 6);
       g.lineStyle(2, TINTA, 1).strokeRoundedRect(0, 0, w, h, 6);
       c.add(g);
-      c.add(texto(this, 10, 8, `#${String(m.numero).padStart(2, '0')}  ·  ${m.año}`, {
+      // en la tarjeta solo el número y el año (el lugar no cabe: se ve al abrirla)
+      c.add(texto(this, 10, 8, `#${String(m.numero).padStart(2, '0')}${m.año ? `  ·  ${m.año}` : ''}`, {
         fontSize: '14px', fontStyle: 'bold', color: SELLO_TXT }));
       const titulo = texto(this, 10, 28, m.titulo, { fontSize: tamTitulo, fontStyle: 'bold', color: TINTA_TXT,
         wordWrap: { width: w - 20 }, lineSpacing: 1 });

@@ -28,7 +28,11 @@ Variables: `PUERTO` y `JIIMATZIN_API` (por defecto `http://localhost:3000`).
 | Moverse | WASD o flechas | arrastrar |
 | Usar una estación | E o Espacio | tocar el aviso |
 | Cerrar | Esc | — |
-| Silenciar | M | — |
+| Silenciar | M | botón del altavoz |
+| Recuerdos de la IA (álbum) | R | botón de la esquina |
+| Agrandar el minimapa | clic en el minimapa | tocar el minimapa |
+| Lo que estás aprendiendo (y reporte para adultos) | P | botón «Avance» de la esquina |
+| Idioma | en la portada | en la portada |
 
 Otras teclas:
 - **F2** muestra las colisiones; también con `?depurar` en la dirección.
@@ -62,6 +66,58 @@ frontend/
 
 Cómo se habla entre partes del juego (eventos del bus, estado, pantallas encima del mapa): [docs/acuerdos.md](docs/acuerdos.md).
 
+## Cómo se juega la historia
+
+- **Cada personaje tiene su ruta** (`src/mecanicas/rutas.js`): el día empieza por su especialidad y tiene una ventaja
+  propia (más tiempo, menos gasto). Sus líneas en los diálogos dicen «TÚ».
+- **La hora la dicta la IA:** amanece, hay luz, llega la emergencia y anochece cuando la IA lo anuncia; con su aviso
+  cambian la luz del mapa y la ficha del Sol (que muestra la hora).
+- **Los datos de la historia son recuerdos de la IA:** al llegar a uno, el diálogo se vuelve un flashback con su año,
+  lugar e ilustración, y el recuerdo queda en el álbum (16 en total).
+- **Voces:** las de la entrega del rol 5 (MP3) y, para lo que aún no tiene grabación, la voz del navegador. La mezcla
+  (`MEZCLA` en `src/motor/sonido.js`) lleva cada archivo a su nivel medido: la música queda muy por debajo de las voces.
+  La música es la «Propuesta 3» (cinematográfica, hecha con código, CC0) en `public/assets/audio/musica/propuesta3/`.
+  Las pistas de Suno de la entrega del rol 5 no se usan: son del plan gratis (uso no comercial, derechos de Suno).
+- **Minimapa** (`src/escenas/minimapa.js`): arriba a la derecha, en la misma perspectiva que el mapa. Marca dónde estás,
+  la sala del objetivo y el camino punteado hasta ella.
+
+Detalle en [docs/acuerdos.md](docs/acuerdos.md), puntos 10 y 11.
+
+## Idiomas: español e inglés
+
+Se elige en la portada (Español / English) y se guarda en el navegador.
+
+- **Historia:** las 213 líneas con voz usan la traducción del rol 5 (`public/assets/audio/voces/lineas_es_en.json`).
+  Lo que no tiene voz (prólogo, narración, cartas, opciones de las emergencias, instrucciones) está en
+  `src/textos/historia_en.js`.
+- **Todo lo demás** (interfaz, IA guía, recuerdos, consola y minijuegos) está en `src/textos/en.js`. No hay que tocar
+  cada pantalla: todo texto de Phaser pasa por ese diccionario al dibujarse (`src/motor/idioma.js`). Las frases con
+  números o nombres van como plantillas: `'⏳ Tiempo: {n} s': '⏳ Time: {n} s'`.
+- **Voz en inglés:** no hay MP3 en inglés, así que habla la voz del navegador en inglés. El servidor de voz del rol 5
+  (`9_servidor_voz`) podría dar la voz de cada personaje.
+- **Si se cambia o se añade un texto en español,** hay que añadir su inglés en `en.js`. Para ver lo que falta, jugar en
+  inglés y escribir `__idioma.faltan` en la consola del navegador.
+- **Pendiente:** que un hablante nativo revise `historia_en.js` y `en.js` (traducidos con ayuda de IA). Los letreros
+  pintados en el arte de las salas (ENERGÍA, MANDO, ▼ SOPORTE VITAL…) siguen en español.
+
+## La IA guía y el machine learning
+
+Todo el machine learning del juego está en la IA guía (`src/compania/guia.js`), el "cerebro" del robot:
+
+- **Pronóstico de llamaradas** (`src/ml/pronostico.js`): regresión logística entrenada con datos reales de NOAA.
+- **Medición del aprendizaje** (`src/ml/aprendizaje.js`): Bayesian Knowledge Tracing. Estima cuánto domina el niño
+  cuatro temas (Energía, Aire, Escudo y Decidir con datos) con lo que hace: minijuegos, reparto de energía en la consola
+  y decisiones de emergencia (si cuida el recurso más bajo).
+- **Adapta la ayuda:** pistas y más tiempo en lo flojo; menos ayuda en lo dominado; y el porqué de cada decisión.
+- **Lo ven el niño y el adulto:** estrellas y palabras para el niño; dominio en %, aciertos y un reporte descargable para
+  el adulto (tecla P o botón «Avance»).
+- **Calificación de misión** (pantalla final): medalla de oro (80 o más), plata (60 o más) o bronce, y estrellas por tema.
+  Puntaje = 70 % aprendizaje (dominio medio de los 4 temas) + 30 % soles que aguantó la base.
+- **Se guarda de forma anónima** en la API del equipo (`POST /api/v1/partidas`, `src/api/partidas.js`) al final de cada
+  sol y de la misión: un código al azar del dispositivo, la partida, el dominio y las pruebas. Sin nombres. Sin conexión,
+  la partida espera en el navegador y se manda después. Solo el equipo lee los datos
+  (`pnpm --filter @jiimatzin/backend partidas -- exportar`). Aviso en la portada; detalle en `docs/07-google-cloud.md`.
+
 ## Carga y memoria
 
 El juego no carga todo al principio. `src/motor/cargas.js` lo reparte en grupos, y la escena `Cargador` (que no se
@@ -73,6 +129,7 @@ apaga nunca) los baja en segundo plano o cuando hacen falta.
 | `personajes` (retratos) y `efectos` | En segundo plano, durante el prólogo | Nunca |
 | `zona:<id>` | Al cruzar su puerta; la del objetivo se adelanta | Al alejarse (quedan la actual, el Pasillo y la del objetivo) |
 | `minijuego:<escena>` | Al empezar el día | Al terminar ese minijuego |
+| `recuerdo:<id>` (ilustraciones de los flashbacks) | En segundo plano, durante el prólogo | Nunca (pesan 430 KB en total) |
 | `musica:<tema>` | Al sonar | Al cambiar de tema (salvo el del día) |
 | Voces | Al hablar | Al terminar la línea |
 
@@ -131,6 +188,7 @@ y [docs/biblia-objetos.md](docs/biblia-objetos.md). Los personajes son dibujos d
 python frontend/herramientas/pintar_zonas.py         # las 7 salas (≈ 3 min; caché en herramientas/.cache)
 python frontend/herramientas/pintar_minijuegos.py    # arte de los minijuegos
 python frontend/herramientas/pintar_interfaz.py      # piezas de la interfaz
+python frontend/herramientas/pintar_recuerdos.py     # ilustraciones de los 16 recuerdos (flashbacks)
 ```
 
 Requieren Python 3.11 con Pillow y NumPy. Las propuestas y hojas de revisión se escriben en `docs-internos/`, que el

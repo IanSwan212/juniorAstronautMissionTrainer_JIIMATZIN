@@ -30,6 +30,12 @@ export const EV = {
   DATO: 'dato',
   // IA -> interfaz: se abrió un archivo de memoria. datos: { id, numero, titulo, abiertas, total }
   MEMORIA: 'memoria',
+  // diálogo -> ciclo: la IA anunció la hora de la base (la IA dicta el tiempo). datos: { fase, hora }
+  //   fase: 'manana' | 'dia' | 'emergencia' | 'noche'. El ciclo la guarda en GameState.reloj y publica el estado.
+  HORA: 'hora',
+  // IA guía (src/compania/guia.js) -> interfaz y robot: hubo una prueba de aprendizaje.
+  //   datos: { tema, nombre, tipo, correcto, antes, despues, nivel: { estrellas, texto }, subio }
+  APRENDIZAJE: 'aprendizaje',
 };
 
 // Estado de control compartido (no es estado del juego: eso es del rol 2)

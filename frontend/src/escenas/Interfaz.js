@@ -6,6 +6,10 @@ import { datosReales } from '../mecanicas/datosReales.js';
 import { PANEL_PROVISIONAL, COLOR_SISTEMA } from '../motor/config.js';
 import { bus, EV, control } from '../motor/eventos.js';
 import { asegurarFlecha } from '../motor/flecha.js';
+import { sonido } from '../motor/sonido.js';
+import { ruta } from '../mecanicas/rutas.js';
+import Minimapa from './minimapa.js';
+import { idioma } from '../motor/idioma.js';
 
 const FUENTE = '"Trebuchet MS", "Segoe UI", system-ui, sans-serif';
 const NUMEROS = 'Consolas, Menlo, "Courier New", monospace';
@@ -13,6 +17,8 @@ const TINTA = '#141026', LUZ = '#f3e3c3', SELLO = '#b8473d';
 const ROJO_ALERTA = 0xff5a4e;
 const BAJO = 25;                      // por debajo, el recurso avisa
 const T = 0.5;                        // las piezas están pintadas al doble de resolución
+const ANCHO_FICHA = 204;              // cabe "¡Emergencia! · 16:00" (la hora que dicta la IA)
+const BOTON_SONIDO = 44;
 
 const RECURSOS = [
   { clave: 'energia', icono: 'icono_energia', nombre: 'Energía' },
@@ -33,7 +39,7 @@ const SALAS = {   // nombre en el mapa -> nombre visible y sistema (color)
 // Frase corta bajo el nombre de cada sala al entrar (qué se aprende ahí)
 const LEMAS = {
   Pasillo: 'Aquí se unen todas las salas de la base', Energia: 'Paneles y baterías: sin energía, nada funciona',
-  Mando: 'Desde aquí se reparte la energía del día', Comunicaciones: 'Un mensaje a la Tierra tarda de 4 a 24 minutos',
+  Mando: 'Desde aquí se reparte la energía del día', Comunicaciones: 'Un mensaje a la Tierra tarda de 3 a 22 minutos',
   Invernadero: 'Las plantas nos dan comida y oxígeno', 'Soporte vital': 'Aquí se limpia el aire: quitamos el CO2',
   Refugio: 'Muros de agua contra la radiación del Sol',
 };
@@ -56,6 +62,8 @@ export default class Interfaz extends Phaser.Scene {
     this.crearBanderin();
     this.crearAviso();
     this.crearPanel();
+    this.crearSilencio();
+    this.minimapa = new Minimapa(this);
     this.crearJoystick();
     this.flechaBorde = this.add.image(0, 0, asegurarFlecha(this)).setVisible(false).setDepth(40);
     this.tweens.add({ targets: this.flechaBorde, alpha: 0.55, duration: 500, yoyo: true, repeat: -1 });
@@ -81,6 +89,7 @@ export default class Interfaz extends Phaser.Scene {
       bus.off(EV.INTERACTUAR, alInteractuar); bus.off(EV.CERRAR_PANEL, alCerrar); bus.off(EV.OBJETIVO, alObjetivo);
       this.scale.off('resize', alRedimensionar);
       this.game.events.off(Phaser.Core.Events.BLUR, this.alPerderFoco);
+      if (sonido.alCambiarSilencio === this.alSilencio) sonido.alCambiarSilencio = null;
     });
 
     this.pintarEstado(this.registry.get('estado') ?? ESTADO_MUESTRA, true);
@@ -114,7 +123,7 @@ export default class Interfaz extends Phaser.Scene {
     this.textoClima = texto(this, 0, 0, '', { fontSize: '16px', fontStyle: 'bold', color: '#fff3dc', stroke: '#141026', strokeThickness: 4 })
       .setOrigin(1, 0).setVisible(false);
     datosReales.cargar().then(() => this.pintarClima());
-    const ANCHO = 168, ALTO = 64;
+    const ANCHO = ANCHO_FICHA, ALTO = 64;
     this.ficha = this.add.container(0, 0);
     this.ficha.add(this.pieza('ui_papel', -ANCHO, 0, ANCHO, ALTO, 30).setOrigin(0));
     this.iconoFase = this.add.image(-ANCHO + 32, ALTO / 2, 'fase_dia').setScale(T);
@@ -206,15 +215,25 @@ export default class Interfaz extends Phaser.Scene {
     this.escalaUI = e;
     const margen = 12 * e;
     this.tablero.setScale(e).setPosition(margen, margen);
-    const estrecho = w < 236 * e + 168 * e + 3 * margen;            // no caben lado a lado
-    this.ficha.setScale(e).setPosition(estrecho ? margen + 168 * e : w - margen, estrecho ? margen * 2 + 124 * e : margen);
+    const estrecho = w < 236 * e + ANCHO_FICHA * e + BOTON_SONIDO * e + 4 * margen;   // no caben lado a lado
+    this.ficha.setScale(e).setPosition(estrecho ? margen + ANCHO_FICHA * e : w - margen, estrecho ? margen * 2 + 124 * e : margen);
+    // Silencio: a la izquierda de la ficha; en el teléfono, en la esquina de arriba a la derecha
+    this.botonSonido.setScale(e).setPosition(
+      estrecho ? w - margen - BOTON_SONIDO * e / 2 : w - margen - ANCHO_FICHA * e - 10 * e - BOTON_SONIDO * e / 2,
+      margen + BOTON_SONIDO * e / 2 + (estrecho ? 0 : 10 * e));
     this.textoClima.setFontSize(Math.max(16, Math.round(14 * e))).setPosition(this.ficha.x, this.ficha.y + 70 * e);
     this.banderin.setScale(e).setPosition(w / 2, (estrecho ? h - 130 * e : 34 * e));
     this.cartel.setScale(Math.min(e, (w - 24) / 560)).setPosition(w / 2, h * 0.66);   // debajo del astronauta: no tapa la burbuja del robot
     // Táctil primero: en pantallas táctiles el aviso y el panel nunca bajan de un tamaño cómodo para el dedo
     const eToque = this.tactil ? Math.max(e, 1.2) : e;
     this.escalaAviso = eToque;
-    this.aviso.setScale(eToque).setPosition(w / 2, h - 44 * eToque);
+    // Minimapa: debajo de la ficha del Sol (y del clima real, si lo hay); en el teléfono, debajo del botón de silencio
+    const yMini = estrecho ? margen + BOTON_SONIDO * e + 8 * e
+      : margen + 64 * e + 10 * e + (this.textoClima.visible ? 24 * e : 0);
+    this.minimapa.colocar(w - margen, yMini, e, estrecho ? w - margen * 2 - 236 * e - 8 : Infinity);
+    // Si la pantalla es angosta, el aviso sube para no encimarse con el botón del álbum (abajo a la derecha)
+    this.avisoAlto = w < 760 ? 70 : 0;
+    this.aviso.setScale(eToque).setPosition(w / 2, h - 44 * eToque - this.avisoAlto);
     this.panel.setScale(Math.min(Math.max(e * 1.1, this.tactil ? 1.15 : 0), (w - 24) / 380)).setPosition(w / 2, h / 2);
   }
 
@@ -235,12 +254,51 @@ export default class Interfaz extends Phaser.Scene {
     this.pintarClima();
     const f = FASES[e.fase] ?? FASES.dia;
     this.iconoFase.setTexture(f.icono);
-    this.textoFase.setText(f.texto).setColor(e.fase === 'emergencia' ? SELLO : TINTA);
+    const fase = idioma.t(f.texto);
+    this.textoFase.setText(e.hora ? `${fase} · ${e.hora}` : fase).setColor(e.fase === 'emergencia' ? SELLO : TINTA);
+    // La IA acaba de dictar otra hora: la ficha late
+    const clave = `${e.sol}-${e.fase}`;
+    if (!inmediato && this.horaMostrada && clave !== this.horaMostrada) {
+      const s = this.ficha.scale;
+      this.tweens.killTweensOf(this.ficha);
+      this.ficha.setScale(s);
+      this.tweens.add({ targets: this.ficha, scale: s * 1.12, duration: 180, yoyo: true, repeat: 1, ease: 'Sine.out' });
+    }
+    this.horaMostrada = clave;
+  }
+
+  // --- Botón de silencio (también con la tecla M): se ve si el juego está callado ---
+  crearSilencio() {
+    const c = this.add.container(0, 0).setDepth(10);
+    const fondo = this.pieza('ui_placa', 0, 0, BOTON_SONIDO, BOTON_SONIDO, 18);
+    this.iconoSonido = this.add.graphics();
+    c.add([fondo, this.iconoSonido]);
+    c.setSize(BOTON_SONIDO, BOTON_SONIDO).setInteractive({ useHandCursor: true });
+    c.on('pointerdown', (p, x, y, ev) => { ev.stopPropagation(); this.aplastar(c); sonido.alternarSilencio(); });
+    this.botonSonido = c;
+    this.alSilencio = callado => this.pintarSilencio(callado);
+    sonido.alCambiarSilencio = this.alSilencio;
+    this.pintarSilencio(sonido.silencio);
+  }
+
+  pintarSilencio(callado) {
+    const g = this.iconoSonido.clear();
+    g.fillStyle(0xf3e3c3, 1).lineStyle(2, 0x141026, 1);
+    g.fillRect(-11, -5, 7, 10).strokeRect(-11, -5, 7, 10);                         // bocina
+    g.fillTriangle(-4, -5, 4, -11, 4, 11).fillTriangle(-4, -5, 4, 11, -4, 5);
+    g.lineStyle(2.5, callado ? 0xff5a4e : 0xf3e3c3, 1);
+    if (callado) { g.lineBetween(7, -6, 15, 6).lineBetween(15, -6, 7, 6); }       // tachado: sin sonido
+    else {
+      g.beginPath(); g.arc(5, 0, 6, -0.9, 0.9); g.strokePath();
+      g.beginPath(); g.arc(5, 0, 11, -0.9, 0.9); g.strokePath();
+    }
   }
 
   pintarClima() {
     const t = this.solActual ? datosReales.resumenClima(this.solActual) : null;
+    const antes = this.textoClima?.visible;
     this.textoClima?.setText(t ?? '').setVisible(!!t);
+    if (this.minimapa && antes !== !!t) this.colocar(this.scale.width, this.scale.height);   // el minimapa baja o sube
   }
 
   // Recurso bajo: la barra late en rojo y el icono tiembla
@@ -273,8 +331,17 @@ export default class Interfaz extends Phaser.Scene {
     if (!c) { this.aviso.setVisible(false); return; }
     const tactil = this.sys.game.device.input.touch;
     this.avisoLetra.setText(tactil ? '☝' : 'E');
-    this.avisoTexto.setText(tactil ? `Toca · ${c.etiqueta}` : c.etiqueta);
-    const ancho = Math.max(170, this.avisoTexto.width + 78);
+    const tuya = c.nombre && c.nombre === ruta(this.registry.get('personaje')).especialidad;
+    const s0 = this.escalaAviso ?? 1, cabe = this.scale.width - 24;
+    const poner = largo => {
+      const etiqueta = tuya ? `${c.etiqueta}  ${largo ? '★ tu especialidad' : '★'}` : c.etiqueta;
+      this.avisoTexto.setText(tactil ? `Toca · ${etiqueta}` : etiqueta);
+      return Math.max(170, this.avisoTexto.width + 78);
+    };
+    let ancho = poner(true);
+    if (ancho * s0 > cabe) ancho = poner(false);              // en pantallas angostas, solo la estrella
+    // y si aun así no cabe, el aviso se encoge: nunca se sale de la pantalla
+    this.aviso.setScale(Math.min(s0, cabe / ancho));
     this.avisoFondo.setSize(ancho / T, 48 / T);
     this.avisoTecla.setX(-ancho / 2 + 28);
     this.avisoLetra.setX(-ancho / 2 + 28);
@@ -283,7 +350,7 @@ export default class Interfaz extends Phaser.Scene {
     this.aviso.input.hitArea.setSize(ancho, 48);
     const mostrar = libre || !control.bloqueado;
     if (mostrar && !this.aviso.visible) {                 // aparece con un pequeño salto
-      const s = this.escalaAviso ?? 1;
+      const s = this.aviso.scaleX;
       this.tweens.add({ targets: this.aviso, scale: { from: s * 0.8, to: s }, duration: 180, ease: 'Back.out' });
     }
     this.aviso.setVisible(mostrar);
@@ -296,7 +363,8 @@ export default class Interfaz extends Phaser.Scene {
   }
 
   // Flecha en el borde de la pantalla cuando la estación objetivo no se ve
-  update() {
+  update(ahora) {
+    this.minimapa?.update(ahora);
     const base = this.scene.get('Base');
     const est = this.objetivo && (base?.puntoObjetivo ? base.puntoObjetivo(this.objetivo) : base?.estaciones?.find(s => s.datos.nombre === this.objetivo));
     if (!est || control.bloqueado) { this.flechaBorde.setVisible(false); return; }

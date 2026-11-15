@@ -28,6 +28,10 @@ export class CO2FilterScene extends Phaser.Scene {
     this.add.image(685, 355, "mj_adaptador").setDisplaySize(420, 365);    // cartucho cuadrado de LiOH y tubo redondo
     addText(this, 245, 198, "PIEZAS DISPONIBLES", 16, "#93c5fd");
     addText(this, 685, 198, "ADAPTADOR DEL FILTRO", 16, "#93c5fd");
+    // Rótulos del adaptador como texto del juego (antes iban dentro del dibujo, a ~10 px e ilegibles)
+    addText(this, 542, 384, "LiOH · CUADRADO", 16, "#d6dcff");
+    addText(this, 827, 380, "TUBO · REDONDO", 16, "#d6dcff");
+    addText(this, 682, 508, "¿Cómo encajar un cuadrado en un círculo?", 16, "#ffd678");
 
     const targets = [
       { id: "cardboard", x: 595, y: 275, label: "1 · CARTÓN (Embudo)" },
@@ -42,7 +46,7 @@ export class CO2FilterScene extends Phaser.Scene {
       zone.setData("pieceId", target.id);
       zone.setInteractive({ dropZone: true });
       // Etiqueta debajo de la caja sin pisar el borde
-      addText(this, target.x, target.y + 52, target.label, 12, "#cbd5e1");
+      addText(this, target.x, target.y + 52, target.label, 14, "#cbd5e1");
     });
 
     const pieces = [
@@ -56,7 +60,7 @@ export class CO2FilterScene extends Phaser.Scene {
       const block = this.add.image(piece.x, piece.y, piece.img).setDisplaySize(175, 56).setDepth(5)
         .setInteractive({ draggable: true, useHandCursor: true });
       block.setData("pieceId", piece.id);
-      const label = addText(this, piece.x, piece.y + 36, piece.label, 13, "#e2e8f0").setDepth(6)
+      const label = addText(this, piece.x, piece.y + 36, piece.label, 14, "#e2e8f0").setDepth(6)
         .setBackgroundColor("#131d33").setPadding(6, 2, 6, 2);
       block.setData("labelObject", label);
 

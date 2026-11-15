@@ -2,6 +2,7 @@
 // efectos de botones. Lo demás lo baja el Cargador en segundo plano o cuando se necesita (src/motor/cargas.js).
 import { cargas, ZONA_INICIAL } from '../motor/cargas.js';
 import { ciclo } from '../mecanicas/ciclo.js';
+import { RECUERDOS } from '../mecanicas/recuerdos.js';
 
 export default class Arranque extends Phaser.Scene {
   constructor() { super('Arranque'); }
@@ -24,7 +25,8 @@ export default class Arranque extends Phaser.Scene {
     cargas.marcar('nucleo');
     cargas.marcar(`zona:${ZONA_INICIAL}`);
     this.scene.launch('Cargador');
-    cargas.precargar(['personajes', 'efectos']);      // mientras se ve el prólogo
+    // mientras se ve el prólogo: retratos, efectos y las ilustraciones de los recuerdos (flashbacks)
+    cargas.precargar(['personajes', 'efectos', ...RECUERDOS.map(r => `recuerdo:${r.id}`)]);
     ciclo.prepararHistoria();
     this.scene.start('Inicio');
   }

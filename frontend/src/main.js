@@ -14,6 +14,11 @@ import { GreenhouseScene } from './minijuegos/Invernadero.js';
 import { conectarCompania } from './compania/robot.js';
 import { sonido } from './motor/sonido.js';
 import { ciclo } from './mecanicas/ciclo.js';
+import { guia } from './compania/guia.js';
+import { idioma, activarTraduccion } from './motor/idioma.js';
+
+idioma.iniciar();          // español o inglés (se elige en la portada)
+activarTraduccion();       // todo texto de Phaser pasa por el diccionario de src/textos/en.js
 
 const juego = new Phaser.Game({
   type: Phaser.AUTO,
@@ -27,8 +32,10 @@ const juego = new Phaser.Game({
   scene: [Arranque, Cargador, Inicio, Seleccion, Base, Interfaz, Consola, PanelCleaningScene, CO2FilterScene, GreenhouseScene, Dialogo],
 });
 
+guia.iniciar();            // la IA guía: todo el machine learning (pronóstico y medición del aprendizaje)
 conectarCompania(juego);   // la IA de la base (robot que acompaña)
 sonido.iniciar(juego);     // música, efectos y voces (rol 5)
 ciclo.iniciar(juego);      // los 10 soles sobre el mapa (rol 2): historia, estaciones y minijuegos
 
 window.__juego = juego; // para depurar desde la consola del navegador
+window.__idioma = idioma; // __idioma.faltan: textos que aún no tienen inglés

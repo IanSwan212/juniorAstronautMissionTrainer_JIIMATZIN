@@ -1,6 +1,9 @@
 // Narrador: corre historia/historia.json (Ink, del rol 5) con inkjs (lib/ink.js) y le pone a cada línea
 // su voz (assets/audio/voces/audios.json), su retrato y su expresión. Lo usa la escena Dialogo.
 // Etiquetas de Ink que entiende: hab, cara, musica, sfx, dato, costo, efecto, instruccion, titulo, carta, habilidades.
+// Las líneas que son un recuerdo de la IA (src/mecanicas/recuerdos.js) salen marcadas para el flashback.
+import { recuerdoDeLinea, textoDeRecuerdo, SALTO_VOZ } from './recuerdos.js';
+import { idioma } from '../motor/idioma.js';
 
 export const PERSONAS = {
   ia: { nombre: 'IA', color: 0x5ec8f2, retrato: null },
@@ -21,10 +24,14 @@ export class Narrador {
     this.story = json && window.inkjs ? new window.inkjs.Story(json) : null;
     if (!this.story) console.warn('[historia] Falta historia/historia.json o lib/ink.js: los diálogos no saldrán.');
     this.voces = new Map();
+    // En audios.json los saludos traen las constantes de Ink ({WEN}, {JUD}, {ATL}): se cambian por los nombres
+    const NOMBRES_INK = { '{WEN}': 'Wenceslao', '{JUD}': 'Judith', '{ATL}': 'Atlas', '{IA}': 'IA' };
     for (const [id, v] of Object.entries(juego.cache.json.get('voces') ?? {})) {
-      this.voces.set(normalizar(v.texto.replaceAll('{jugador}', 'jugadorx')), [id, `assets/audio/voces/${v.ruta}`, v.escena]);
+      const texto = v.texto.replace(/\{(WEN|JUD|ATL|IA)\}/g, m => NOMBRES_INK[m]).replaceAll('{jugador}', 'jugadorx');
+      this.voces.set(normalizar(texto), [id, `assets/audio/voces/${v.ruta}`, v.escena]);
     }
     this.jugador = 'Astronauta';
+    idioma.prepararHistoria(juego.cache.json.get('lineas_en'));
   }
 
   // Variables que escribe el juego: jugador, rol, energia, oxigeno, blindaje, sol
@@ -51,7 +58,9 @@ export class Narrador {
       if (!texto) { if (Object.keys(tags).length) return { tipo: 'tags', tags }; continue; }
       return this.linea(texto, tags);
     }
-    if (s.currentChoices.length) return { tipo: 'opciones', opciones: s.currentChoices.map(c => c.text) };
+    if (s.currentChoices.length) {
+      return { tipo: 'opciones', opciones: s.currentChoices.map(c => (idioma.ingles ? idioma.lineaHistoria(c.text, this.jugador) ?? c.text : c.text)) };
+    }
     return null;
   }
 
@@ -75,9 +84,23 @@ export class Narrador {
       const pref = `${PERSONAS[quien].nombre}:`;
       if (dicho.startsWith(pref)) dicho = dicho.slice(pref.length).trim();
     }
-    const clave = normalizar(this.jugador ? dicho.replaceAll(this.jugador, 'jugadorx') : dicho);
-    const voz = this.voces.get(clave) ?? null;
-    return { tipo: 'linea', quien, texto: dicho, cara: tags.cara?.[0] ?? null, voz, tags };
+    // La voz: primero tal cual; si no, con el nombre del jugador como {jugador}. (Al revés, "Yo soy Wenceslao" y
+    // "¡Hola, Ingeniero Wenceslao!" se quedaban sin voz cuando el jugador era Wenceslao.)
+    const tal = normalizar(dicho);
+    const voz = this.voces.get(tal)
+      ?? (this.jugador ? this.voces.get(normalizar(dicho.replaceAll(this.jugador, 'jugadorx'))) : null) ?? null;
+    // ¿Es un recuerdo de la IA (flashback)? Se muestra sin "Dato curioso:" y su voz salta esa parte
+    const rec = recuerdoDeLinea(tal);
+    let vozDesde = rec && voz ? SALTO_VOZ[voz[0]] ?? 0 : 0;
+    // En inglés: el texto de la traducción y sin MP3 (las voces grabadas son en español): habla la voz del navegador
+    let vozFinal = voz, traducido = false;
+    if (idioma.ingles) {
+      const en = idioma.lineaHistoria(dicho, this.jugador);
+      if (en) { dicho = en; traducido = true; }
+      vozFinal = null; vozDesde = 0;
+    }
+    if (rec) dicho = textoDeRecuerdo(dicho);
+    return { tipo: 'linea', quien, texto: dicho, cara: tags.cara?.[0] ?? null, voz: vozFinal, vozDesde, recuerdo: rec, traducido, tags };
   }
 
   // Lee un nudo entero sin mostrarlo (para las cartas de personaje: título, habilidades y texto)

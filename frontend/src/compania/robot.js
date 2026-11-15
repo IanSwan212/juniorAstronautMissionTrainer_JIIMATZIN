@@ -1,12 +1,17 @@
 // La IA de la base: un robot que flota detrás del jugador, habla en burbujas cortas
 // y cada mañana pronostica el clima espacial con su modelo (src/ml/pronostico.js).
+// Su "cerebro" es la IA guía (src/compania/guia.js): ahí están el pronóstico y la medición del aprendizaje; el robot
+// es su cara en el mapa (pistas más claras en lo flojo y una felicitación al subir de nivel).
 //
 // No toca Base.js: se engancha a la escena Base cuando se crea (ver conectarCompania).
 // Los diálogos largos siguen saliendo de Ink (hab:ia); aquí solo van frases cortas del mapa.
 // Decisiones de diseño: docs/aprendizaje.md (pronóstico con dibujos, frases de una línea,
 // archivos de memoria bloqueados, humor) y docs/accesibilidad.md (letra de 16 px en pantalla).
 import { bus, EV, control } from '../motor/eventos.js';
-import Pronosticador from '../ml/pronostico.js';
+import { guia } from './guia.js';
+import { RECUERDOS } from '../mecanicas/recuerdos.js';
+import { sonido } from '../motor/sonido.js';
+import { idioma } from '../motor/idioma.js';
 
 const CARAS = { neutral: 0, feliz: 1, procesando: 2 };
 const COLOR_CARA = { neutral: 0x5ec8f2, feliz: 0x7cf0a0, procesando: 0xffc83d, alarma: 0xff5a4e };
@@ -25,27 +30,9 @@ const PISTAS = {
   antena: 'Por aquí llegan los datos reales del Sol que uso para pronosticar.',
 };
 
-// Archivos de memoria del robot (los recuerdos del guion). Se abren jugando.
-// El id es el mismo que la etiqueta dato:<id> de Ink, así el diálogo los puede abrir.
-export const MEMORIAS = [
-  // dato: frase corta con el dato verificado en la guía de historia (sección "Datos reales verificados")
-  { id: 'viento_limpia', titulo: 'Mis primos Spirit y Opportunity', año: 'Marte',
-    dato: 'A veces el viento de Marte les limpiaba el polvo de los paneles solares.', pista: 'Limpia los paneles solares' },
-  { id: 'apolo13', titulo: 'El rompecabezas del Apolo 13', año: '1970',
-    dato: 'El filtro era cuadrado y el hueco redondo. Lo unieron con bolsas, cartón, manguera y cinta.', pista: 'Cambia el filtro de CO₂' },
-  { id: 'veggie_zinnias', titulo: 'Las flores de la Estación Espacial', año: '2016',
-    dato: 'Unas zinnias se llenaron de moho por la humedad. Las salvaron y florecieron en enero.', pista: 'Riega el invernadero' },
-  { id: 'skylab', titulo: 'La sombrilla del Skylab', año: '1973',
-    dato: 'El Skylab perdió su escudo contra el calor. Un parasol bajó la temperatura.', pista: 'Aparece en una emergencia' },
-  { id: 'iss_fuga_2013', titulo: 'Copos blancos en la Estación Espacial', año: '2013',
-    dato: 'Salían copitos blancos: era el líquido que la enfría. Salieron 5 horas a arreglarlo.', pista: 'Aparece en una emergencia' },
-  { id: 'mir_1997', titulo: 'El choque en la estación Mir', año: '1997',
-    dato: 'Una nave de carga chocó con la Mir. Desconectaron cables para cerrar la puerta.', pista: 'Aparece en una emergencia' },
-  { id: 'tormentas_polvo', titulo: 'La última señal de Opportunity', año: '2018',
-    dato: 'Opportunity envió su última señal el 10 de junio, en una tormenta de polvo global.', pista: 'Aparece en una emergencia' },
-  { id: 'tormenta_1972', titulo: 'La gran tormenta solar de 1972', año: '1972',
-    dato: 'Pasó entre dos viajes a la Luna. Por suerte, ese día no había astronautas en el espacio.', pista: 'Aparece en una emergencia' },
-];
+// Archivos de memoria del robot: los recuerdos (flashbacks) de la historia. Se abren jugando.
+// La lista está en src/mecanicas/recuerdos.js; el id es el de la etiqueta dato:<id> de Ink.
+export const MEMORIAS = RECUERDOS;
 // Al usar el minijuego de una estación se abre su recuerdo (al cerrar la pantalla)
 const MEMORIA_DE_ESTACION = { tarea_paneles: 'viento_limpia', tarea_filtro: 'apolo13', tarea_invernadero: 'veggie_zinnias' };
 const CLAVE_GUARDADO = 'mision-marte.memorias.v1';
@@ -60,8 +47,8 @@ const CHISTES = [
 ];
 const PAUSA_CHISTE = 80000;               // ms sin hablar antes de un chiste
 
-const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-const fechaCorta = iso => { const [, m, d] = iso.split('-').map(Number); return `${d} de ${MESES[m - 1]}`; };
+// "12 de noviembre" o "November 12", según el idioma
+const fechaCorta = iso => new Date(`${iso}T12:00:00Z`).toLocaleDateString(idioma.locale, { day: 'numeric', month: 'long', timeZone: 'UTC' });
 
 export default class Robot {
   constructor(escena) {
@@ -84,13 +71,12 @@ export default class Robot {
     this.pronostico = null;
     this.ultimaHabla = 0;
     this.memoriaPendiente = null;
+    this.colaBurbujas = [];                          // lo que espera turno para decirse (una burbuja a la vez)
     this.abiertas = this.cargarMemorias();
 
     // Pronóstico: datos guardados ya cargados por Arranque; luego intenta los de hoy en vivo
     const cache = escena.cache.json;
-    this.ml = cache.exists('modelo_pronostico')
-      ? new Pronosticador(cache.get('modelo_pronostico'), cache.get('sol_reciente'))
-      : null;
+    this.ml = guia.pronostico(cache);               // un solo modelo para toda la partida (no uno por sala)
     if (!this.ml) console.warn('[robot] Falta data/modelo_pronostico.json: la IA no pronostica.');
 
     // Bus
@@ -103,11 +89,14 @@ export default class Robot {
       if (id) this.e.time.delayedCall(500, () => this.desbloquearMemoria(id));
     };
     const alDato = id => this.desbloquearMemoria(typeof id === 'string' ? id : id?.id);
+    // Subió de nivel en un tema (la IA guía lo mide): ¡a felicitar!
+    const alAprender = a => { if (a?.subio) this.decir(`¡Subiste en ${a.nombre}: ${a.nivel.texto} ${'★'.repeat(a.nivel.estrellas)}`, { cara: 'feliz', duracion: 4200 }); };
     bus.on(EV.CERCA_DE, alCerca);
     bus.on(EV.ESTADO_CAMBIO, alEstado);
     bus.on(EV.INTERACTUAR, alInteractuar);
     bus.on(EV.CERRAR_PANEL, alCerrar);
     bus.on(EV.DATO, alDato);
+    bus.on(EV.APRENDIZAJE, alAprender);
 
     // Linterna: el robot ilumina a su alrededor (src/motor/luces.js)
     this.quitarLinterna = escena.luces?.agregarFuente(() => this.px == null ? null : { x: this.px, y: this.py + 6, radio: 46, alfa: 0.55 });
@@ -121,7 +110,7 @@ export default class Robot {
     escena.events.once('shutdown', () => {
       this.vivo = false;                                  // la sala cambió: este robot ya no existe
       bus.off(EV.CERCA_DE, alCerca); bus.off(EV.ESTADO_CAMBIO, alEstado); bus.off(EV.INTERACTUAR, alInteractuar);
-      bus.off(EV.CERRAR_PANEL, alCerrar); bus.off(EV.DATO, alDato);
+      bus.off(EV.CERRAR_PANEL, alCerrar); bus.off(EV.DATO, alDato); bus.off(EV.APRENDIZAJE, alAprender);
       escena.events.off('update', alActualizar);
       this.quitarLinterna?.();
       tecla.removeAllListeners();
@@ -148,6 +137,7 @@ export default class Robot {
       fontFamily: FUENTE, fontSize: '7px', color: '#1a1110', align: 'center',
       wordWrap: { width: 120 }, resolution: 4, lineSpacing: 1,
     }).setOrigin(0.5, 0);
+    texto.sinTraducir = true;                    // se escribe letra por letra: decir() la traduce entera
     const fondo = e.add.graphics();
     const iconos = e.add.graphics();
     const cont = e.add.container(0, 0, [fondo, texto, iconos]).setDepth(30).setVisible(false);
@@ -220,14 +210,32 @@ export default class Robot {
     this.puntos.forEach(p => p.setVisible(nombre === 'procesando'));
   }
 
-  /** Burbuja corta sobre el robot. opciones: { cara, duracion (ms), soles (0-10: fila de soles con llamarada) } */
-  decir(texto, { cara = 'neutral', duracion, soles = null } = {}) {
+  /** Burbuja corta sobre el robot.
+   *  opciones: { cara, duracion (ms), soles (0-10: fila de soles con llamarada),
+   *              importante (pasa delante en la fila), relleno (pistas y chistes: si ya habla, se descarta) } */
+  decir(texto, opciones = {}) {
+    const { cara = 'neutral', duracion, soles = null, importante = false, relleno = false } = opciones;
     if (!this.vivo) return;
+    if (!opciones.traducido) { texto = idioma.traducir(texto); opciones = { ...opciones, traducido: true }; }
     // con un diálogo, la consola o un minijuego abiertos, espera a que se cierren (no encimar burbujas)
-    if (control.modal) { this.e.time.delayedCall(1200, () => this.decir(texto, { cara, duracion, soles })); return; }
+    if (control.modal) {
+      if (relleno) return;
+      this.e.time.delayedCall(1200, () => this.decir(texto, opciones));
+      return;
+    }
+    const b = this.burbuja;
+    // Si ya hay una burbuja que todavía no se ha podido leer, esta espera su turno (no se pisan)
+    if (b.cont.visible && this.e.time.now < (b.leidaEn ?? 0)) {
+      if (relleno) return;
+      if (!this.colaBurbujas.some(x => x.texto === texto)) {
+        if (importante) this.colaBurbujas.unshift({ texto, opciones }); else this.colaBurbujas.push({ texto, opciones });
+        this.colaBurbujas.length = Math.min(this.colaBurbujas.length, 4);
+      }
+      return;
+    }
     this.cara(cara);
     this.ultimaHabla = this.e.time.now;
-    const b = this.burbuja;
+    sonido.pitido(2, 0.03);
     b.soles = soles;
     b.letras = 0;
     b.cont.setVisible(true).setAlpha(1);
@@ -247,14 +255,19 @@ export default class Robot {
       callback: () => { b.texto.setText(texto.slice(0, ++b.letras)); this.dibujarBurbuja(); },
     });
     b.ocultar?.remove();
-    b.ocultar = this.e.time.delayedCall(duracion ?? Math.max(3000, texto.length * 60), () => this.ocultarBurbuja());
+    const dura = duracion ?? Math.max(3000, texto.length * 60);
+    b.leidaEn = this.e.time.now + Math.min(dura, 900 + texto.length * 45);   // antes de esto no se pisa
+    b.ocultar = this.e.time.delayedCall(dura, () => this.ocultarBurbuja());
   }
 
   ocultarBurbuja() {
     const b = this.burbuja;
     b.escribiendo?.remove();
+    b.ocultar?.remove();
+    b.leidaEn = 0;
     this.e.tweens.add({ targets: b.cont, alpha: 0, duration: 250, onComplete: () => b.cont.setVisible(false) });
     if (!this.alarma) this.cara('neutral');
+    this.siguienteEn = this.e.time.now + 450;      // la siguiente de la fila sale en update()
   }
 
   // ---------- Pronóstico (machine learning) ----------
@@ -299,7 +312,7 @@ export default class Robot {
     }
     const hubo = p.resultadoReal, acerto = (p.prob >= 0.4) === hubo;
     const real = hubo ? `¡El ${fechaCorta(p.fechaPronostico)} sí hubo llamarada fuerte!` : `El ${fechaCorta(p.fechaPronostico)} el Sol estuvo tranquilo.`;
-    this.decir(`${real} ${acerto ? '¡Acerté! ¡Bip-hurra!' : 'Fallé: los pronósticos a veces fallan.'}`,
+    this.decir(`${idioma.traducir(real)} ${idioma.traducir(acerto ? '¡Acerté! ¡Bip-hurra!' : 'Fallé: los pronósticos a veces fallan.')}`,
       { cara: acerto ? 'feliz' : 'neutral', duracion: 5500 });
   }
 
@@ -340,11 +353,11 @@ export default class Robot {
   // ---------- Reacciones ----------
   alAcercarse(c) {
     if (!c || control.bloqueado || this.alarma) return;
-    const pista = PISTAS[c.nombre];
+    const pista = guia.pistaEstacion(c.nombre) ?? PISTAS[c.nombre];   // más explicada si el tema está flojo
     const ahora = this.e.time.now;
     if (!pista || ahora - (this.ultimaPista[c.nombre] ?? -1e9) < 45000) return;
     this.ultimaPista[c.nombre] = ahora;
-    this.decir(pista, { cara: 'neutral' });
+    this.decir(pista, { cara: 'neutral', relleno: true });
   }
 
   alCambiarEstado(e) {
@@ -353,7 +366,8 @@ export default class Robot {
     this.faseAnterior = e.fase;
     this.alarma = e.fase === 'emergencia';
     if (e.fase === 'manana' && e.sol !== this.solPronosticado) this.pronosticar(e.sol, e.solesTotales ?? 10);
-    if (e.fase === 'emergencia') this.decir('¡BIP-BIP-BIP! ¡Alerta en el radar!', { cara: 'procesando', duracion: 3000 });
+    // La alerta ya la da la IA en el diálogo de la emergencia; la burbuja solo si no hay diálogo (si no, salía al final)
+    if (e.fase === 'emergencia' && !control.modal) this.decir('¡BIP-BIP-BIP! ¡Alerta en el radar!', { cara: 'procesando', duracion: 3000, relleno: true });
     if (e.fase === 'noche') {
       const tras = antes === 'emergencia';
       if (tras) this.e.time.delayedCall(800, () => this.contarResultado());
@@ -403,9 +417,15 @@ export default class Robot {
       b.cont.setPosition(bx, by);
     }
 
+    // Lo que esperaba turno, de uno en uno y sin diálogos encima
+    if (!b.cont.visible && this.colaBurbujas.length && !control.modal && this.e.time.now > (this.siguienteEn ?? 0)) {
+      const sig = this.colaBurbujas.shift();
+      this.decir(sig.texto, sig.opciones);
+    }
+
     // Humor: si lleva mucho rato callado y no pasa nada importante, un chiste corto
     if (!b.cont.visible && !control.bloqueado && !this.alarma && this.e.time.now - this.ultimaHabla > PAUSA_CHISTE) {
-      this.decir(Phaser.Utils.Array.GetRandom(CHISTES), { cara: 'feliz' });
+      this.decir(Phaser.Utils.Array.GetRandom(CHISTES), { cara: 'feliz', relleno: true });
     }
   }
 
@@ -417,12 +437,15 @@ export default class Robot {
 export function conectarCompania(juego) {
   juego.events.once('ready', async () => {
     const { default: Album } = await import('./Album.js');
+    const { default: Aprendizaje } = await import('./Aprendizaje.js');
     juego.scene.add('Album', Album, false);              // se añade al final: queda encima de Interfaz
+    juego.scene.add('Aprendizaje', Aprendizaje, false);  // lo que mide la IA guía (tecla P)
     const base = juego.scene.getScene('Base');
     base.events.on('create', () => {
       if (!base.textures.exists('robot_ia')) { console.warn('[robot] Falta assets/arte/robot_ia.png'); return; }
       window.__robot = new Robot(base);
       if (!juego.scene.isActive('Album')) base.scene.launch('Album');
+      if (!juego.scene.isActive('Aprendizaje')) base.scene.launch('Aprendizaje');
     });
   });
 }

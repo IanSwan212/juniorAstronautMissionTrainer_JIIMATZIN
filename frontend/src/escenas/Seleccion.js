@@ -2,6 +2,7 @@
 // retratos que dibujó la compañera de arte, y la dificultad (la del prototipo de minijuegos del rol 2).
 import { ciclo } from '../mecanicas/ciclo.js';
 import { sonido } from '../motor/sonido.js';
+import { ruta, NOMBRE_TAREA } from '../mecanicas/rutas.js';
 
 const FUENTE = 'system-ui, -apple-system, "Segoe UI", sans-serif';
 const CARTAS = [
@@ -29,7 +30,10 @@ export default class Seleccion extends Phaser.Scene {
       const titulo = this.add.text(0, 0, info.tags.titulo?.[0] ?? c.id, { fontFamily: FUENTE, fontSize: '22px', fontStyle: 'bold', color: '#ffffff' }).setOrigin(0.5, 0);
       const habil = this.add.text(0, 0, info.tags.habilidades?.[0] ?? '', { fontFamily: FUENTE, fontSize: '15px', color: Phaser.Display.Color.IntegerToColor(c.color).rgba, align: 'center' }).setOrigin(0.5, 0);
       const texto = this.add.text(0, 0, info.lineas.join(' '), { fontFamily: FUENTE, fontSize: '16px', color: '#ded8ff', align: 'center', lineSpacing: 4 }).setOrigin(0.5, 0);
-      const bonus = this.add.text(0, 0, `★ ${c.bonus}`, { fontFamily: FUENTE, fontSize: '15px', fontStyle: 'bold', color: '#ffc83d', align: 'center' }).setOrigin(0.5, 0);
+      // La ruta del personaje (src/mecanicas/rutas.js): por dónde empieza su día y su ventaja
+      const r = ruta(c.id);
+      const bonus = this.add.text(0, 0, `★ Su día empieza por ${NOMBRE_TAREA[r.especialidad].split(',')[0]} (${c.bonus.replace(/ al .*| en .*/, '')})
+★ ${r.ventaja}`, { fontFamily: FUENTE, fontSize: '15px', fontStyle: 'bold', color: '#ffc83d', align: 'center' }).setOrigin(0.5, 0);
       const zona = this.add.rectangle(0, 0, 10, 10, 0xffffff, 0.001).setInteractive({ useHandCursor: true });
       cont.add([marco, retrato, titulo, habil, texto, bonus, zona]);
       zona.on('pointerover', () => { cont.encima = true; this.dibujarCarta(cont); this.tweens.add({ targets: retrato, scale: retrato.scale * 1.04, duration: 160 }); });
@@ -100,8 +104,10 @@ export default class Seleccion extends Phaser.Scene {
         for (const t of [cont.titulo, cont.habil, cont.texto, cont.bonus]) t.setOrigin(0.5, 0).setAlign('center').setWordWrapWidth(ancho - 30);
         cont.titulo.setPosition(0, lado + 18).setFontSize(Math.round(21 * e));
         cont.habil.setPosition(0, cont.titulo.y + cont.titulo.height + 4).setFontSize(Math.max(16, Math.round(15 * e)));
-        cont.texto.setVisible(alto > 470).setPosition(0, cont.habil.y + cont.habil.height + 8).setFontSize(16);
-        cont.bonus.setPosition(0, alto - 36).setFontSize(Math.max(16, Math.round(15 * e)));
+        cont.bonus.setOrigin(0.5, 1).setPosition(0, alto - 14).setFontSize(Math.max(16, Math.round(15 * e)));
+        cont.texto.setPosition(0, cont.habil.y + cont.habil.height + 8).setFontSize(16);
+        // el texto de la carta solo si cabe sin tocar la ruta (no se enciman)
+        cont.texto.setVisible(cont.texto.y + cont.texto.height < cont.bonus.y - cont.bonus.height - 8);
       }
       cont.zona.setPosition(0, alto / 2).setSize(ancho, alto);
       cont.zona.input.hitArea.setTo(0, 0, ancho, alto);

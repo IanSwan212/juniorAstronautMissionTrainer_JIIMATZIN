@@ -8,6 +8,7 @@
 //    catálogo de eventos del Sol casi en tiempo real: no es una medición en Marte ni dispara reglas del juego
 //    (docs/04-api.md del repo), así que solo se cuenta, sin etiquetas de peligro.
 // Si la API no responde y no hay respaldo en /escenarios/<id>.json, el juego sigue con su contenido propio.
+import { idioma } from '../motor/idioma.js';
 import { cargarEscenario, obtenerFicha, apiGet, ErrorApi } from '../api/index.js';
 
 export const ESCENARIO_ID = 'base-marte-uno';     // el id con el que el equipo prepara la misión de 10 soles
@@ -32,7 +33,11 @@ export const datosReales = {
 
   // Se pide una vez al empezar; no detiene el juego (tiempo máximo del adaptador: 8 s)
   cargar() {
-    this.promesa ??= cargarEscenario(ESCENARIO_ID)
+    this.promesa ??= this.publicado()
+      .then(publicado => {
+        if (publicado === false) throw new ErrorApi('la misión aún no está publicada en la API', { codigo: 'sin_publicar' });
+        return cargarEscenario(ESCENARIO_ID);
+      })
       .then(({ escenario, origen }) => {
         this.escenario = escenario;
         this.origen = origen;
@@ -46,6 +51,19 @@ export const datosReales = {
         return null;
       });
     return this.promesa;
+  },
+
+  // ¿La API ya publicó la misión? Se pregunta primero a la lista (GET /scenarios), para no pedir una misión que
+  // todavía no existe (el equipo la publica con el paquete científico revisado, docs/12-contenido-juego.md).
+  // true / false; null si la API no responde (entonces se prueba igual, por si hay respaldo local).
+  async publicado() {
+    try {
+      const lista = await apiGet('/scenarios');
+      const items = Array.isArray(lista) ? lista : lista?.escenarios ?? [];
+      return items.some(e => (e.scenarioId ?? e.id) === ESCENARIO_ID);
+    } catch {
+      return null;
+    }
   },
 
   hay() { return !!this.escenario; },
@@ -78,20 +96,24 @@ export const datosReales = {
     if (!r) return null;
     const ini = new Date(`${r.period_requested.startDate}T00:00:00Z`), fin = new Date(`${r.period_requested.endDate}T00:00:00Z`);
     const dias = Math.round((fin - ini) / 86400000) + 1;
-    const fecha = iso => new Date(iso).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', timeZone: 'UTC' });
+    const fecha = iso => new Date(iso).toLocaleDateString(idioma.locale, { day: 'numeric', month: 'long', timeZone: 'UTC' });
     const fuerza = c => 'ABCMX'.indexOf(c[0]) * 100 + (parseFloat(c.slice(1)) || 0);
     const ev = r.events.map(e => e.data).filter(d => typeof d.class_type === 'string' && 'ABCMX'.includes(d.class_type[0]));
-    const guardada = r.freshness?.stale ? ' (es la última copia guardada: la NASA no respondió)' : '';
+    const t = (es, v) => idioma.t(es, v);
+    const guardada = r.freshness?.stale ? ` ${t('Es la última copia guardada: la NASA no respondió.')}` : '';
     const lineas = [];
     if (!ev.length) {
-      lineas.push({ quien: 'ia', cara: 'feliz', texto: `Noticias del Sol, de la NASA: en los últimos ${dias} días no se registró ninguna llamarada solar${guardada}. El Sol ha estado tranquilo.` });
+      lineas.push({ quien: 'ia', cara: 'feliz', traducido: true,
+        texto: t('Noticias del Sol, de la NASA: en los últimos {d} días no se registró ninguna llamarada solar. El Sol ha estado tranquilo.', { d: dias }) + guardada });
     } else {
       const max = ev.reduce((a, b) => (fuerza(b.class_type) > fuerza(a.class_type) ? b : a));
-      lineas.push({ quien: 'ia', cara: 'procesando', texto: `Noticias del Sol, de la NASA: en los últimos ${dias} días se registraron ${ev.length} ` +
-        `${ev.length === 1 ? 'llamarada solar' : 'llamaradas solares'}${guardada}. La más fuerte fue de clase ${max.class_type}, el ${fecha(max.peak_time ?? max.begin_time)}.` });
+      const datos = { d: dias, n: ev.length, c: max.class_type, f: fecha(max.peak_time ?? max.begin_time) };
+      const texto = ev.length === 1
+        ? t('Noticias del Sol, de la NASA: en los últimos {d} días se registró 1 llamarada solar, de clase {c}, el {f}.', datos)
+        : t('Noticias del Sol, de la NASA: en los últimos {d} días se registraron {n} llamaradas solares. La más fuerte fue de clase {c}, el {f}.', datos);
+      lineas.push({ quien: 'ia', cara: 'procesando', traducido: true, texto: texto + guardada });
     }
-    lineas.push({ quien: 'ia', texto: 'Las llamaradas se nombran con letras: A, B, C, M y X. Cada letra es diez veces más fuerte que la anterior. ' +
-      'Esto pasa en el Sol: no es una medición en Marte.' });
+    lineas.push({ quien: 'ia', traducido: true, texto: t('Las llamaradas se nombran con letras: A, B, C, M y X. Cada letra es diez veces más fuerte que la anterior. Esto pasa en el Sol: no es una medición en Marte.') });
     return lineas;
   },
 

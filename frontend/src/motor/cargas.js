@@ -7,6 +7,7 @@
 //   'zona:<id>'            fondo, frente y objetos de una sala (assets/zonas/zonas.json)
 //   'minijuego:<escena>'   el arte de un minijuego y su fondo
 //   'consola'              el fondo de la consola de mando
+//   'recuerdo:<id>'        la ilustración de un recuerdo de la IA (flashback); se adelantan todos en segundo plano
 //   'musica:<clave>'       un tema de música (se decodifica entero: pesa decenas de MB en memoria)
 //
 // Las descargas las hace la escena Cargador, que no se apaga nunca (si las hiciera otra escena, se cortarían al
@@ -22,7 +23,8 @@ const MINIJUEGOS = {
   GreenhouseScene: ['mj_veggie', 'mj_cojin_0', 'mj_cojin_1', 'mj_cojin_2', 'mj_tallo_0', 'mj_tallo_1', 'mj_tallo_2',
     'mj_flor_0', 'mj_flor_1', 'mj_flor_2', 'mj_moho', 'mj_fondo_invernadero'],
 };
-const EN_GRUPOS = new Set([...RETRATOS, ...Object.values(MINIJUEGOS).flat(), 'mj_fondo_consola']);
+const RECUERDOS_IMG = Object.keys(IMAGENES).filter(k => k.startsWith('recuerdo_'));
+const EN_GRUPOS = new Set([...RETRATOS, ...Object.values(MINIJUEGOS).flat(), 'mj_fondo_consola', ...RECUERDOS_IMG]);
 export const ZONA_INICIAL = 'pasillo';
 
 export const cargas = {
@@ -51,6 +53,7 @@ export const cargas = {
     }
     const [tipo, id] = grupo.split(':');
     if (tipo === 'minijuego') return (MINIJUEGOS[id] ?? []).map(img);
+    if (tipo === 'recuerdo') return IMAGENES[`recuerdo_${id}`] ? [img(`recuerdo_${id}`)] : [];
     if (tipo === 'musica') return AUDIO[id] ? [['audio', id, AUDIO[id]]] : [];
     if (tipo === 'zona') {
       const z = this.juego?.cache.json.get('zonas')?.zonas?.[id];
@@ -77,6 +80,13 @@ export const cargas = {
       if (tipo === 'spritesheet') load.spritesheet(clave, ruta, op);
       else load[tipo](clave, ruta);
     }
+  },
+
+  // Arranca un cargador o, si ya está cargando (start() no haría nada), le pide que tome ya los archivos nuevos
+  // en vez de esperar al siguiente cuadro
+  arrancar(load) {
+    if (load.isLoading()) load.checkLoadQueue();
+    else load.start();
   },
 
   marcar(grupo) { this.hechos.add(grupo); if (!this.promesas.has(grupo)) this.promesas.set(grupo, Promise.resolve()); },
@@ -112,7 +122,7 @@ export const cargas = {
     const load = this.escena.load;
     this.encolar(load, lista);
     load.once('complete', fin);
-    load.start();
+    this.arrancar(load);
   },
 
   // Libera texturas, animaciones y sonidos de un grupo (salas que quedan lejos, minijuegos ya jugados, música)

@@ -22,6 +22,9 @@ bus.emit(EV.CERRAR_PANEL);   // al terminar: devuelve el control al jugador
 | `EV.PEDIR_INTERACCION` | Interfaz | — (igual que pulsar E) |
 | `EV.DEPURACION` | Motor | `true` o `false` |
 | `EV.OBJETIVO` | Mecánicas (rol 2) | Nombre de la estación a la que debe ir el jugador (p. ej. `'tarea_paneles'`) o `null`. El motor pone una flecha que rebota encima y la interfaz otra en el borde de la pantalla si no se ve. Úsenlo en el tutorial del sol 1 y en cada tarea nueva |
+| `EV.HORA` | Diálogo (cuando la IA anuncia la hora) | `{ fase, hora }`, p. ej. `{ fase: 'noche', hora: '20:00' }`. El ciclo lo guarda en `GameState.reloj` y publica el estado (ver punto 10) |
+| `EV.APRENDIZAJE` | IA guía | `{ tema, nombre, tipo, correcto, antes, despues, nivel, subio }`: hubo una prueba de aprendizaje (punto 11) |
+| `EV.DATO` | Diálogo | Id de un recuerdo o ficha (`dato:<id>` de Ink). La IA lo abre en el álbum |
 
 `control.bloqueado` es `true` mientras hay una pantalla abierta: el astronauta no se mueve.
 Cuando el rol 2 conecte sus pantallas, cambiar `PANEL_PROVISIONAL` a `false` en `src/motor/config.js`.
@@ -34,7 +37,9 @@ El rol 2 guarda el estado en `this.registry.set('estado', estado)` y emite `EV.E
 {
   sol: 1, solesTotales: 10,
   energia: 0-100, oxigeno: 0-100, blindaje: 0-100,
-  fase: 'manana' | 'dia' | 'emergencia' | 'noche',   // el motor cambia la luz y la visión según la fase
+  fase: 'manana' | 'dia' | 'emergencia' | 'noche',   // la que ANUNCIÓ la IA: el motor cambia la luz y la visión con ella
+  hora: '06:00',                                     // la hora de la base que dijo la IA
+  faseJuego: 'MAÑANA' | 'DIA' | 'EMERGENCIA' | 'NOCHE' | 'MEJORA' | 'FIN',   // la de las reglas
   tripulacion: { comandante: {...}, ingeniera: {...}, biologo: {...}, ia: {...} }
 }
 ```
@@ -126,7 +131,8 @@ bus.on(EV.PRONOSTICO, p => {
 - **Pantallas encima del mapa:** mientras hay un diálogo, la consola o un minijuego, `control.modal` es `true`: el mapa no
   se mueve ni cierra nada con E/Espacio/Esc, y el robot espera para hablar.
 - **Sonido:** `src/motor/sonido.js` (música por fase con fundido, efectos, viento real de Marte y voces que se cargan al
-  hablar). Tecla M: silencio.
+  hablar). Tecla M o el botón del altavoz: silencio. El álbum de recuerdos se abre con R (antes usaba la M y, al
+  abrirlo, el juego se quedaba sin sonido).
 
 ## 8. Datos reales: API de contenido del equipo
 
@@ -156,3 +162,63 @@ Repositorio del equipo: `as9689138/juniorAstronautMissionTrainer_JIIMATZIN` (bac
 - **Recursos:** se piden por grupos con `cargas.asegurar(grupo)`, que devuelve una promesa, y se adelantan con
   `cargas.precargar([...])`. Se liberan con `cargas.liberar(grupo)`. Nadie llama a `this.load` fuera de `Arranque` y del
   `Cargador`. Las voces son la excepción: se bajan al hablar y se liberan al terminar la línea.
+
+## 10. La historia de cada personaje, la hora y los recuerdos
+
+- **Ruta del personaje** (`src/mecanicas/rutas.js`): el día sigue al personaje elegido. Las tres tareas se piden en su
+  orden, empezando por su especialidad (Wenceslao: paneles; Judith: invernadero; Atlas: filtro de CO₂). La IA lo dice
+  en la burbuja del robot y el aviso de la estación lleva una ★. Ventajas, de las «Ideas de habilidad por rol» del
+  paquete de historia: Wenceslao gasta un 20 % menos de energía de noche; Judith tiene 5 s más en las emergencias de
+  clima (solar, polvo y radiación); Atlas paga la mitad en las decisiones de blindaje y en la emergencia de radiación.
+  El +5 de cada minijuego ya venía del prototipo. Los números se cambian en ese archivo.
+- **El jugador es el personaje:** en los diálogos, sus líneas dicen «NOMBRE · TÚ».
+- **Minimapa** (`src/escenas/minimapa.js`, en la Interfaz): esquema isométrico de las salas con tu posición, la sala
+  del objetivo (`registry('objetivo')`) y el camino. Lee la sala y la posición de la escena Base; no cambia nada.
+- **Mezcla de sonido** (`MEZCLA` en `src/motor/sonido.js`): niveles objetivo en LUFS por tipo de sonido, con la sonoridad
+  medida de cada archivo. Con un diálogo abierto la música y el viento bajan y se quedan abajo hasta que se cierra.
+  La música es la «Propuesta 3» (`public/assets/audio/musica/propuesta3/`, CC0); para cambiarla, las rutas están en
+  `src/motor/recursos.js` y su sonoridad medida en `LUFS` de `src/motor/sonido.js`.
+- **La hora la dicta la IA:** la luz del mapa y la ficha del Sol cambian solo cuando la IA anuncia la hora en un diálogo
+  (`EV.HORA`). Amanece a las 06:00 (aviso de la IA al empezar cada sol), hay luz a las 10:00 (nudo `dia`), la emergencia
+  llega a las 16:00 (primera línea de la alerta) y anochece a las 20:00 (aviso de la IA con el gasto de energía, que se
+  descuenta al terminar el aviso). Para anunciar una hora: `ciclo.narrar(nudo, { hora: ciclo.hora('noche') })` o una
+  línea suelta con `hora`.
+- **Recuerdos (flashbacks):** los "datos curiosos" de la historia son recuerdos de la IA (guion v4: «Archivo de
+  memoria»). `src/mecanicas/recuerdos.js` dice qué líneas de `historia.ink` son un recuerdo; el diálogo las muestra como
+  flashback (rebobinado, holograma, año, lugar e ilustración de `herramientas/pintar_recuerdos.py`), sin la frase
+  «Dato curioso:» y con la voz desde después de esa frase. Son 16 recuerdos; quedan abiertos en el álbum (tecla R).
+- **Voces:** las 213 líneas con MP3 del rol 5 suenan todas. Las que no tienen MP3 (narración, avisos del juego, la hora
+  de la IA) usan la voz del navegador, el último respaldo de la entrega del rol 5. La lista para grabarlas está en
+  [voces-pendientes.md](voces-pendientes.md).
+
+## 11. La IA guía: machine learning y medición del aprendizaje
+
+- **Dónde:** `src/compania/guia.js` (la IA guía), con los modelos en `src/ml/` (`pronostico.js` y `aprendizaje.js`). El
+  robot (`robot.js`) es su cara en el mapa; el panel `Aprendizaje.js` muestra lo que mide.
+- **Modelo:** Bayesian Knowledge Tracing por tema. Parámetros en `PARAMETROS` de `src/ml/aprendizaje.js` (L0 0,25;
+  T 0,15; adivinar y resbalón por tipo de prueba). Una prueba con pista cuenta menos (se "adivina" más).
+- **Pruebas** (las llama `ciclo.js`):
+  - `guia.evidenciaMinijuego(clave, exito)`: paneles → Energía; filtro e invernadero → Aire.
+  - `guia.evidenciaConsola(asignacion, recursos, conPista)`: acierta si el sistema del recurso más bajo recibe más
+    núcleos (y los Escudos al menos 2 si el pronóstico es alto). Si no hay un recurso claramente más bajo, no cuenta.
+  - `guia.evidenciaEmergencia(nudo, eleccion, agotado, recursos, conPista)`: acierta si gasta el recurso que tiene de
+    sobra y cuida el más bajo (los costes de cada opción están en `COSTES`, sacados de `historia.ink`). Si se acaba el
+    tiempo, falla "Decidir con datos". La elección la apunta el diálogo en las etiquetas (`eleccion`, `agotado`).
+- **Adaptación:** `ajusteTiempo` (×1,2 de tiempo en un minijuego flojo, ×0,9 si lo domina, vía `GameState.ajusteIA`),
+  `pistaConsola`, `pistaEmergencia` (sale encima de las opciones), `pistaEstacion` (burbuja del robot) y
+  `resumenDelSol` (lo que dice la IA al anochecer). Tras cada decisión, la IA dice el porqué.
+- **Guardado:** `localStorage` (`jiimatzin.aprendizaje.v1`): la partida actual y el resumen de las 10 anteriores. Sin
+  nombres ni servidor. Reporte en texto con `guia.reporteTexto()` o el botón «Descargar».
+
+## 12. Idiomas (español e inglés)
+
+- **Dónde:** `src/motor/idioma.js` (idioma elegido, `traducir`, `t`, historia) y los diccionarios `src/textos/en.js`
+  (todo lo que no es Ink) y `src/textos/historia_en.js` (líneas de Ink sin voz). La traducción de las líneas con voz es
+  la del rol 5 (`lineas_es_en.json`).
+- **Cómo funciona:** al dibujarse, todo `Phaser.GameObjects.Text` pasa por `idioma.traducir()`: frase exacta o plantilla
+  con `{…}` (lo que va dentro se traduce también). Lo que se escribe letra por letra (el diálogo y la burbuja del robot)
+  lleva `sinTraducir = true` y se traduce entero antes. En el código propio, `t('Frase {n}', { n })`.
+- **Para añadir un texto:** escribirlo en español como siempre y poner su inglés en `en.js` (clave: el texto tal como sale
+  en pantalla). `__idioma.faltan`, en la consola del navegador jugando en inglés, lista lo que falta.
+- **Voz:** en inglés no se tocan los MP3 (son en español): habla la voz del navegador en inglés.
+- **No se traduce:** el arte (letreros pintados en las salas) ni los datos que vienen en español de la API del equipo.

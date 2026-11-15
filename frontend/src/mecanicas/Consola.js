@@ -7,6 +7,14 @@ import { addText, addButton, drawPanel } from '../minijuegos/ui.js';
 import { GameState } from './estado.js';
 import { CARTAS_MEJORA } from './datos.js';
 import { sonido } from '../motor/sonido.js';
+import { guia } from '../compania/guia.js';
+
+// Calificación de misión (IA guía): colores de cada medalla y lo que dice la IA
+const MEDALLA = {
+  oro: { nombre: 'Medalla de oro', color: 0xf5c542, borde: 0x9a6b10, frase: '¡Dominas la base! Eres un gran astronauta.' },
+  plata: { nombre: 'Medalla de plata', color: 0xd7dde6, borde: 0x6b7686, frase: '¡Vas muy bien! Un poco más de práctica y es de oro.' },
+  bronce: { nombre: 'Medalla de bronce', color: 0xd08a4e, borde: 0x7a4520, frase: '¡Buen comienzo! Cada misión te enseña algo nuevo.' },
+};
 
 export default class Consola extends Phaser.Scene {
   constructor() { super('Consola'); }
@@ -126,8 +134,47 @@ export default class Consola extends Phaser.Scene {
     const info = textos[motivo] ?? textos.VICTORIA;
     drawPanel(this, info.titulo, 'Reporte final de la IA de la Base Marte Uno', 'consola');
     this.dibujarBarraRecursos();
-    this.add.text(480, 310, info.cuerpo, { fontSize: '17px', color: info.color, align: 'center', wordWrap: { width: 780 }, lineSpacing: 8,
+    this.add.text(480, 206, info.cuerpo, { fontSize: '15px', color: info.color, align: 'center', wordWrap: { width: 820 }, lineSpacing: 5,
       fontFamily: 'Inter, system-ui, -apple-system, sans-serif', resolution: 2 }).setOrigin(0.5);
-    addButton(this, 480, 480, 'VOLVER A INTENTAR', () => this.terminar('reiniciar'), 280);
+    this.dibujarCalificacion(guia.calificacion(motivo === 'VICTORIA'));
+    // El reporte completo (el niño ve sus estrellas; el adulto, los números): src/compania/Aprendizaje.js
+    addButton(this, 340, 548, 'VER LO QUE APRENDÍ', () => this.scene.get('Aprendizaje')?.abrir(true), 250);
+    addButton(this, 620, 548, 'VOLVER A INTENTAR', () => this.terminar('reiniciar'), 250);
+  }
+
+  // Calificación de misión: la medalla a la izquierda y las estrellas de cada tema a la derecha
+  dibujarCalificacion(c) {
+    const m = MEDALLA[c.medalla];
+    this.add.rectangle(480, 395, 860, 230, 0x0f172a, 0.92).setStrokeStyle(2, 0x334155);
+    const g = this.add.graphics();                 // después del fondo: si no, la medalla queda debajo
+    addText(this, 480, 300, 'CALIFICACIÓN DE MISIÓN', 18, '#facc15');
+    // medalla con su cinta
+    const mx = 220, my = 395;
+    g.fillStyle(0xb8473d, 1).fillTriangle(mx - 34, my - 92, mx - 4, my - 92, mx - 14, my - 40).fillTriangle(mx + 4, my - 92, mx + 34, my - 92, mx + 14, my - 40);
+    g.fillStyle(m.borde, 1).fillCircle(mx, my, 50);
+    g.fillStyle(m.color, 1).fillCircle(mx, my, 44);
+    g.lineStyle(3, m.borde, 1).strokeCircle(mx, my, 36);
+    this.estrellaFinal(g, mx, my, 22, true, m.borde);
+    addText(this, mx, my + 68, m.nombre, 17, '#ffffff');
+    addText(this, mx, my + 92, `Puntaje: ${c.puntaje} de 100`, 14, '#94a3b8');
+    // los cuatro temas con sus estrellas
+    c.temas.forEach((t, i) => {
+      const y = 335 + i * 38;
+      addText(this, 470, y, t.nombre, 16, '#f8fafc', 'left').setOrigin(0, 0.5);
+      for (let k = 0; k < 4; k++) this.estrellaFinal(g, 650 + k * 30, y, 11, k < t.nivel.estrellas, 0x141026);
+      addText(this, 780, y, t.nivel.texto, 13, '#fbbf24', 'left').setOrigin(0, 0.5);
+    });
+    addText(this, 620, 490, `IA: «${m.frase}»`, 14, '#cbd5e1');
+    sonido.efecto(c.medalla === 'bronce' ? 'ui_carta_voltea' : 'ui_carta_mejora', 0.8);
+  }
+
+  estrellaFinal(g, x, y, r, llena, tinta) {
+    const pts = [];
+    for (let i = 0; i < 10; i++) {
+      const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * 0.45 : r;
+      pts.push(new Phaser.Math.Vector2(x + Math.cos(a) * rr, y + Math.sin(a) * rr));
+    }
+    if (llena) g.fillStyle(0xfacc15, 1).fillPoints(pts, true);
+    g.lineStyle(2, llena ? tinta : 0x94a3b8, 1).strokePoints(pts, true, true);
   }
 }

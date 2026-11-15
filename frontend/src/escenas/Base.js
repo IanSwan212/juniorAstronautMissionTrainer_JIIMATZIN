@@ -12,6 +12,11 @@ import { cargas, ZONA_INICIAL } from '../motor/cargas.js';
 
 const RADIO = 0.27;          // radio de los pies del astronauta, en casillas
 const ESCALA_ARTE = 0.5;     // el arte de las salas está pintado al doble
+// Astronautas del mapa (assets/personajes/mapa/hojas.json): cuerpo de 176 px en la textura; origen en los pies
+// Paso: 8 cuadros a 11 por segundo a velocidad normal (más lento si camina despacio) y, encima, el balanceo suave
+// del astronauta provisional, más corto (los cuadros ya inclinan el cuerpo)
+const PJ = { cuerpo: 176, origenX: 0.5, origenY: 0.9963, fps: 11, balanceo: 3.5, rebote: 0.035 };
+const ALTO_PJ = 43;         // alto del cuerpo en el mapa antes de la escala real (como el astronauta provisional)
 
 export default class Base extends Phaser.Scene {
   constructor() { super('Base'); }
@@ -70,7 +75,20 @@ export default class Base extends Phaser.Scene {
     const p0 = this.iso(c, r);
     const S = this.escalaPj;
     this.sombra = this.add.ellipse(p0.x, p0.y, 24 * S, 10 * S, 0x282256, 0.45).setDepth(4.9);
-    this.pj = this.add.image(p0.x, p0.y, 'astronauta').setOrigin(0.5, 0.95).setScale(S).setDepth(5);
+    // El astronauta que se eligió, con su paso dibujado; sin su hoja, el provisional con balanceo
+    const hoja = `pj_${this.registry.get('personaje') ?? 'wenceslao'}`;
+    this.conPaso = this.textures.exists(hoja);
+    if (this.conPaso) {
+      if (!this.anims.exists(`${hoja}_paso`)) {
+        this.anims.create({ key: `${hoja}_paso`, frames: this.anims.generateFrameNumbers(hoja, { start: 0, end: 7 }), frameRate: PJ.fps, repeat: -1 });
+      }
+      this.escalaCuerpo = S * ALTO_PJ / PJ.cuerpo;
+      this.animPaso = `${hoja}_paso`;
+      this.pj = this.add.sprite(p0.x, p0.y, hoja, 0).setOrigin(PJ.origenX, PJ.origenY).setScale(this.escalaCuerpo).setDepth(5);
+    } else {
+      this.escalaCuerpo = S;
+      this.pj = this.add.image(p0.x, p0.y, 'astronauta').setOrigin(0.5, 0.95).setScale(S).setDepth(5);
+    }
     this.pj.body = { center: new Phaser.Math.Vector2(p0.x, p0.y), destroy() {} };   // la IA del robot sigue este punto
     if (llegada) {                                  // sale de la oscuridad del hueco de la puerta
       this.pj.setAlpha(0); this.sombra.setAlpha(0);
@@ -80,7 +98,10 @@ export default class Base extends Phaser.Scene {
     this.vel = new Phaser.Math.Vector2();
     this.mira = new Phaser.Math.Vector2();          // adelanto de la cámara hacia donde camina
     this.proximoPaso = 0;
-    this.balanceo = this.tweens.add({ targets: this.pj, angle: { from: -6, to: 6 }, duration: 160, yoyo: true, repeat: -1, paused: true });
+    const giro = this.conPaso ? PJ.balanceo : 6;
+    this.balanceo = this.tweens.add({ targets: this.pj, angle: { from: -giro, to: giro }, duration: this.conPaso ? 180 : 160,
+      ease: 'Sine.inOut', yoyo: true, repeat: -1, paused: true });
+    this.fasePaso = 0;                              // para el rebote al pisar
 
     // --- Cámara ---
     const cam = this.cameras.main;
@@ -345,7 +366,7 @@ export default class Base extends Phaser.Scene {
   efectoUsar(e) {
     const onda = this.add.ellipse(e.x, e.y, 30, 15).setStrokeStyle(3, COLOR_SISTEMA[e.datos.sistema] ?? 0xffffff, 1).setDepth(11);
     this.tweens.add({ targets: onda, scale: 2.4, alpha: 0, duration: 380, ease: 'Cubic.out', onComplete: () => onda.destroy() });
-    const S = this.escalaPj;
+    const S = this.escalaCuerpo;
     this.tweens.add({ targets: this.pj, scaleX: S * 1.08, scaleY: S * 0.9, duration: 80, yoyo: true });   // se agacha un poco
   }
 
@@ -470,8 +491,27 @@ export default class Base extends Phaser.Scene {
     this.pj.body.center.set(pie.x, pie.y);
     this.sombra.setPosition(pie.x, pie.y);
     const moviendo = this.vel.length() > 20;
-    if (moviendo && this.balanceo.isPaused()) this.balanceo.resume();
-    if (!moviendo && !this.balanceo.isPaused()) { this.balanceo.pause(); this.pj.angle = 0; }
+    if (this.conPaso) {                             // el paso dibujado + balanceo y rebote suaves
+      const rapidez = Math.min(1.15, this.vel.length() / VELOCIDAD);
+      if (moviendo) {
+        if (!this.pj.anims.isPlaying) { this.pj.play({ key: this.animPaso, startFrame: 1 }); this.parando?.stop(); }
+        this.pj.anims.timeScale = 0.6 + 0.4 * rapidez;          // al arrancar, pasos más lentos
+        if (this.balanceo.isPaused()) this.balanceo.resume();
+        this.fasePaso += dt * 0.0175 * rapidez;                 // dos rebotes por ciclo de 8 cuadros
+        this.pj.scaleY = this.escalaCuerpo * (1 - PJ.rebote * Math.abs(Math.sin(this.fasePaso)));
+        this.pj.scaleX = this.escalaCuerpo * (1 + PJ.rebote * 0.5 * Math.abs(Math.sin(this.fasePaso)));
+      } else if (this.pj.anims.isPlaying) {
+        // al parar: termina en el cuadro de parado y vuelve derecho con suavidad, sin brincos
+        this.pj.stop().setFrame(0);
+        this.balanceo.pause();
+        this.parando = this.tweens.add({ targets: this.pj, angle: 0, scaleX: this.escalaCuerpo, scaleY: this.escalaCuerpo,
+          duration: 180, ease: 'Sine.out' });
+        this.fasePaso = 0;
+      }
+    } else {
+      if (moviendo && this.balanceo.isPaused()) this.balanceo.resume();
+      if (!moviendo && !this.balanceo.isPaused()) { this.balanceo.pause(); this.pj.angle = 0; }
+    }
     if (Math.abs(this.vel.x) > 1) this.pj.setFlipX(this.vel.x < 0);
     if (moviendo && t > this.proximoPaso) { this.pisada(pie.x, pie.y); this.proximoPaso = t + 210; }
     // la cámara se adelanta un poco hacia donde camina

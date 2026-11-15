@@ -27,6 +27,15 @@ Qué dice la investigación sobre aprender ciencia con juegos (niñas y niños d
 | **Jugar en grupo y en varias sesiones** | Los juegos rinden más con grupos y varias sesiones (Wouters y otros, 2013) | **Modo clase:** jugar en parejas, una toma las decisiones y la otra lee el pronóstico. Guardar el progreso entre sesiones. Una guía de 1 página para el docente | Rol 1 y rol 3 | Medio |
 | **Arte en STEAM (música y dibujo)** | Evidencia débil sobre lo aprendido, pero positiva sobre interés y actitud | La música y el estilo visual motivan; **no** les pedimos que enseñen. Mantener lo visual claro: lo recargado puede distraer | Rol 4 y rol 5 | — |
 
+## Cómo mide el juego lo que aprende (IA guía)
+
+La IA guía usa **Bayesian Knowledge Tracing** (Corbett y Anderson, 1995), el modelo de los tutores inteligentes: para
+cada tema estima la probabilidad de que el niño ya lo domine y la actualiza con cada prueba. Las pruebas salen del
+juego, sin exámenes: minijuegos, reparto de energía en la consola y decisiones de emergencia (¿cuidó el recurso más
+bajo?). Con eso aplica lo de arriba: **guía en lo flojo** (pistas y más tiempo), **retroalimentación con porqué**
+después de cada decisión y **menos ayuda cuando ya domina** (sentirse capaz). El niño ve estrellas y palabras; el adulto,
+el dominio en % y un reporte. Detalle técnico: `docs/acuerdos.md`, punto 11.
+
 ## Lo que NO conviene
 
 - **Detalles atractivos que no enseñan.** Quitarlos es uno de los principios con más efecto (Mayer). Cada dato curioso tiene que conectar con la decisión del momento. Si no, va a la ficha de «¿Sabías que?», no a la acción.
