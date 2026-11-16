@@ -47,16 +47,21 @@ export const sonido = {
   vozObj: null,
   silencio: false,
 
+  enCine: false,          // mientras se ve un video (src/motor/cine.js) el sonido del juego calla, sin tocar `silencio`
+
   iniciar(juego) {
     this.juego = juego;
     // 'silencio.v2': antes la tecla M abría el álbum Y silenciaba, y ese silencio sin querer quedaba guardado
     try { this.silencio = localStorage.getItem('silencio.v2') === '1'; } catch { /* sin almacenamiento */ }
-    juego.sound.mute = this.silencio;
+    this.aplicarSilencio();
   },
+
+  // El volumen general del juego: callado si el jugador lo pidió (M o el botón) o si hay un video encima
+  aplicarSilencio() { if (this.juego) this.juego.sound.mute = this.silencio || this.enCine; },
 
   alternarSilencio() {
     this.silencio = !this.silencio;
-    this.juego.sound.mute = this.silencio;
+    this.aplicarSilencio();
     if (this.silencio) this.callar();
     try { localStorage.setItem('silencio.v2', this.silencio ? '1' : '0'); } catch { /* sin almacenamiento */ }
     this.alCambiarSilencio?.(this.silencio);
